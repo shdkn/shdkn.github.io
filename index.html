@@ -55,6 +55,50 @@
     .btn:hover {
       background: #eee;
     }
+    .card {
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  transform: translateY(-4px);
+}
+
+.card img {
+  width: calc(100% - 4px);
+  border-radius: 10px;
+  margin: 2px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.card h3 {
+  margin-top: 12px;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #333;
+}
+
+.buy-button {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: #000;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+}
+
+.buy-button:hover {
+  background-color: #444;
+}
   </style>
 </head>
 <body>
@@ -83,12 +127,10 @@
         card.style.backgroundColor = colors[i % colors.length];
 
         card.innerHTML = `
-          <img src="${item.img}" alt="${item.title}" />
-          <div class="title"><a href="${item.link}" target="_blank">${item.title}</a></div>
-          <div class="buttons">
-            <a class="btn" href="${item.link}" target="_blank">🔗 Link</a>
-          </div>
-        `;
+  <img src="${item.img}" alt="${item.title}" />
+  <h3>${item.title}</h3>
+  <a class="buy-button" href="${item.link}" target="_blank">🔗 Link</a>
+`;
         grid.appendChild(card);
       });
     }
