@@ -107,6 +107,22 @@
     .buy-button:hover {
       background-color: #444;
     }
+    .search-bar {
+  padding: 16px;
+  text-align: center;
+  background-color: #1c1c1c;
+}
+
+#searchInput {
+  width: 90%;
+  max-width: 400px;
+  padding: 10px 14px;
+  font-size: 1em;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #000;
+      }
   </style>
 </head>
 <body>
@@ -120,7 +136,9 @@
     </div>
     <a href="https://t.me/sharedukaan" class="telegram-btn" target="_blank">📲 Telegram</a>
   </header>
-
+<div class="search-bar">
+  <input type="text" id="searchInput" placeholder="Search products..." />
+</div>
   <div class="grid" id="productGrid"></div>
 
   <script>
@@ -154,6 +172,15 @@
     }
 
     loadProducts();
+document.getElementById("searchInput").addEventListener("input", function () {
+  const query = this.value.toLowerCase();
+  const cards = document.querySelectorAll(".card");
+
+  cards.forEach(card => {
+    const title = card.querySelector("h3").textContent.toLowerCase();
+    card.style.display = title.includes(query) ? "flex" : "none";
+  });
+});
   </script>
 
 </body>
