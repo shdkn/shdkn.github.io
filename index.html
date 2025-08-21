@@ -67,7 +67,7 @@
     ];
 
     async function loadProducts() {
-      const sheetID = "YOUR_SHEET_ID"; // 👈 Replace this with your actual Sheet ID
+      const sheetID = "https://docs.google.com/spreadsheets/d/1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw/gviz/tq?tqx=out:json&sheet=Sheet1"; // 👈 Replace this with your actual Sheet ID
       const tabName = "Sheet1";
       const url = `https://opensheet.elk.sh/${sheetID}/${tabName}`;
       const res = await fetch(url);
