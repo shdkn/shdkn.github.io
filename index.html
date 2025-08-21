@@ -1,1 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shoe Dukaan – Catalog</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f5f5;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      padding: 16px;
+    }
+    .card {
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .card img {
+      width: 100%;
+      max-width: 240px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .title {
+      margin-top: 12px;
+      font-weight: bold;
+      text-decoration: underline;
+      color: #333;
+    }
+    .buttons {
+      margin-top: 12px;
+    }
+    .btn {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.9em;
+      cursor: pointer;
+      text-decoration: none;
+      color: #333;
+      display: inline-block;
+    }
+    .btn:hover {
+      background: #eee;
+    }
+  </style>
+</head>
+<body>
 
+  <div class="grid" id="productGrid"></div>
+
+  <script>
+    const colors = [
+      "#FFF9C4", "#C8E6C9", "#BBDEFB",
+      "#FFCDD2", "#E1BEE7", "#FFE0B2", "#CFD8DC"
+    ];
+
+    async function loadProducts() {
+      const sheetID = "YOUR_SHEET_ID"; // 👈 Replace this with your actual Sheet ID
+      const tabName = "Sheet1";
+      const url = `https://opensheet.elk.sh/${sheetID}/${tabName}`;
+      const res = await fetch(url);
+      const data = await res.json();
+
+      const grid = document.getElementById("productGrid");
+      data.forEach((item, i) => {
+        if (!item.title || !item.img || !item.link) return;
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.style.backgroundColor = colors[i % colors.length];
+
+        card.innerHTML = `
+          <img src="${item.img}" alt="${item.title}" />
+          <div class="title"><a href="${item.link}" target="_blank">${item.title}</a></div>
+          <div class="buttons">
+            <a class="btn" href="${item.link}" target="_blank">🔗 Link</a>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    loadProducts();
+  </script>
+
+</body>
+  </html>
