@@ -222,7 +222,7 @@
         const card = document.createElement("div");
         card.className = "card";
         card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
-        card.style.animationDelay = `${i * 100}ms`;
+card.style.transitionDelay = `${i * 100}ms`; // ✅ USE this instead
 
         card.innerHTML = `
           <img src="${item.img}" alt="${item.title}" loading="lazy" />
