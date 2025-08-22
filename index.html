@@ -175,6 +175,32 @@ body {
   background-color: #ffd633;
   transform: scale(1.05);
  }
+   .nav-bar {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 12px 0;
+  background-color: #1c1c1c;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+}
+
+.nav-btn {
+  font-family: 'Barlow', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  color: #BABABA;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-btn:hover {
+  background-color: #2a2a2a;
+  color: #fff;
+   }
   </style>
 </head>
 <body>
@@ -188,7 +214,11 @@ body {
     </div>
     <a href="https://t.me/sharedukaan" class="telegram-btn action-button-text" target="_blank">📲 Telegram</a>
   </header>
-
+<nav class="nav-bar">
+  <a href="#mens" class="nav-btn">Mens</a>
+  <a href="#womens" class="nav-btn">Womens</a>
+  <a href="#blog" class="nav-btn">Blog</a>
+</nav>
   <div class="search-bar">
     <input type="text" id="searchInput" placeholder="Search products..." />
   </div>
