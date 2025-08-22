@@ -1,272 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500&display=swap" rel="stylesheet">
- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet">
- <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400&display=swap" rel="stylesheet">
- <meta charset="UTF-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Shoe Dukaan – Catalog</title>
-  <style> 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: #1c1c1c;
-}
 
-/* 🔥 Fade-in animation */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400&display=swap" rel="stylesheet">
 
-.top-banner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background-color: #333;
-  color: #fff;
-  flex-wrap: wrap;
-  position: relative;
-}
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #1c1c1c;
+    }
 
-.header-left .logo {
-  width: 75px;
-  height: auto;
-}
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-.header-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  text-align: center;
-  flex: 1;
-}
+    .top-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background-color: #333;
+      color: #fff;
+      flex-wrap: wrap;
+      position: relative;
+    }
 
-.tagline {
-  font-family: 'Assistant', sans-serif;
-  font-size: 15px;
-  font-weight: 400;
-  margin-bottom: 4px;
-}
+    .logo {
+      width: 75px;
+      height: auto;
+    }
 
-.telegram-link {
-  font-family: 'Assistant', sans-serif;
-  font-size: 13px;
-  color: #ffcc00;
-  text-decoration: none;
-  font-weight: 500;
-}
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: center;
+      flex: 1;
+    }
 
-.telegram-link:hover {
-  color: #ffd633;
-}
+    .tagline {
+      font-family: 'Assistant', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
 
-.search-bar {
-  padding: 16px;
-  text-align: center;
-  background-color: #1c1c1c;
-}
+    .telegram-link {
+      font-family: 'Assistant', sans-serif;
+      font-size: 13px;
+      color: #ffcc00;
+      text-decoration: none;
+      font-weight: 500;
+    }
 
-#searchInput {
-  width: 90%;
-  max-width: 400px;
-  padding: 10px 14px;
-  font-size: 1em;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  color: #000;
-}
+    .telegram-link:hover {
+      color: #ffd633;
+    }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 6px;
-  padding: 16px;
-}
+    .search-bar {
+      padding: 16px;
+      text-align: center;
+      background-color: #1c1c1c;
+    }
 
-.card {
-  border-radius: 0px;
-  padding: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
+    #searchInput {
+      width: 90%;
+      max-width: 400px;
+      padding: 10px 14px;
+      font-size: 1em;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      color: #000;
+    }
 
-.card.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 6px;
+      padding: 16px;
+    }
 
-.card img {
-  width: calc(100% - 4px);
-  max-width: 100%;
-  border-radius: 10px;
-  margin: 2px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
+    .card {
+      border-radius: 0px;
+      padding: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
 
-.title-text {
-  font-family: 'Inter', sans-serif;
-  font-weight: 300;
-  font-size: 0.95em; /* Carrd size 2 ≈ 15px or 0.95em */
-  color: #BABABA;
-  margin-top: 10px;
-  line-height: 1.4;
-  text-align: center;
-  }
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-/* 🔘 Shared button typography */
-.action-button-text {
-  font-family: 'Barlow', sans-serif;
-  font-weight: 500;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
+    .title-text {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: 0.95em;
+      color: #BABABA;
+      margin-top: 10px;
+      line-height: 1.4;
+      text-align: center;
+    }
 
-/* 🛒 Buy Button */
-.buy-button {
-  margin-top: 12px;
-  padding: 6px 12px;
-  background-color: #3B3B3B;
-  color: #BABABA;
-  text-decoration: none;
-  border-radius: 6px;
-  transition: background-color 0.3s ease, opacity 0.3s ease;
-  align-self: flex-start;
-}
+    .action-button-text {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
 
-.buy-button:hover {
-  background-color: #4A4A4A;
-  opacity: 0.85;
-}
+    .buy-button {
+      margin-top: 12px;
+      padding: 6px 12px;
+      background-color: #3B3B3B;
+      color: #BABABA;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background-color 0.3s ease, opacity 0.3s ease;
+      align-self: flex-start;
+    }
 
-/* 📲 Telegram Button */
-.telegram-btn {
-  background-color: #ffcc00;
-  color: #000;
-  padding: 6px 12px;
-  border-radius: 6px;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
+    .buy-button:hover {
+      background-color: #4A4A4A;
+      opacity: 0.85;
+    }
 
-.telegram-btn:hover {
-  background-color: #ffd633;
-}
+    .telegram-btn {
+      background-color: #ffcc00;
+      color: #000;
+      padding: 6px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
 
-/* ⬆️ Back to Top Button */
-#backToTop {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 100;
-  background-color: #ffcc00;
-  color: #000;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 18px;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  display: none;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
+    .telegram-btn:hover {
+      background-color: #ffd633;
+    }
 
-#backToTop:hover {
-  background-color: #ffd633;
-  transform: scale(1.05);
- }
-.nav-bar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 0;
-  background-color: rgba(30, 30, 30, 0.85);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-  border-top: 1px solid #444;
-  border-bottom: 1px solid #444;
-}
+    #backToTop {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      background-color: #ffcc00;
+      color: #000;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 18px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      display: none;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
 
-.nav-btn {
-  font-family: 'Assistant', sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  color: #BABABA;
-  text-transform: uppercase;
-  text-decoration: none;
-  padding: 6px 8px;
-  transition: color 0.3s ease;
- }
+    #backToTop:hover {
+      background-color: #ffd633;
+      transform: scale(1.05);
+    }
 
-.nav-btn:hover {
-  color: #fff;
-}
+    .nav-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      background-color: rgba(30, 30, 30, 0.85);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      border-top: 1px solid #444;
+      border-bottom: 1px solid #444;
+    }
 
-.nav-separator {
-  color: #555;
-  font-size: 14px;
-  user-select: none;
+    .nav-btn {
+      font-family: 'Assistant', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: #BABABA;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 6px 8px;
+      transition: color 0.3s ease;
+    }
 
- .carousel {
-  position: relative;
-  height: 400px;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 10px;
-}
+    .nav-btn:hover {
+      color: #fff;
+    }
 
-.carousel img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.6s ease-in-out;
-}
+    .nav-separator {
+      color: #555;
+      font-size: 14px;
+      user-select: none;
+    }
 
-.carousel img.active {
-  opacity: 1;
- }
+    .carousel {
+      position: relative;
+      height: 400px;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    .carousel img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.6s ease-in-out;
+    }
+
+    .carousel img.active {
+      opacity: 1;
+    }
   </style>
-</head>
+  </head>
 <body>
 
-<div class="top-banner">
-  <div class="header-left">
-    <img src="https://i.imgur.com/hp0QbkV.jpeg" alt="sharedukaan_Logo" class="logo">
+  <div class="top-banner">
+    <div class="header-left">
+      <img src="https://i.imgur.com/hp0QbkV.jpeg" alt="sharedukaan_Logo" class="logo">
+    </div>
+    <div class="header-right">
+      <p class="tagline">Discover The Best Shoes & Accessories – All in One Place | Shop Smart!!</p>
+      <a href="https://t.me/sharedukaan" class="telegram-link">For daily updates 👉 Telegram</a>
+    </div>
   </div>
-  <div class="header-right">
-    <p class="tagline">Discover The Best Shoes & Accessories – All in One Place | Shop Smart!!</p>
-    <a href="https://t.me/sharedukaan" class="telegram-link">For daily updates 👉 Telegram</a>
-  </div>
-</div>
-     </header>
-<nav class="nav-bar">
-  <a href="https://shdkn.short.gy/mens" class="nav-btn">Mens >></a>
-  <span class="nav-separator">|</span>
-  <a href="https://shdkn.short.gy/womens" class="nav-btn">Womens >></a>
-  <span class="nav-separator">|</span>
-  <a href="#blog" class="nav-btn">Blog >></a>
-</nav>
+
+  <nav class="nav-bar">
+    <a href="https://shdkn.short.gy/mens" class="nav-btn">Mens >></a>
+    <span class="nav-separator">|</span>
+    <a href="https://shdkn.short.gy/womens" class="nav-btn">Womens >></a>
+    <span class="nav-separator">|</span>
+    <a href="#blog" class="nav-btn">Blog >></a>
+  </nav>
+
   <div class="search-bar">
     <input type="text" id="searchInput" placeholder="Search products..." />
   </div>
@@ -299,64 +292,59 @@ body {
     function renderNextBatch() {
       const grid = document.getElementById("productGrid");
       const nextItems = allProducts.slice(currentIndex, currentIndex + batchSize);
-      function activateCarousels() {
-  document.querySelectorAll('.carousel').forEach(carousel => {
-    const images = carousel.querySelectorAll('img');
-    if (images.length <= 1) return;
 
-    let index = 0;
-    setInterval(() => {
-      images.forEach((img, i) => img.classList.toggle('active', i === index));
-      index = (index + 1) % images.length;
-    }, 3000);
-  });    
-     }
-     activateCarousels();
-      const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    } else {
-      entry.target.classList.remove('visible');
-    }
-  });
-}, {
-  threshold: 0.1
-});
       nextItems.forEach((item, i) => {
         const card = document.createElement("div");
         card.className = "card";
         card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
-        card.style.transitionDelay = `${i * 100}ms`; // ✅ Use this instead
-        const imageArray = item.img.split(','); // supports multiple image URLs
-const carouselHTML = imageArray.map((url, i) =>
-  `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" />`
-).join('');
+        card.style.transitionDelay = `${i * 100}ms`;
 
-card.innerHTML = `
-  <div class="carousel">
-    ${carouselHTML}
-  </div>
-  <h3 class="title-text">${item.title}</h3>
-  <a class="buy-button action-button-text" href="${item.link}" target="_blank">🔗 Link</a>
-`;
+        const imageArray = item.img.split(',');
+        const carouselHTML = imageArray.map((url, i) =>
+          `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" />`
+        ).join('');
+
+        card.innerHTML = `
+          <div class="carousel">
+            ${carouselHTML}
+          </div>
+          <h3 class="title-text">${item.title}</h3>
+          <a class="buy-button action-button-text" href="${item.link}" target="_blank">🔗 Link</a>
+        `;
+
         grid.appendChild(card);
         observer.observe(card);
       });
 
+      activateCarousels();
       currentIndex += batchSize;
     }
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    } else {
-      entry.target.classList.remove('visible'); // 👈 Re-trigger animation
+
+    function activateCarousels() {
+      document.querySelectorAll('.carousel').forEach(carousel => {
+        const images = carousel.querySelectorAll('img');
+        if (images.length <= 1) return;
+
+        let index = 0;
+        setInterval(() => {
+          images.forEach((img, i) => img.classList.toggle('active', i === index));
+          index = (index + 1) % images.length;
+        }, 3000);
+      });
     }
-  });
-}, {
-  threshold: 0.1
-});
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        } else {
+          entry.target.classList.remove('visible');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
     window.addEventListener("scroll", () => {
       const scrollY = window.scrollY;
       const viewportHeight = window.innerHeight;
@@ -368,7 +356,6 @@ const observer = new IntersectionObserver((entries) => {
         }
       }
 
-      // Show/hide Back to Top button
       const backToTopBtn = document.getElementById("backToTop");
       backToTopBtn.style.display = scrollY > 300 ? "block" : "none";
     });
@@ -388,18 +375,6 @@ const observer = new IntersectionObserver((entries) => {
     });
 
     loadProducts();
-    {
-  document.querySelectorAll('.carousel').forEach(carousel => {
-    const images = carousel.querySelectorAll('img');
-    if (images.length <= 1) return; // Skip rotation if only one image
-
-    let index = 0;
-    setInterval(() => {
-      images.forEach((img, i) => img.classList.toggle('active', i === index));
-      index = (index + 1) % images.length;
-    }, 3000); // Change every 3 seconds
-  });
-}
   </script>
 
 </body>
