@@ -28,31 +28,46 @@ body {
 }
 
 .top-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
   background-color: #333;
   color: #fff;
-  padding: 12px 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  flex-wrap: wrap;
+  position: relative;
 }
 
-.logo-title {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.logo {
-  width: 75px;
+.header-left .logo {
+  width: 48px;
   height: auto;
-  margin-bottom: 8px;
+}
+
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  flex: 1;
 }
 
 .tagline {
-  font-size: 0.95em;
+  font-family: 'Assistant', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+.telegram-link {
+  font-family: 'Assistant', sans-serif;
+  font-size: 13px;
+  color: #ffcc00;
+  text-decoration: none;
   font-weight: 500;
-  margin-bottom: 8px;
+}
+
+.telegram-link:hover {
+  color: #ffd633;
 }
 
 .search-bar {
@@ -212,13 +227,15 @@ body {
 </head>
 <body>
 
-  <header class="top-banner">
-    <div class="logo-title">
-      <img src="https://i.imgur.com/hp0QbkV_d.jpeg?maxwidth=520&shape=thumb&fidelity=high" alt="ShareDukaan Logo" class="logo" />
-      <div class="tagline">
-        Discover The Best Shoes & Accessories – All in One Place | Shop Smart!!
-      </div>
-    </div>
+<div class="top-banner">
+  <div class="header-left">
+    <img src="your-logo.png" alt="Logo" class="logo">
+  </div>
+  <div class="header-right">
+    <p class="tagline">Discover The Best Shoes & Accessories – All in One Place | Shop Smart!!</p>
+    <a href="https://t.me/sharedukaan" class="telegram-link">👉 Telegram</a>
+  </div>
+</div>
     <a href="https://t.me/sharedukaan" class="telegram-btn action-button-text" target="_blank">📲 Telegram</a>
   </header>
 <nav class="nav-bar">
