@@ -211,8 +211,9 @@
       const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      entry.target.classList.add("visible");
-      observer.unobserve(entry.target); // Optional: stop watching once visible
+      entry.target.classList.add('visible');
+    } else {
+      entry.target.classList.remove('visible');
     }
   });
 }, {
@@ -222,8 +223,7 @@
         const card = document.createElement("div");
         card.className = "card";
         card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
-card.style.transitionDelay = `${i * 100}ms`; // ✅ USE this instead
-
+        card.style.transitionDelay = `${i * 100}ms`; // ✅ Use this instead
         card.innerHTML = `
           <img src="${item.img}" alt="${item.title}" loading="lazy" />
           <h3 class="title-text">${item.title}</h3>
@@ -235,7 +235,17 @@ card.style.transitionDelay = `${i * 100}ms`; // ✅ USE this instead
 
       currentIndex += batchSize;
     }
-
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    } else {
+      entry.target.classList.remove('visible'); // 👈 Re-trigger animation
+    }
+  });
+}, {
+  threshold: 0.1
+});
     window.addEventListener("scroll", () => {
       const scrollY = window.scrollY;
       const viewportHeight = window.innerHeight;
