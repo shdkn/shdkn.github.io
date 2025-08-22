@@ -11,6 +11,18 @@
       background: #1c1c1c;
     }
 
+    /* 🔥 Fade-in animation */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .top-banner {
       background-color: #333;
       color: #fff;
@@ -28,7 +40,7 @@
     }
 
     .logo {
-      width: 150px;
+      width: 48px;
       height: auto;
       margin-bottom: 8px;
     }
@@ -53,6 +65,23 @@
       background-color: #ffd633;
     }
 
+    .search-bar {
+      padding: 16px;
+      text-align: center;
+      background-color: #1c1c1c;
+    }
+
+    #searchInput {
+      width: 90%;
+      max-width: 400px;
+      padding: 10px 14px;
+      font-size: 1em;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      color: #000;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -68,12 +97,7 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
-    }
-
-    .card:hover {
-      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-      transform: translateY(-4px);
+      animation: fadeInUp 0.6s ease forwards;
     }
 
     .card img {
@@ -82,14 +106,14 @@
       border-radius: 10px;
       margin: 2px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      loading: lazy;
     }
 
-    .card h3 {
+    .title-text {
       margin-top: 12px;
       font-weight: bold;
       text-decoration: underline;
-      color: #fff;
+      mix-blend-mode: difference;
+      color: white;
     }
 
     .buy-button {
@@ -107,125 +131,123 @@
     .buy-button:hover {
       background-color: #444;
     }
-    .search-bar {
-  padding: 16px;
-  text-align: center;
-  background-color: #1c1c1c;
-}
 
-#searchInput {
-  width: 90%;
-  max-width: 400px;
-  padding: 10px 14px;
-  font-size: 1em;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  color: #000;
-      }
-    .title-text {
-  mix-blend-mode: difference;
+    #backToTop {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      background-color: #ffcc00;
+      color: #000;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 18px;
+      font-size: 0.95em;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      display: none;
+      transition: background-color 0.3s ease, transform 0.3s ease;
     }
-#backToTop {
-  padding: 10px 18px;
-  font-size: 0.95em;
-  border-radius: 20px; /* more pill-shaped */
-}
-#backToTop:hover {
-  background-color: #ffd633;
-  transform: scale(1.05);
-      }
+
+    #backToTop:hover {
+      background-color: #ffd633;
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
 
   <header class="top-banner">
     <div class="logo-title">
-      <img src="https://i.imgur.com/hp0QbkV_d.jpeg?maxwidth=520&shape=thumb&fidelity=high" alt="ShareDukaan Logo" class="logo" />
+      <img src="https://i.imgur.com/2vZzyTj.png" alt="ShareDukaan Logo" class="logo" />
       <div class="tagline">
         Discover The Best Shoes & Accessories – All in One Place | Shop Smart!!
       </div>
     </div>
     <a href="https://t.me/sharedukaan" class="telegram-btn" target="_blank">📲 Telegram</a>
   </header>
-<div class="search-bar">
-  <input type="text" id="searchInput" placeholder="Search products..." />
-</div>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search products..." />
+  </div>
+
   <div class="grid" id="productGrid"></div>
-<button id="backToTop" title="Back to Top">⬆️TOP</button>
+
+  <button id="backToTop" title="Back to Top">Top</button>
+
   <script>
-const colors = [
-  "#CDEDE4", "#D7EAFB", "#A9CCE3",
-  "#D8CFEF", "#FDE3D9", "#F3EACB", "#EAEAEA"
-];
+    const colors = [
+      "#CDEDE4", "#D7EAFB", "#A9CCE3",
+      "#D8CFEF", "#FDE3D9", "#F3EACB", "#EAEAEA"
+    ];
 
-let allProducts = [];
-let currentIndex = 0;
-const batchSize = 12;
+    let allProducts = [];
+    let currentIndex = 0;
+    const batchSize = 12;
 
-async function loadProducts() {
-  const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
-  const tabName = "Sheet1";
-  const url = `https://opensheet.elk.sh/${sheetID}/${tabName}`;
-  const res = await fetch(url);
-  const data = await res.json();
+    async function loadProducts() {
+      const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+      const tabName = "Sheet1";
+      const url = `https://opensheet.elk.sh/${sheetID}/${tabName}`;
+      const res = await fetch(url);
+      const data = await res.json();
 
-  allProducts = data.filter(item => item.title && item.img && item.link);
-  renderNextBatch(); // Load first 12
-}
-
-function renderNextBatch() {
-  const grid = document.getElementById("productGrid");
-  const nextItems = allProducts.slice(currentIndex, currentIndex + batchSize);
-
-  nextItems.forEach((item, i) => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
-
-    card.innerHTML = `
-      <img src="${item.img}" alt="${item.title}" loading="lazy" />
-      <h3 class="title-text">${item.title}</h3>
-      <a class="buy-button" href="${item.link}" target="_blank">🔗 Link</a>
-    `;
-    grid.appendChild(card);
-  });
-
-  currentIndex += batchSize;
-}
-
-// 🔁 Infinite Scroll Trigger
-window.addEventListener("scroll", () => {
-  const scrollY = window.scrollY;
-  const viewportHeight = window.innerHeight;
-  const fullHeight = document.body.offsetHeight;
-
-  if (scrollY + viewportHeight >= fullHeight - 100) {
-    if (currentIndex < allProducts.length) {
+      allProducts = data.filter(item => item.title && item.img && item.link);
       renderNextBatch();
     }
-  }
-});
 
-loadProducts();
-document.getElementById("searchInput").addEventListener("input", function () {
-  const query = this.value.toLowerCase();
-  const cards = document.querySelectorAll(".card");
+    function renderNextBatch() {
+      const grid = document.getElementById("productGrid");
+      const nextItems = allProducts.slice(currentIndex, currentIndex + batchSize);
 
-  cards.forEach(card => {
-    const title = card.querySelector("h3").textContent.toLowerCase();
-    card.style.display = title.includes(query) ? "flex" : "none";
-  });
-});
-const backToTopBtn = document.getElementById("backToTop");
+      nextItems.forEach((item, i) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
+        card.style.animationDelay = `${i * 100}ms`;
 
-window.addEventListener("scroll", () => {
-  backToTopBtn.style.display = window.scrollY > 300 ? "block" : "none";
-});
+        card.innerHTML = `
+          <img src="${item.img}" alt="${item.title}" loading="lazy" />
+          <h3 class="title-text">${item.title}</h3>
+          <a class="buy-button" href="${item.link}" target="_blank">🔗 Link</a>
+        `;
+        grid.appendChild(card);
+      });
 
-backToTopBtn.addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
+      currentIndex += batchSize;
+    }
+
+    window.addEventListener("scroll", () => {
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const fullHeight = document.body.offsetHeight;
+
+      if (scrollY + viewportHeight >= fullHeight - 100) {
+        if (currentIndex < allProducts.length) {
+          renderNextBatch();
+        }
+      }
+
+      // Show/hide Back to Top button
+      const backToTopBtn = document.getElementById("backToTop");
+      backToTopBtn.style.display = scrollY > 300 ? "block" : "none";
+    });
+
+    document.getElementById("backToTop").addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    document.getElementById("searchInput").addEventListener("input", function () {
+      const query = this.value.toLowerCase();
+      const cards = document.querySelectorAll(".card");
+
+      cards.forEach(card => {
+        const title = card.querySelector("h3").textContent.toLowerCase();
+        card.style.display = title.includes(query) ? "flex" : "none";
+      });
+    });
+
+    loadProducts();
   </script>
 
 </body>
