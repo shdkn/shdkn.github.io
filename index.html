@@ -299,7 +299,18 @@ body {
     function renderNextBatch() {
       const grid = document.getElementById("productGrid");
       const nextItems = allProducts.slice(currentIndex, currentIndex + batchSize);
-      activateCarousels();
+      function activateCarousels() {
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    const images = carousel.querySelectorAll('img');
+    if (images.length <= 1) return;
+
+    let index = 0;
+    setInterval(() => {
+      images.forEach((img, i) => img.classList.toggle('active', i === index));
+      index = (index + 1) % images.length;
+    }, 3000);
+  });
+       }
       const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
