@@ -176,18 +176,39 @@ body {
   transform: scale(1.05);
  }
 .nav-bar {
+.nav-bar {
   display: flex;
   justify-content: center;
-  gap: 16px;
+  align-items: center;
+  gap: 12px;
   padding: 12px 0;
-  background-color: rgba(30, 30, 30, 0.85); /* ✅ More contrast, semi-transparent */
-  backdrop-filter: blur(8px);               /* ✅ Adds depth and softness */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);     /* ✅ Separates visually from header */
+  background-color: rgba(30, 30, 30, 0.85);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
   border-top: 1px solid #444;
   border-bottom: 1px solid #444;
-  position: relative; /* Optional: for layering */
-  z-index: 10;
- }
+}
+
+.nav-btn {
+  font-family: 'Barlow', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  color: #BABABA;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 6px 8px;
+  transition: color 0.3s ease;
+}
+
+.nav-btn:hover {
+  color: #fff;
+}
+
+.nav-separator {
+  color: #555;
+  font-size: 14px;
+  user-select: none;
+                         }
 
 .nav-btn {
   font-family: 'Barlow', sans-serif;
