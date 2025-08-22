@@ -104,13 +104,15 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
-.title-text {
-  margin-top: 12px;
-  font-weight: bold;
-  text-decoration: underline;
-  mix-blend-mode: difference;
-  color: white;
-}
+.card-text {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300; /* Light */
+  font-size: 0.95em; /* Carrd size 2 ≈ 15px */
+  color: #BABABA;
+  margin-top: 10px;
+  line-height: 1.4;
+  text-align: center;
+ }
 
 /* 🔘 Shared button typography */
 .action-button-text {
@@ -238,7 +240,7 @@ body {
         card.style.transitionDelay = `${i * 100}ms`; // ✅ Use this instead
         card.innerHTML = `
           <img src="${item.img}" alt="${item.title}" loading="lazy" />
-          <h3 class="title-text">${item.title}</h3>
+          <p class="card-text">${item.desc}</p>
           <a class="buy-button action-button-text" href="${item.link}" target="_blank">🔗 Link</a>
         `;
         grid.appendChild(card);
@@ -283,7 +285,7 @@ const observer = new IntersectionObserver((entries) => {
       const cards = document.querySelectorAll(".card");
 
       cards.forEach(card => {
-        const title = card.querySelector("h3").textContent.toLowerCase();
+        const title = card.querySelector(".carrd-text").textContent.toLowerCase();
         card.style.display = title.includes(query) ? "flex" : "none";
       });
     });
