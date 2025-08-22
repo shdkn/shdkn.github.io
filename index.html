@@ -175,14 +175,18 @@ body {
   background-color: #ffd633;
   transform: scale(1.05);
  }
-.nav-bar {
+..nav-bar {
   display: flex;
   justify-content: center;
   gap: 16px;
   padding: 12px 0;
-  background-color: #2A2A2A; /* 👈 Contrast against #333 */
+  background-color: rgba(30, 30, 30, 0.85); /* ✅ More contrast, semi-transparent */
+  backdrop-filter: blur(8px);               /* ✅ Adds depth and softness */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);     /* ✅ Separates visually from header */
   border-top: 1px solid #444;
   border-bottom: 1px solid #444;
+  position: relative; /* Optional: for layering */
+  z-index: 10;
  }
 
 .nav-btn {
