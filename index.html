@@ -424,44 +424,55 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
-  // 🔍 Search filter with reset
-  document.getElementById("searchInput").addEventListener("input", function () {
-    const query = this.value.toLowerCase();
-    const grid = document.querySelector("main.grid");
-    if (!grid) return;
+// 🔍 Search filter with reset
+document.getElementById("searchInput").addEventListener("input", function () {
+  const query = this.value.toLowerCase();
+  const grid = document.querySelector("main.grid");
+  if (!grid) return;
 
-    grid.innerHTML = ""; // Clear existing cards
-    currentIndex = 0;
+  grid.innerHTML = ""; // Clear existing cards
+  currentIndex = 0;
 
-    const filtered = allProducts.filter(item =>
-      item.title.toLowerCase().includes(query)
-    );
+  const filtered = allProducts.filter(item =>
+    item.title.toLowerCase().includes(query)
+  );
 
-    filtered.slice(0, batchSize).forEach((item, i) => {
-      const card = document.createElement("article");
-      card.className = "card";
-      card.style.backgroundColor = colors[i % colors.length];
-      card.style.transitionDelay = `${i * 100}ms`;
+  filtered.slice(0, batchSize).forEach((item, i) => {
+    const card = document.createElement("article");
+    card.className = "card";
+    card.style.backgroundColor = colors[i % colors.length];
+    card.style.transitionDelay = `${i * 100}ms`;
 
-      const imageArray = item.img.split(',');
-      const carouselHTML = imageArray.map((url, i) =>
-        `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" />`
-      ).join('');
+    const imageArray = item.img.split(',');
+    const carouselHTML = imageArray.map((url, i) =>
+      `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" />`
+    ).join('');
 
-      card.innerHTML = `
-        <div class="carousel">
-          ${carouselHTML}
-        </div>
-        <h3 class="title-text">${item.title}</h3>
-        <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
-      `;
+    card.innerHTML = `
+      <div class="carousel">
+        ${carouselHTML}
+      </div>
+      <h3 class="title-text">${item.title}</h3>
+      <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
+    `;
 
-      grid.appendChild(card);
-      observer.observe(card);
-    });
-
-    activateCarousels();
+    grid.appendChild(card);
+    observer.observe(card);
   });
+
+  activateCarousels();
+
+  // ✅ Inject footer after grid is rebuilt
+  fetch("footer.html")
+    .then(response => response.text())
+    .then(html => {
+      const footerWrapper = document.createElement("div");
+      footerWrapper.className = "card footer-card";
+      footerWrapper.innerHTML = html;
+      grid.appendChild(footerWrapper);
+    })
+    .catch(err => console.error("Could not load footer:", err));
+});
 </script>
 </body>
 </html>
