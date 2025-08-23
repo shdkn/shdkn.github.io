@@ -339,12 +339,9 @@
     const data = await res.json();
 
     // ✅ Sort by shuffleID before rendering
-    data.sort((a, b) => a.shuffleID - b.shuffleID);
-
-    allProducts = data.filter(item => item.title && item.img && item.link);
-    renderNextBatch();
-  }
-
+    allProducts = data
+  .filter(item => item.title && item.img && item.link)
+  .sort((a, b) => Number(a.shuffleID) - Number(b.shuffleID));
   // 🧱 Render a batch of product cards
   function renderNextBatch() {
     const grid = document.querySelector("main.grid");
