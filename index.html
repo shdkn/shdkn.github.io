@@ -374,19 +374,16 @@
     currentIndex += batchSize;
   }
  // 🔀 Shuffle visible cards every hour
-function shuffleVisibleCards() {
-  const grid = document.querySelector("main.grid");
-  const cards = Array.from(grid.children);
+  function shuffleVisibleCards() {
+    const grid = document.querySelector("main.grid");
+    const cards = Array.from(grid.children);
 
-  for (let i = cards.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    grid.insertBefore(cards[j], cards[i]);
+    for (let i = cards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      grid.insertBefore(cards[j], cards[i]);
+    }
   }
-}
 
-// 🚀 Initial render + start shuffle loop
-renderNextBatch();
-setInterval(shuffleVisibleCards, 3600000); // 1 hour
   // 🎞️ Activate image carousels
   function activateCarousels() {
     document.querySelectorAll('.carousel').forEach(carousel => {
@@ -400,6 +397,10 @@ setInterval(shuffleVisibleCards, 3600000); // 1 hour
       }, 3000);
     });
   }
+
+  // 🚀 Initial load and shuffle loop
+  loadProducts(); // ✅ FIXED: this should be called, not renderNextBatch directly
+  setInterval(shuffleVisibleCards, 3600000); // ✅ Starts after initial render
 
   // 👀 Animate cards on scroll
   const observer = new IntersectionObserver((entries) => {
