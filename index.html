@@ -332,7 +332,6 @@ const batchSize = 12;
 
 // 📦 Load product data from Google Sheets
 async function loadProducts() {
-  async function loadProducts() {
   const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
   const tabName = "Sheet1";
   const url = `https://opensheet.elk.sh/${sheetID}/${tabName}`;
@@ -419,19 +418,6 @@ function activateCarousels() {
 
 // 🚀 Initial load
 loadProducts();
-
-// ⏱ Sync reshuffle to top of hour
-function syncToHourStart(callback) {
-  const now = new Date();
-  const msUntilNextHour =
-    (60 - now.getMinutes()) * 60 * 1000 - now.getSeconds() * 1000;
-  setTimeout(() => {
-    callback();
-    setInterval(callback, 60 * 60 * 1000);
-  }, msUntilNextHour);
-}
-
-syncToHourStart(renderShuffledGrid);
 
 // 👀 Animate cards on scroll
 const observer = new IntersectionObserver((entries) => {
