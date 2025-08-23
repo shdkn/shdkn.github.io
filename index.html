@@ -364,36 +364,50 @@
 
   // 🧱 Render a batch of product cards
   function renderNextBatch() {
-    const grid = document.querySelector("main.grid");
-    if (!grid) return;
+  const grid = document.querySelector("main.grid");
+  if (!grid) return;
 
-    const nextItems = allProducts.slice(currentIndex, currentIndex + batchSize);
+  const nextItems = allProducts.slice(currentIndex, currentIndex + batchSize);
 
-    nextItems.forEach((item, i) => {
-      const card = document.createElement("article");
-      card.className = "card";
-      card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
-      card.style.transitionDelay = `${i * 100}ms`;
+  nextItems.forEach((item, i) => {
+    const card = document.createElement("article");
+    card.className = "card";
+    card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
+    card.style.transitionDelay = `${i * 100}ms`;
 
-      const imageArray = item.img.split(',');
-      const carouselHTML = imageArray.map((url, i) =>
-        `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" />`
-      ).join('');
+    const imageArray = item.img.split(',');
+    const carouselHTML = imageArray.map((url, i) =>
+      `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" />`
+    ).join('');
 
-      card.innerHTML = `
-        <div class="carousel">
-          ${carouselHTML}
-        </div>
-        <h3 class="title-text">${item.title}</h3>
-        <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
-      `;
+    card.innerHTML = `
+      <div class="carousel">
+        ${carouselHTML}
+      </div>
+      <h3 class="title-text">${item.title}</h3>
+      <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
+    `;
 
-      grid.appendChild(card);
-      observer.observe(card);
-    });
+    grid.appendChild(card);
+    observer.observe(card);
+  });
 
-    activateCarousels();
-    currentIndex += batchSize;
+  activateCarousels();
+  currentIndex += batchSize;
+
+  // ✅ Append footer card only once, after final batch
+  if (currentIndex >= allProducts.length) {
+    const footerCard = document.createElement("article");
+    footerCard.className = "card footer-card";
+    footerCard.innerHTML = `
+      <p>Inspired by Google Keep’s brilliant simplicity</p>
+      <p>© 2025 ShareDukaan. All rights reserved.</p>
+      <p class="disclaimer">
+        Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We may earn a small commission when you purchase through affiliate links, at no extra cost to you. Product prices and availability are subject to change. The actual product may differ slightly from the images shown above.
+      </p>
+    `;
+    grid.appendChild(footerCard);
+  }
   }
 
   // 🎞️ Activate image carousels
@@ -479,12 +493,6 @@
     activateCarousels();
   });
 </script>
-<article class="card footer-card">
-  <p>Inspired by Google Keep’s brilliant simplicity</p>
-  <p>© 2025 ShareDukaan. All rights reserved.</p>
-  <p class="disclaimer">
-    Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We may earn a small commission when you purchase through affiliate links, at no extra cost to you. Product prices and availability are subject to change. The actual product may differ slightly from the images shown above.
-  </p>
-</article>
+
 </body>
 </html>
