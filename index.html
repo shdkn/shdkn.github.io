@@ -271,14 +271,18 @@
   grid-template-columns: 1fr; /* Mobile: 1 column */
   gap: 16px;
   padding: 16px;
+  width: 100%; /* Default for mobile */
 }
 
-/* Desktop layout: 4 columns */
+/* Desktop layout: 4 columns, centered at 80% width */
 @media (min-width: 768px) {
   .grid {
     grid-template-columns: repeat(4, 1fr);
+    width: 80%;
+    margin: 0 auto;
   }
 }
+
 
 
 
