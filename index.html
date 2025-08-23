@@ -266,18 +266,20 @@
   display: flex;
   align-items: center;
 }
-  .grid {
+.grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr; /* Mobile: 1 column */
   gap: 16px;
   padding: 16px;
 }
 
+/* Desktop layout: 4 columns */
 @media (min-width: 768px) {
   .grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 }
+
 
 
   </style>
