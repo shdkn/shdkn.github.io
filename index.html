@@ -289,17 +289,6 @@
   transform: scale(1.03) translateY(0); /* Slight zoom */
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16); /* Elevated shadow */
 }
-    .footer-card {
-  background-color: #282A2B;
-  color: #BDB9B9;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  line-height: 1.6;
-  padding: 24px;
-  border-top: 1px solid #3A3A3A;
-  text-align: center;
-  grid-column: 1 / -1; /* Span full width of grid */
-}
   </style>
   </head>
 <body>
@@ -471,27 +460,8 @@
       observer.observe(card);
     });
 
-    activateCarousels()
-document.addEventListener("DOMContentLoaded", () => {
-  const grid = document.querySelector(".grid");
-  if (!grid) return;
-
-  // Prevent duplicate footer
-  if (!document.querySelector(".footer-card")) {
-    fetch("footer.html")
-      .then(response => {
-        if (!response.ok) throw new Error("Footer fetch failed");
-        return response.text();
-      })
-      .then(html => {
-        const footerWrapper = document.createElement("div");
-        footerWrapper.className = "card footer-card";
-        footerWrapper.innerHTML = html;
-        grid.appendChild(footerWrapper);
-      })
-      .catch(err => console.error("Could not load footer:", err));
-  }
-})
+    activateCarousels();
+  });
 </script>
 </body>
 </html>
