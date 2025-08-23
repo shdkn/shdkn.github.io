@@ -462,6 +462,26 @@
 
     activateCarousels();
   });
+document.addEventListener("DOMContentLoaded", () => {
+  const grid = document.querySelector(".grid");
+  if (!grid) return;
+
+  // Prevent duplicate footer
+  if (!document.querySelector(".footer-card")) {
+    fetch("footer.html")
+      .then(response => {
+        if (!response.ok) throw new Error("Footer fetch failed");
+        return response.text();
+      })
+      .then(html => {
+        const footerWrapper = document.createElement("div");
+        footerWrapper.className = "card footer-card";
+        footerWrapper.innerHTML = html;
+        grid.appendChild(footerWrapper);
+      })
+      .catch(err => console.error("Could not load footer:", err));
+  }
+});
 </script>
 </body>
 </html>
