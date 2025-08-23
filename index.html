@@ -321,126 +321,150 @@
 </footer>
 <script>
   // 🎨 Color palette for card backgrounds
-  const colors = [
-    "#3A3647", "#1C262E", "#692B17",
-    "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
-  ];
+const colors = [
+  "#3A3647", "#1C262E", "#692B17",
+  "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
+];
 
-  let allProducts = [];
-  let currentIndex = 0;
-  const batchSize = 12;
+let allProducts = [];
+let currentIndex = 0;
+const batchSize = 12;
 
-  // 📦 Load product data from Google Sheets
-  async function loadProducts() {
-    const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
-    const tabName = "Sheet1";
-    const url = `https://opensheet.elk.sh/${sheetID}/${tabName}`;
-    const res = await fetch(url);
-    const data = await res.json();
+// 📦 Load product data from Google Sheets
+async function loadProducts() {
+  const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+  const tabName = "Sheet1";
+  const url = `https://opensheet.elk.sh/${sheetID}/${tabName}`;
+  const res = await fetch(url);
+  const data = await res.json();
 
-    allProducts = data.filter(item => item.title && item.img && item.link);
+  allProducts = data.filter(item => item.title && item.img && item.link);
+  renderNextBatch();
+}
+
+// 🔀 Reshuffle logic synced to hour
+function generateShuffleWeight(title) {
+  const time = new Date();
+  const hour = time.getHours();
+  return (title.length * hour) % 1000;
+}
+
+function shuffleByWeight(arr) {
+  return arr
+    .map(item => ({
+      ...item,
+      weight: generateShuffleWeight(item.title)
+    }))
+    .sort((a, b) => a.weight - b.weight);
+}
+
+function renderShuffledGrid() {
+  const grid = document.querySelector("main.grid");
+  grid.innerHTML = "";
+  currentIndex = 0;
+  allProducts = shuffleByWeight(allProducts);
+  renderNextBatch();
+}
+
+// 🧱 Render a batch of product cards
+function renderNextBatch() {
+  const grid = document.querySelector("main.grid");
+  const nextItems = allProducts.slice(currentIndex, currentIndex + batchSize);
+
+  nextItems.forEach((item, i) => {
+    const card = document.createElement("article");
+    card.className = "card";
+    card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
+    card.style.transitionDelay = `${i * 100}ms`;
+
+    const imageArray = item.img.split(',');
+    const carouselHTML = imageArray.map((url, i) =>
+      `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" />`
+    ).join('');
+
+    card.innerHTML = `
+      <div class="carousel">
+        ${carouselHTML}
+      </div>
+      <h3 class="title-text">${item.title}</h3>
+      <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
+    `;
+
+    grid.appendChild(card);
+    observer.observe(card);
+  });
+
+  activateCarousels();
+  currentIndex += batchSize;
+}
+
+// 🎞️ Activate image carousels
+function activateCarousels() {
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    const images = carousel.querySelectorAll('img');
+    if (images.length <= 1) return;
+
+    let index = 0;
+    setInterval(() => {
+      images.forEach((img, i) => img.classList.toggle('active', i === index));
+      index = (index + 1) % images.length;
+    }, 3000);
+  });
+}
+
+// 🚀 Initial load
+loadProducts();
+
+// ⏱ Sync reshuffle to top of hour
+function syncToHourStart(callback) {
+  const now = new Date();
+  const msUntilNextHour =
+    (60 - now.getMinutes()) * 60 * 1000 - now.getSeconds() * 1000;
+  setTimeout(() => {
+    callback();
+    setInterval(callback, 60 * 60 * 1000);
+  }, msUntilNextHour);
+}
+
+syncToHourStart(renderShuffledGrid);
+
+// 👀 Animate cards on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    entry.target.classList.toggle('visible', entry.isIntersecting);
+  });
+}, {
+  threshold: 0.1
+});
+
+// 📜 Infinite scroll + back-to-top visibility
+window.addEventListener("scroll", () => {
+  const scrollY = window.scrollY;
+  const viewportHeight = window.innerHeight;
+  const fullHeight = document.body.offsetHeight;
+
+  if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < allProducts.length) {
     renderNextBatch();
   }
 
-  // 🧱 Render a batch of product cards
-  function renderNextBatch() {
-    const grid = document.querySelector("main.grid");
-    const nextItems = allProducts.slice(currentIndex, currentIndex + batchSize);
+  document.getElementById("backToTop").style.display = scrollY > 300 ? "block" : "none";
+});
 
-    nextItems.forEach((item, i) => {
-      const card = document.createElement("article");
-      card.className = "card";
-      card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
-      card.style.transitionDelay = `${i * 100}ms`;
+// ⬆️ Smooth scroll to top
+document.getElementById("backToTop").addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
 
-      const imageArray = item.img.split(',');
-      const carouselHTML = imageArray.map((url, i) =>
-        `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" />`
-      ).join('');
+// 🔍 Search filter
+document.getElementById("searchInput").addEventListener("input", function () {
+  const query = this.value.toLowerCase();
+  const cards = document.querySelectorAll("article.card");
 
-      card.innerHTML = `
-        <div class="carousel">
-          ${carouselHTML}
-        </div>
-        <h3 class="title-text">${item.title}</h3>
-        <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
-      `;
-
-      grid.appendChild(card);
-      observer.observe(card);
-    });
-
-    activateCarousels();
-    currentIndex += batchSize;
-  }
- // 🔀 Shuffle visible cards every hour
-  function shuffleVisibleCards() {
-    const grid = document.querySelector("main.grid");
-    const cards = Array.from(grid.children);
-
-    for (let i = cards.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      grid.insertBefore(cards[j], cards[i]);
-    }
-  }
-
-  // 🎞️ Activate image carousels
-  function activateCarousels() {
-    document.querySelectorAll('.carousel').forEach(carousel => {
-      const images = carousel.querySelectorAll('img');
-      if (images.length <= 1) return;
-
-      let index = 0;
-      setInterval(() => {
-        images.forEach((img, i) => img.classList.toggle('active', i === index));
-        index = (index + 1) % images.length;
-      }, 3000);
-    });
-  }
-
-  // 🚀 Initial load and shuffle loop
-  loadProducts(); // ✅ FIXED: this should be called, not renderNextBatch directly
-  setInterval(shuffleVisibleCards, 3600000); // ✅ Starts after initial render
-
-  // 👀 Animate cards on scroll
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      entry.target.classList.toggle('visible', entry.isIntersecting);
-    });
-  }, {
-    threshold: 0.1
+  cards.forEach(card => {
+    const title = card.querySelector("h3").textContent.toLowerCase();
+    card.style.display = title.includes(query) ? "flex" : "none";
   });
-
-  // 📜 Infinite scroll + back-to-top visibility
-  window.addEventListener("scroll", () => {
-    const scrollY = window.scrollY;
-    const viewportHeight = window.innerHeight;
-    const fullHeight = document.body.offsetHeight;
-
-    if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < allProducts.length) {
-      renderNextBatch();
-    }
-
-    document.getElementById("backToTop").style.display = scrollY > 300 ? "block" : "none";
-  });
-
-  // ⬆️ Smooth scroll to top
-  document.getElementById("backToTop").addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-
-  // 🔍 Search filter
-  document.getElementById("searchInput").addEventListener("input", function () {
-    const query = this.value.toLowerCase();
-    const cards = document.querySelectorAll("article.card");
-
-    cards.forEach(card => {
-      const title = card.querySelector("h3").textContent.toLowerCase();
-      card.style.display = title.includes(query) ? "flex" : "none";
-    });
-  });
-
-  // 🚀 Initialize
+});
 </script>
 </body>
 </html>
