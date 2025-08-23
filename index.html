@@ -289,23 +289,6 @@
   transform: scale(1.03) translateY(0); /* Slight zoom */
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16); /* Elevated shadow */
 }
-    .footer-card {
-  background-color: #282A2B;
-  color: #BDB9B9;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  line-height: 1.6;
-  padding: 24px;
-  border-top: 1px solid #3A3A3A;
-  text-align: center;
-  grid-column: 1 / -1; /* Span full width of grid */
-}
-
-.footer-card .disclaimer {
-  margin-top: 12px;
-  font-size: 12px;
-  opacity: 0.85;
-      }
   </style>
   </head>
 <body>
@@ -362,19 +345,7 @@
 
     renderNextBatch(); // Initial render after load
   }
-const grid = document.querySelector("main.grid");
-if (!document.querySelector(".footer-card")) {
-  const footerCard = document.createElement("article");
-  footerCard.className = "card footer-card";
-  footerCard.innerHTML = `
-    <p>Inspired by Google Keep’s brilliant simplicity</p>
-    <p>© 2025 ShareDukaan. All rights reserved.</p>
-    <p class="disclaimer">
-      Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We may earn a small commission when you purchase through affiliate links, at no extra cost to you. Product prices and availability are subject to change. The actual product may differ slightly from the images shown above.
-    </p>
-  `;
-  grid.appendChild(footerCard);
-}
+
   // 🧱 Render a batch of product cards
   function renderNextBatch() {
     const grid = document.querySelector("main.grid");
