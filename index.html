@@ -472,6 +472,19 @@
     });
 
     activateCarousels();
+    // Fetch and inject external footer.html
+fetch("footer.html")
+  .then(response => {
+    if (!response.ok) throw new Error("Network response was not ok");
+    return response.text();
+  })
+  .then(html => {
+    const footerWrapper = document.createElement("div");
+    footerWrapper.className = "card footer-card";
+    footerWrapper.innerHTML = html;
+    document.querySelector(".grid").appendChild(footerWrapper);
+  })
+  .catch(err => console.error("Footer load failed:", err));
   });
 </script>
 </body>
