@@ -273,10 +273,13 @@
 @media (min-width: 768px) {
   .grid {
     grid-template-columns: repeat(5, 1fr);
-    width: 80%;
+    width: 100%;
+    max-width: 1200px; /* or 1280px, depending on your design */
     margin: 0 auto;
+    padding: 0 12px; /* optional side padding */
   }
 }
+
 
 
 .card:hover {
