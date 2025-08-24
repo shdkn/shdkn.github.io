@@ -101,15 +101,7 @@
       background-color: #fff;
       color: #000;
     }
-
-    .grid {
-      display: block;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 6px;
-      padding: 16px;
-    }
-    
-   .card {
+ .card {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -271,12 +263,17 @@
 }
 .grid {
   display: grid;
-  grid-template-columns: 1fr; /* Mobile: 1 column */
+  grid-template-columns: 1fr;
   gap: 16px;
-  padding: 16px;
-  width: 100%; /* Default for mobile */
+  padding: 16px 0;
+  width: 100%;
 }
 
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
 /* Desktop layout: 4 columns, centered at 80% width */
 @media (min-width: 768px) {
   .grid {
