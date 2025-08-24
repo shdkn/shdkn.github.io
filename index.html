@@ -371,12 +371,25 @@
   padding: 0 24px;
 }
 
+:root {
+  --max-width: 1440px;
+  --side-padding: 24px;
+}
+
+.layout-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--side-padding);
+  box-sizing: border-box;
+}
+
 
 </style>
 </head>
 <body>
   <div class="wrapper grid-wrapper">
-    <header class="top-banner">
+    <!-- Header -->
+    <header class="top-banner layout-container">
       <div class="header-left">
         <img src="https://i.imgur.com/hp0QbkV.jpeg" alt="ShareDukaan Logo" class="logo">
       </div>
@@ -386,7 +399,8 @@
       </div>
     </header>
 
-    <nav class="nav-bar" aria-label="Main site navigation">
+    <!-- Navigation -->
+    <nav class="nav-bar layout-container" role="navigation" aria-label="Main site navigation">
       <ul class="nav-list">
         <li><a href="https://shdkn.short.gy/" class="nav-btn">Mens >></a></li>
         <li><span class="nav-separator">|</span></li>
@@ -396,19 +410,21 @@
       </ul>
     </nav>
 
-    <section class="search-bar" aria-label="Product search">
-      <input type="text" id="searchInput" placeholder="Search products..." />
+    <!-- Search Bar -->
+    <section class="search-bar layout-container" aria-label="Product search">
+      <input type="text" id="searchInput" placeholder="Search products..." aria-label="Search products" />
     </section>
+
+    <!-- Product Grid -->
+    <main id="productGrid" class="grid layout-container" aria-label="Product catalog"></main>
   </div>
 
-  <div class="wrapper grid-wrapper">
-    <main id="productGrid" class="grid" aria-label="Product catalog"></main>
-  </div>
-
+  <!-- Back to Top Button -->
   <button id="backToTop" title="Back to Top">Top</button>
 
+  <!-- Footer -->
   <footer class="footer-banner">
-    <div class="wrapper">
+    <div class="layout-container">
       <div class="footer-content">
         <p class="footer-tagline">Inspired by Google Keep’s brilliant simplicity</p>
         <p class="footer-branding">© 2025 ShareDukaan. All rights reserved.</p>
@@ -419,6 +435,7 @@
     </div>
   </footer>
 
+  <!-- JavaScript -->
   <script>
     const colors = [
       "#3A3647", "#1C262E", "#692B17",
@@ -470,8 +487,10 @@
           <div class="carousel">
             ${carouselHTML}
           </div>
-          <h3 class="title-text">${item.title}</h3>
-          <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
+          <div class="card-meta">
+            <h3 class="title-text">${item.title}</h3>
+            <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
+          </div>
         `;
 
         grid.appendChild(card);
@@ -546,18 +565,15 @@
           `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" />`
         ).join('');
 
-     card.innerHTML = `
-  <div class="carousel">
-    ${imageArray.map((url, i) =>
-      `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" />`
-    ).join('')}
-  </div>
-  <div class="card-meta">
-    <h3 class="title-text">${item.title}</h3>
-    <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
-  </div>
-`;
-
+        card.innerHTML = `
+          <div class="carousel">
+            ${carouselHTML}
+          </div>
+          <div class="card-meta">
+            <h3 class="title-text">${item.title}</h3>
+            <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
+          </div>
+        `;
 
         grid.appendChild(card);
         observer.observe(card);
@@ -567,6 +583,4 @@
     });
   </script>
 </body>
-
-
 </html>
