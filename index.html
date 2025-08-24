@@ -269,17 +269,16 @@
   width: 100%;
 }
 
-/* Desktop layout: 4 columns, centered at 80% width */
 @media (min-width: 768px) {
   .grid {
     grid-template-columns: repeat(5, 1fr);
-    background: rgba(0, 128, 255, 0.05);
     width: 100%;
-    max-width: 1200px; /* or 1280px, depending on your design */
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 0 12px; /* optional side padding */
+    padding: 0 12px;
   }
 }
+
 
 
 
@@ -356,7 +355,7 @@
   <input type="text" id="searchInput" placeholder="Search products..." />
 </section>
 
-<div class:"wrapper"> <main id="productGrid" class="grid" aria-label="Product catalog"></main>
+<div class="wrapper"> <main id="productGrid" class="grid" aria-label="Product catalog"></main>
 
 <footer>
   <button id="backToTop" title="Back to Top">Top</button>
