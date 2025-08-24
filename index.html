@@ -271,11 +271,10 @@
 }
 
 /* Desktop override — scoped to grid-wrapper only */
-@media (min-width: 768px) {
-  .wrapper.grid-wrapper {
-    width: 100%;
-    max-width: none;
-    padding: 0;
+@media (min-width: 1024px) {
+  .wrapper {
+    max-width: 1440px;       /* Or go bolder: 1600px or even 100% */
+    padding: 0 24px;         /* Slightly wider padding for balance */
   }
 
  .wrapper.grid-wrapper .grid {
