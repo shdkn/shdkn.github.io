@@ -261,28 +261,31 @@
   display: flex;
   align-items: center;
 }
+/* Base mobile styles — untouched */
 .grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 6px;
-  padding: 4px 0;
+  padding: 4px 12px;
   width: 100%;
 }
 
+/* Desktop override — scoped to grid-wrapper only */
 @media (min-width: 768px) {
+  .wrapper.grid-wrapper {
+    max-width: none;
+    padding: 0;
+  }
+
   .grid {
     grid-template-columns: repeat(5, 1fr);
-    width: 100%;
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 12px;
   }
 }
 
-
-
-
-.card:hover {
+    .card:hover {
   transform: scale(1.03) translateY(0); /* Slight zoom */
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16); /* Elevated shadow */
 }
@@ -355,7 +358,7 @@
   <input type="text" id="searchInput" placeholder="Search products..." />
 </section>
 
-<div class="wrapper"> <main id="productGrid" class="grid" aria-label="Product catalog"></main>
+<div class="wrapper grid-wrapper"> <main id="productGrid" class="grid" aria-label="Product catalog"></main>
 
 <footer>
   <button id="backToTop" title="Back to Top">Top</button>
