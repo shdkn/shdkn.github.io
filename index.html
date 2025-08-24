@@ -273,10 +273,12 @@
 @media (min-width: 768px) {
   .grid {
     grid-template-columns: repeat(5, 1fr);
-    width: 80%;
+    width: 100vw;
+    max-width: 80vw;
     margin: 0 auto;
   }
 }
+
 .card:hover {
   transform: scale(1.03) translateY(0); /* Slight zoom */
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16); /* Elevated shadow */
