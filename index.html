@@ -284,42 +284,11 @@
     width: 80%;
     margin: 0 auto;
   }
+}
 .card:hover {
   transform: scale(1.03) translateY(0); /* Slight zoom */
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16); /* Elevated shadow */
 }
-.footer-banner {
-  width: 100%;
-  background-color: #333;
-  color: #BDB9B9;
-  padding: 24px 0;
-  border-top: 1px solid #3A3A3A;
-}
-
-.footer-content {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 16px;
-  text-align: center;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.footer-tagline {
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-
-.footer-branding {
-  font-size: 12px;
-  margin-bottom: 8px;
-}
-
-.footer-disclaimer {
-  font-size: 12px;
-  opacity: 0.85;
-        }
   </style>
   </head>
 <body>
@@ -455,64 +424,44 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
-// 🔍 Search filter with reset
-document.getElementById("searchInput").addEventListener("input", function () {
-  const query = this.value.toLowerCase();
-  const grid = document.querySelector("main.grid");
-  if (!grid) return;
+  // 🔍 Search filter with reset
+  document.getElementById("searchInput").addEventListener("input", function () {
+    const query = this.value.toLowerCase();
+    const grid = document.querySelector("main.grid");
+    if (!grid) return;
 
-  grid.innerHTML = ""; // Clear existing cards
-  currentIndex = 0;
+    grid.innerHTML = ""; // Clear existing cards
+    currentIndex = 0;
 
-  const filtered = allProducts.filter(item =>
-    item.title.toLowerCase().includes(query)
-  );
+    const filtered = allProducts.filter(item =>
+      item.title.toLowerCase().includes(query)
+    );
 
-  filtered.slice(0, batchSize).forEach((item, i) => {
-    const card = document.createElement("article");
-    card.className = "card";
-    card.style.backgroundColor = colors[i % colors.length];
-    card.style.transitionDelay = `${i * 100}ms`;
+    filtered.slice(0, batchSize).forEach((item, i) => {
+      const card = document.createElement("article");
+      card.className = "card";
+      card.style.backgroundColor = colors[i % colors.length];
+      card.style.transitionDelay = `${i * 100}ms`;
 
-    const imageArray = item.img.split(',');
-    const carouselHTML = imageArray.map((url, i) =>
-      `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" />`
-    ).join('');
+      const imageArray = item.img.split(',');
+      const carouselHTML = imageArray.map((url, i) =>
+        `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" />`
+      ).join('');
 
-    card.innerHTML = `
-      <div class="carousel">
-        ${carouselHTML}
-      </div>
-      <h3 class="title-text">${item.title}</h3>
-      <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
-    `;
+      card.innerHTML = `
+        <div class="carousel">
+          ${carouselHTML}
+        </div>
+        <h3 class="title-text">${item.title}</h3>
+        <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
+      `;
 
-    grid.appendChild(card);
-    observer.observe(card);
+      grid.appendChild(card);
+      observer.observe(card);
+    });
+
+    activateCarousels();
   });
-
-  activateCarousels();
-
-  // ✅ Inject footer after grid is rebuilt
-  fetch("footer.html")
-    .then(response => response.text())
-    .then(html => {
-      const footerWrapper = document.createElement("div");
-      footerWrapper.className = "card footer-card";
-      footerWrapper.innerHTML = html;
-      grid.appendChild(footerWrapper);
-    })
-    .catch(err => console.error("Could not load footer:", err));
-});
 </script>
-  <footer class="footer-banner">
-  <div class="footer-content">
-    <p class="footer-tagline">Inspired by Google Keep’s brilliant simplicity</p>
-    <p class="footer-branding">© 2025 ShareDukaan. All rights reserved.</p>
-    <p class="footer-disclaimer">
-      Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We may earn a small commission when you purchase through affiliate links, at no extra cost to you. Product prices and availability are subject to change. The actual product may differ slightly from the images shown above.
-    </p>
-  </div>
-  </footer>
 </body>
 </html>
