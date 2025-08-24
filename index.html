@@ -43,6 +43,7 @@
     }
 
     .top-banner {
+      width: 100%
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -324,6 +325,7 @@
   max-width: 960px;
   margin: 0 auto;
   padding: 0 16px;
+  box-sizing: border-box;
     }
   </style>
   </head>
@@ -351,7 +353,7 @@
   <input type="text" id="searchInput" placeholder="Search products..." />
 </section>
 
-<main id="productGrid" class="grid" aria-label="Product catalog"></main>
+<div class:"wrapper"> <main id="productGrid" class="grid" aria-label="Product catalog"></main>
 
 <footer>
   <button id="backToTop" title="Back to Top">Top</button>
