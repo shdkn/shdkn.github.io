@@ -278,14 +278,15 @@
     padding: 0;
   }
 
-  .wrapper.grid-wrapper .grid {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(200px, 1fr)); /* 👈 Your line */
-    max-width: 1440px;   /* 👈 Your line */
-    margin: 0 auto;      /* 👈 Your line */
-    padding: 0 24px;
-    gap: 24px;
-  }
+ .wrapper.grid-wrapper .grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 equal columns */
+  gap: 2px; /* Tight spacing */
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 12px; /* Optional: reduce padding to match tight feel */
+}
 }
     .card:hover {
   transform: scale(1.03) translateY(0); /* Slight zoom */
