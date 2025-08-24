@@ -280,15 +280,13 @@
 
   .wrapper.grid-wrapper .grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    width: 100%;
-    max-width: none;       /* 🔓 Remove width cap */
-    margin: 0;             /* 🧼 Remove centering */
-    padding: 0 24px;       /* 🧘 Add edge breathing room */
+    grid-template-columns: repeat(5, minmax(200px, 1fr)); /* 👈 Your line */
+    max-width: 1440px;   /* 👈 Your line */
+    margin: 0 auto;      /* 👈 Your line */
+    padding: 0 24px;
     gap: 24px;
   }
 }
-
     .card:hover {
   transform: scale(1.03) translateY(0); /* Slight zoom */
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16); /* Elevated shadow */
