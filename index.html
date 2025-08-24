@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <title>Shoe Dukaan | Premium Footwear Catalog</title>
-   <link rel="icon" href="favicon.png" type="image/png">
+  <title>Shoe Dukaan | Premium Footwear Catalog</title>
   <meta name="description" content="Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.">
   <meta name="keywords" content="premium shoes, footwear catalog, mobile-first grid, Shoe Dukaan, vertical product images, curated shoes, online shoe store">
   <meta name="author" content="ShareDukaan">
@@ -26,6 +25,7 @@
 
   <style>
     body {
+      overflow-x: hidden;
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -42,16 +42,18 @@
         transform: translateY(0);
       }
     }
-
+* {
+  outline: 1px solid red;
+}
     .top-banner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 16px;
-      background-color: #333;
-      color: #fff;
-      flex-wrap: wrap;
-      position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: #333;
+  color: #fff;
+  padding: 12px 0;
+  width: 100%;
     }
 
     .logo {
@@ -69,7 +71,7 @@
 
     .tagline {
       font-family: 'Assistant', sans-serif;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 400;
       margin-bottom: 4px;
     }
@@ -102,15 +104,7 @@
       background-color: #fff;
       color: #000;
     }
-
-    .grid {
-      display: block;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 6px;
-      padding: 16px;
-    }
-    
-   .card {
+ .card {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -125,11 +119,6 @@
   transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
   width: 100%;
   box-sizing: border-box;
-}
-
-    .card:hover {
-  transform: scale(1.03) translateY(0); /* Slight zoom */
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16); /* Elevated shadow */
 }
 
     .card.visible {
@@ -275,176 +264,262 @@
   display: flex;
   align-items: center;
 }
+/* Base mobile styles — untouched */
 .grid {
   display: grid;
-  grid-template-columns: 1fr; /* Mobile: 1 column */
-  gap: 16px;
-  padding: 16px;
-  width: 100%; /* Default for mobile */
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding: 0px 12px;
+  width: 100%;
 }
 
-/* Desktop layout: 4 columns, centered at 80% width */
-@media (min-width: 768px) {
-  .grid {
-    grid-template-columns: repeat(5, 1fr);
-    width: 80%;
-    margin: 0 auto;
-  }
-}
+/* Desktop override — scoped to grid-wrapper only */
+@media (min-width: 1024px) {
+     .wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+    }
 
  .wrapper.grid-wrapper .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 5 equal columns */
+  grid-template-columns: repeat(5, 1fr); /* 5 equal columns */
   gap: 2px; /* Tight spacing */
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 12px; /* Optional: reduce padding to match tight feel */
 }
-}
-.card:hover {
+
+    .card:hover {
   transform: scale(1.03) translateY(0); /* Slight zoom */
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16); /* Elevated shadow */
 }
+  .footer-banner {
+  width: 100%;
+  background-color: #333;
+  color: #BDB9B9;
+  padding: 2px 0; /* Reduced vertical padding */
+  border-top: 1px solid #3A3A3A;
+  opacity: 0.85; 
+  padding-top: 6px;
+  padding-bottom: 6px;
+
+}
+
+.footer-content {
+  margin: 0 auto;
+  padding: 0 16px;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 11px;
+  line-height: 1.2;
+  
+}
+
+.footer-tagline {
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.footer-branding {
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.footer-disclaimer {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
   </style>
   </head>
 <body>
-<header class="top-banner">
-  <div class="header-left">
-    <img src="https://i.imgur.com/hp0QbkV.jpeg" alt="sharedukaan_Logo" class="logo">
+  <div class="wrapper">
+    <header class="top-banner">
+      <div class="header-left">
+        <img src="https://i.imgur.com/hp0QbkV.jpeg" alt="ShareDukaan Logo" class="logo">
+      </div>
+      <div class="header-right">
+        <p class="tagline">Discover The Best Shoes & Accessories – All in One Place | Shop Smart!!</p>
+        <a href="https://t.me/sharedukaan" class="telegram-link">For daily updates 👉 Telegram</a>
+      </div>
+    </header>
+
+    <nav class="nav-bar" aria-label="Main site navigation">
+      <ul class="nav-list">
+        <li><a href="https://shdkn.short.gy/" class="nav-btn">Mens >></a></li>
+        <li><span class="nav-separator">|</span></li>
+        <li><a href="https://shdkn.short.gy/womens" class="nav-btn">Womens >></a></li>
+        <li><span class="nav-separator">|</span></li>
+        <li><a href="#blog" class="nav-btn">Blog >></a></li>
+      </ul>
+    </nav>
+
+    <section class="search-bar" aria-label="Product search">
+      <input type="text" id="searchInput" placeholder="Search products..." />
+    </section>
   </div>
-  <div class="header-right">
-    <p class="tagline">Discover The Best Shoes & Accessories – All in One Place | Shop Smart!!</p>
-    <a href="https://t.me/sharedukaan" class="telegram-link">For daily updates 👉 Telegram</a>
+
+  <div class="wrapper grid-wrapper">
+    <main id="productGrid" class="grid" aria-label="Product catalog"></main>
   </div>
-</header>
-<nav class="nav-bar" aria-label="Main site navigation">
-  <ul class="nav-list">
-    <li><a href="https://shdkn.short.gy/" class="nav-btn">Mens >></a></li>
-    <li><span class="nav-separator">|</span></li>
-    <li><a href="https://shdkn.short.gy/womens" class="nav-btn">Womens >></a></li>
-    <li><span class="nav-separator">|</span></li>
-    <li><a href="#blog" class="nav-btn">Blog >></a></li>
-  </ul>
-</nav>
-<section class="search-bar" aria-label="Product search">
-  <input type="text" id="searchInput" placeholder="Search products..." />
-</section>
 
-<main id="productGrid" class="grid" aria-label="Product catalog"></main>
+  <div class="footer-controls">
+    <button id="backToTop" title="Back to Top">Top</button>
+  </div>
 
-<footer>
-  <button id="backToTop" title="Back to Top">Top</button>
-</footer>
-<script>
-  // 🎨 Color palette for card backgrounds
-  const colors = [
-    "#3A3647", "#1C262E", "#692B17",
-    "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
-  ];
+  <footer class="footer-banner">
+    <div class="wrapper">
+      <div class="footer-content">
+        <p class="footer-tagline">Inspired by Google Keep’s brilliant simplicity</p>
+        <p class="footer-branding">© 2025 ShareDukaan. All rights reserved.</p>
+        <p class="footer-disclaimer">
+          Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We may earn a small commission when you purchase through affiliate links, at no extra cost to you. Product prices and availability are subject to change. The actual product may differ slightly from the images shown above.
+        </p>
+      </div>
+    </div>
+  </footer>
 
-  let allProducts = [];
-  let currentIndex = 0;
-  const batchSize = 12;
+  <script>
+    const colors = [
+      "#3A3647", "#1C262E", "#692B17",
+      "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
+    ];
 
-  // 📦 Load product data from Google Sheets
-  async function loadProducts() {
-    const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
-    const tabName = "Sheet1";
-    const url = `https://opensheet.elk.sh/${sheetID}/${tabName}`;
-    const res = await fetch(url);
-    const data = await res.json();
+    let allProducts = [];
+    let currentIndex = 0;
+    const batchSize = 12;
 
-    allProducts = data.filter(item => item.title && item.img && item.link);
-    renderNextBatch();
-  }
+    async function loadProducts() {
+      try {
+        const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+        const tabName = "Sheet1";
+        const url = `https://opensheet.elk.sh/${sheetID}/${tabName}`;
+        const res = await fetch(url);
+        const data = await res.json();
 
-  // 🧱 Render a batch of product cards
-  function renderNextBatch() {
-    const grid = document.querySelector("main.grid");
-    const nextItems = allProducts.slice(currentIndex, currentIndex + batchSize);
+        allProducts = data
+          .filter(item => item.title && item.img && item.link)
+          .sort((a, b) => Number(a.shuffleID) - Number(b.shuffleID));
 
-    nextItems.forEach((item, i) => {
-      const card = document.createElement("article");
-      card.className = "card";
-      card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
-      card.style.transitionDelay = `${i * 100}ms`;
-
-      const imageArray = item.img.split(',');
-      const carouselHTML = imageArray.map((url, i) =>
-        `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" />`
-      ).join('');
-
-      card.innerHTML = `
-        <div class="carousel">
-          ${carouselHTML}
-        </div>
-        <h3 class="title-text">${item.title}</h3>
-        <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
-      `;
-
-      grid.appendChild(card);
-      observer.observe(card);
-    });
-
-    activateCarousels();
-    currentIndex += batchSize;
-  }
-
-  // 🎞️ Activate image carousels
-  function activateCarousels() {
-    document.querySelectorAll('.carousel').forEach(carousel => {
-      const images = carousel.querySelectorAll('img');
-      if (images.length <= 1) return;
-
-      let index = 0;
-      setInterval(() => {
-        images.forEach((img, i) => img.classList.toggle('active', i === index));
-        index = (index + 1) % images.length;
-      }, 3000);
-    });
-  }
-
-  // 👀 Animate cards on scroll
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      entry.target.classList.toggle('visible', entry.isIntersecting);
-    });
-  }, {
-    threshold: 0.1
-  });
-
-  // 📜 Infinite scroll + back-to-top visibility
-  window.addEventListener("scroll", () => {
-    const scrollY = window.scrollY;
-    const viewportHeight = window.innerHeight;
-    const fullHeight = document.body.offsetHeight;
-
-    if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < allProducts.length) {
-      renderNextBatch();
+        renderNextBatch();
+      } catch (err) {
+        console.error("Failed to load products:", err);
+      }
     }
 
-    document.getElementById("backToTop").style.display = scrollY > 300 ? "block" : "none";
-  });
+    function renderNextBatch() {
+      const grid = document.querySelector("main.grid");
+      if (!grid) return;
 
-  // ⬆️ Smooth scroll to top
-  document.getElementById("backToTop").addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
+      const nextItems = allProducts.slice(currentIndex, currentIndex + batchSize);
 
-  // 🔍 Search filter
-  document.getElementById("searchInput").addEventListener("input", function () {
-    const query = this.value.toLowerCase();
-    const cards = document.querySelectorAll("article.card");
+      nextItems.forEach((item, i) => {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
+        card.style.transitionDelay = `${i * 100}ms`;
 
-    cards.forEach(card => {
-      const title = card.querySelector("h3").textContent.toLowerCase();
-      card.style.display = title.includes(query) ? "flex" : "none";
+        const imageArray = item.img.split(',');
+        const carouselHTML = imageArray.map((url, i) =>
+          `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" />`
+        ).join('');
+
+        card.innerHTML = `
+          <div class="carousel">
+            ${carouselHTML}
+          </div>
+          <h3 class="title-text">${item.title}</h3>
+          <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
+        `;
+
+        grid.appendChild(card);
+        observer.observe(card);
+      });
+
+      activateCarousels();
+      currentIndex += batchSize;
+    }
+
+    function activateCarousels() {
+      document.querySelectorAll('.carousel').forEach(carousel => {
+        const images = carousel.querySelectorAll('img');
+        if (images.length <= 1) return;
+
+        let index = 0;
+        setInterval(() => {
+          images.forEach((img, i) => img.classList.toggle('active', i === index));
+          index = (index + 1) % images.length;
+        }, 3000);
+      });
+    }
+
+    window.addEventListener("DOMContentLoaded", loadProducts);
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        entry.target.classList.toggle('visible', entry.isIntersecting);
+      });
+    }, {
+      threshold: 0.1
     });
-  });
 
-  // 🚀 Initialize
-  loadProducts();
-</script>
+    window.addEventListener("scroll", () => {
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const fullHeight = document.body.offsetHeight;
+
+      if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < allProducts.length) {
+        renderNextBatch();
+      }
+
+      document.getElementById("backToTop").style.display = scrollY > 300 ? "block" : "none";
+    });
+
+    document.getElementById("backToTop").addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    document.getElementById("searchInput").addEventListener("input", function () {
+      const query = this.value.toLowerCase();
+      const grid = document.querySelector("main.grid");
+      if (!grid) return;
+
+      grid.innerHTML = "";
+      currentIndex = 0;
+
+      const filtered = allProducts.filter(item =>
+        item.title.toLowerCase().includes(query)
+      );
+
+      filtered.slice(0, batchSize).forEach((item, i) => {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.style.backgroundColor = colors[i % colors.length];
+        card.style.transitionDelay = `${i * 100}ms`;
+
+        const imageArray = item.img.split(',');
+        const carouselHTML = imageArray.map((url, i) =>
+          `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" />`
+        ).join('');
+
+        card.innerHTML = `
+          <div class="carousel">
+            ${carouselHTML}
+          </div>
+          <h3 class="title-text">${item.title}</h3>
+          <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
+        `;
+
+        grid.appendChild(card);
+        observer.observe(card);
+      });
+
+      activateCarousels();
+    });
+  </script>
 </body>
 </html>
