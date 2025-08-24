@@ -43,7 +43,6 @@
     }
   }
 
-
   .top-banner {
     display: flex;
     justify-content: space-between;
@@ -108,8 +107,9 @@
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 25px;
-  padding: 32px;
+  background-color: #1c1c1c; /* or any dark tone */
+  gap: 5px;
+  padding: 16px;
   width: 100%;
 }
 
@@ -117,7 +117,7 @@
 @media (min-width: 1024px) {
   .grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 2px;
+    gap: 5px;
   }
 
   .wrapper.grid-wrapper {
@@ -132,6 +132,7 @@
   justify-content: flex-start;
   align-items: center;
   padding: 0;
+  width: auto;
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
