@@ -276,12 +276,15 @@
   padding: 16px;
   width: 100%; /* Default for mobile */
 }
-/* Desktop override — scoped to grid-wrapper only */
-@media (min-width: 1024px) {
-  .wrapper {
-    max-width: 1440px;       /* Or go bolder: 1600px or even 100% */
-    padding: 0 24px;         /* Slightly wider padding for balance */
+
+/* Desktop layout: 4 columns, centered at 80% width */
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    width: 80%;
+    margin: 0 auto;
   }
+}
 
  .wrapper.grid-wrapper .grid {
   display: grid;
