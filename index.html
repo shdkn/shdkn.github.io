@@ -279,13 +279,15 @@
   }
 
   .wrapper.grid-wrapper .grid {
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 🔥 Force 5 columns */
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 24px;
     gap: 12px;
   }
 }
+
 
 
     .card:hover {
