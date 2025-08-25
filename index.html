@@ -405,7 +405,14 @@ body {
   opacity: 0.85;
 }
 }
-</style>
+.buy-divider {
+  width: 100%;
+  height: 1px;
+  background-color: #ccc; /* or #e0e0e0 for a softer tone */
+  margin: 16px 0; /* adjust spacing as needed */
+  opacity: 0.6;
+}
+ </style>
 </head>
 <body>
   <div class="wrapper grid-wrapper">
@@ -505,13 +512,14 @@ body {
         ).join('');
 
         card.innerHTML = `
-          <div class="carousel">
-            ${carouselHTML}
-          </div>
-             <h3 class="title-text">${item.title}</h3>
-            <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
-          </div>
-        `;
+  <div class="carousel">
+    ${carouselHTML}
+  </div>
+  <h3 class="title-text">${item.title}</h3>
+  <div class="buy-divider"></div>
+  <a class="buy-button action-button-text" href="${item.link}" target="_blank">👉👉 Link</a>
+</div>
+`;
 
         grid.appendChild(card);
         observer.observe(card);
