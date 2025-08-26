@@ -297,7 +297,7 @@ body {
 
 .carousel img.active {
   opacity: 1;
-  z-index: 1;
+  position: relative;
 }
 
 .carousel img.active:hover {
@@ -553,7 +553,7 @@ body {
       carouselIntervals.push(interval);
     });
   }
-
+  
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       entry.target.classList.toggle('visible', entry.isIntersecting);
