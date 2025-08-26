@@ -287,19 +287,21 @@ overflow: hidden;
 .carousel img {
 position: absolute;
 top: 0;
-left: 100%; /* Start off-screen to the right */
+  left: 0;
+  left: 100%; /* Start off-screen to the right */
 width: 100%;
 height: 100%;
 object-fit: cover;
-transition: transform 0.6s ease, opacity 0.6s ease;
-transform: translateX(100%);
+  transition: transform 0.6s ease, opacity 0.6s ease;
+  transform: translateX(100%);
 opacity: 0;
+  transition: opacity 0.6s ease;
 z-index: 0;
 }
 
 .carousel img.active {
-transform: translateX(0%);
-left: 0;
+  transform: translateX(0%);
+  left: 0;
 opacity: 1;
 z-index: 1;
 }
@@ -308,31 +310,6 @@ z-index: 1;
 transform: scale(1.03);
 transition: transform 0.3s ease;
 }
-   /* Carousel inside Card */
-.card .carousel {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 3 / 5; /* Matches .card ratio */
-  overflow: hidden;
-  border-radius: 8px; /* Optional: soft inner crop */
-}
-
-.card .carousel img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: opacity 0.6s ease;
-  opacity: 0;
-}
-
-.card .carousel img.active {
-  opacity: 1;
-  z-index: 1;
-}
-
 
 /* Navigation */
 .nav-bar {
@@ -506,6 +483,7 @@ const colors = [
 let allProducts = [];
 let currentIndex = 0;
 const batchSize = 12;
+const carouselIntervals = [];
 
 async function loadProducts() {
 try {
@@ -532,7 +510,7 @@ const carouselHTML = imageArray.map((url, i) =>
 ).join('');
 
 return `
-     <div class="carousel" data-seed="${item.shuffleID}">
+     <div class="carousel">
        ${carouselHTML}
      </div>
      <h3 class="title-text">${item.title}</h3>
@@ -560,30 +538,26 @@ grid.appendChild(card);
 observer.observe(card);
 });
 
-activateCarousels(".carousel");
+activateCarousels();
 currentIndex += batchSize;
 }
 
-function activateCarousels(selector = ".carousel") {
-document.querySelectorAll(selector).forEach((carousel, index) => {
-if (carousel.dataset.activated === "true") return;
-carousel.dataset.activated = "true";
-
-const images = carousel.querySelectorAll("img");
+function activateCarousels() {
+document.querySelectorAll('.carousel').forEach(carousel => {
+const images = carousel.querySelectorAll('img');
 if (images.length <= 1) return;
 
-let current = 0;
+let index = 0;
 
 function shuffle() {
-images.forEach((img, i) => img.classList.toggle("active", i === current));
-current = (current + 1) % images.length;
+images.forEach((img, i) => img.classList.toggle('active', i === index));
+index = (index + 1) % images.length;
 
-const seed = Number(carousel.dataset.seed) || index;
-const nextDelay = 2000 + (seed % 3000); // 2–5s based on seed
+const nextDelay = 2000 + Math.floor(Math.random() * 3000); // 2–5s
 setTimeout(shuffle, nextDelay);
 }
 
-const initialDelay = Math.floor(Math.random() * 3000); // 0–3s stagger
+const initialDelay = Math.floor(Math.random() * 3000); // 0–3s staggered start
 setTimeout(shuffle, initialDelay);
 });
 }
@@ -639,8 +613,10 @@ grid.appendChild(card);
 observer.observe(card);
 });
 
-activateCarousels(".carousel");
+activateCarousels();
 });
 </script>
+
+
 </body>
 </html>
