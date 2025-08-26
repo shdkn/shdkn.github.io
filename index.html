@@ -543,19 +543,19 @@ function activateCarousels() {
 
     let index = 0;
 
-    function shuffleImages() {
+    function shuffle() {
       images.forEach((img, i) => img.classList.toggle('active', i === index));
       index = (index + 1) % images.length;
 
-      const randomDelay = 2000 + Math.floor(Math.random() * 3000); // 2–5 seconds
-      setTimeout(shuffleImages, randomDelay);
+      const nextDelay = 2000 + Math.floor(Math.random() * 3000); // 2–5s
+      setTimeout(shuffle, nextDelay);
     }
 
-    shuffleImages(); // Start the loop
+    const initialDelay = Math.floor(Math.random() * 3000); // 0–3s staggered start
+    setTimeout(shuffle, initialDelay);
   });
 }
 
-  
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       entry.target.classList.toggle('visible', entry.isIntersecting);
