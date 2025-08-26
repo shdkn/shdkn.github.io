@@ -536,23 +536,25 @@ body {
     currentIndex += batchSize;
   }
 
-  function activateCarousels() {
-    carouselIntervals.forEach(clearInterval);
-    carouselIntervals.length = 0;
+function activateCarousels() {
+  document.querySelectorAll('.carousel').forEach(carousel => {
+    const images = carousel.querySelectorAll('img');
+    if (images.length <= 1) return;
 
-    document.querySelectorAll('.carousel').forEach(carousel => {
-      const images = carousel.querySelectorAll('img');
-      if (images.length <= 1) return;
+    let index = 0;
 
-      let index = 0;
-      const interval = setInterval(() => {
-        images.forEach((img, i) => img.classList.toggle('active', i === index));
-        index = (index + 1) % images.length;
-      }, 3000);
+    function shuffleImages() {
+      images.forEach((img, i) => img.classList.toggle('active', i === index));
+      index = (index + 1) % images.length;
 
-      carouselIntervals.push(interval);
-    });
-  }
+      const randomDelay = 2000 + Math.floor(Math.random() * 3000); // 2–5 seconds
+      setTimeout(shuffleImages, randomDelay);
+    }
+
+    shuffleImages(); // Start the loop
+  });
+}
+
   
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
