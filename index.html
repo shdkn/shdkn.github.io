@@ -504,7 +504,7 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
       const data = await res.json();
 
       allProducts = data
-        .filter(item => item.title && item.img && item.link)
+        .filter(item => item.title && item.desc && item.img && item.link)
         .sort((a, b) => Number(a.shuffleID) - Number(b.shuffleID));
 
       renderNextBatch();
