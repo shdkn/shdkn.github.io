@@ -481,7 +481,6 @@ body {
   let allProducts = [];
   let currentIndex = 0;
   const batchSize = 12;
-  const carouselIntervals = [];
 
   async function loadProducts() {
     try {
@@ -508,7 +507,7 @@ body {
     ).join('');
 
     return `
-      <div class="carousel">
+      <div class="carousel" data-seed="${item.shuffleID}">
         ${carouselHTML}
       </div>
       <h3 class="title-text">${item.title}</h3>
@@ -536,29 +535,33 @@ body {
       observer.observe(card);
     });
 
-    activateCarousels();
+    activateCarousels(".carousel");
     currentIndex += batchSize;
   }
 
-function activateCarousels() {
-  document.querySelectorAll('.carousel').forEach(carousel => {
-    const images = carousel.querySelectorAll('img');
-    if (images.length <= 1) return;
+  function activateCarousels(selector = ".carousel") {
+    document.querySelectorAll(selector).forEach((carousel, index) => {
+      if (carousel.dataset.activated === "true") return;
+      carousel.dataset.activated = "true";
 
-    let index = 0;
+      const images = carousel.querySelectorAll("img");
+      if (images.length <= 1) return;
 
-    function shuffle() {
-      images.forEach((img, i) => img.classList.toggle('active', i === index));
-      index = (index + 1) % images.length;
+      let current = 0;
 
-      const nextDelay = 2000 + Math.floor(Math.random() * 3000); // 2–5s
-      setTimeout(shuffle, nextDelay);
-    }
+      function shuffle() {
+        images.forEach((img, i) => img.classList.toggle("active", i === current));
+        current = (current + 1) % images.length;
 
-    const initialDelay = Math.floor(Math.random() * 3000); // 0–3s staggered start
-    setTimeout(shuffle, initialDelay);
-  });
-}
+        const seed = Number(carousel.dataset.seed) || index;
+        const nextDelay = 2000 + (seed % 3000); // 2–5s based on seed
+        setTimeout(shuffle, nextDelay);
+      }
+
+      const initialDelay = Math.floor(Math.random() * 3000); // 0–3s stagger
+      setTimeout(shuffle, initialDelay);
+    });
+  }
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -611,10 +614,8 @@ function activateCarousels() {
       observer.observe(card);
     });
 
-    activateCarousels();
+    activateCarousels(".carousel");
   });
 </script>
-
-
 </body>
 </html>
