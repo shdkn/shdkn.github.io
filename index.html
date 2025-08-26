@@ -195,22 +195,20 @@ body {
 
 /* Card */
 .card {
-.card {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 16px 16px 24px;
+  padding: 16px 16px 24px; /* top, sides, extra bottom */
   width: auto;
-  background: #fff; /* Fallback, overridden by JavaScript */
+  background: #fff;
   border-radius: 0px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-  aspect-ratio: auto; /* Remove to avoid height constraints */
-  min-height: 350px; /* Ensure enough space */
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
   box-sizing: border-box;
   opacity: 0;
   transform: translateY(20px);
-  overflow: visible; /* Prevent clipping */
 }
 
 .product-image {
