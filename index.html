@@ -514,14 +514,7 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
       console.error("Failed to load products:", err);
     }
   }
-
-  function generateCardHTML(item, index) {
-    const imageArray = item.img.split(',');
-    const carouselHTML = imageArray.map((url, i) =>
-      `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
-    ).join('');
-
-    function generateCardHTML(item, index) {
+function generateCardHTML(item, index) {
   const imageArray = item.img.split(',');
   const carouselHTML = imageArray.map((url, i) =>
     `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
@@ -539,6 +532,7 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
     <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${titleLines[0]}">👉👉 Link</a>
   `;
                                                    }
+                                                    }
   function renderNextBatch() {
     const grid = document.querySelector("main.grid");
     if (!grid) return;
