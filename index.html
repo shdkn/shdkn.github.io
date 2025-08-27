@@ -527,17 +527,24 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
       `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
     ).join('');
 
-    return `
-      <div class="carousel" data-seed="${item.shuffleID}">
-        ${carouselHTML}
-      </div>
-      <h3 class="title-text">${item.title}</h3>
-      ${item.desc ? `<p class="txtline">${item.desc.replace(/\n/g, '<br>')}</p>` : ""}
-      <div class="buy-divider"></div>
-      <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
-    `;
-  }
+    function generateCardHTML(item, index) {
+  const imageArray = item.img.split(',');
+  const carouselHTML = imageArray.map((url, i) =>
+    `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
+  ).join('');
 
+  const titleLines = item.title.split('\n').filter(line => line.trim() !== "");
+  const formattedTitle = titleLines.map(line => `<p class="txtline">${line.trim()}</p>`).join('');
+
+  return `
+    <div class="carousel" data-seed="${item.shuffleID}">
+      ${carouselHTML}
+    </div>
+    ${formattedTitle}
+    <div class="buy-divider"></div>
+    <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${titleLines[0]}">👉👉 Link</a>
+  `;
+                                                   }
   function renderNextBatch() {
     const grid = document.querySelector("main.grid");
     if (!grid) return;
