@@ -532,7 +532,7 @@ renderNextBatch();
       ${carouselHTML}
     </div>
     <h3 class="title-text">${item.title}</h3>
-    ${item.desc ? `<p class="txtline">${item.desc}</p>` : ""}
+    ${item.desc ? ``<p class="txtline">${item.desc ? item.desc.replace(/\n/g, '<br>') : "Tap to explore this drop 🔍"}</p>`` : ""}
     <div class="buy-divider"></div>
     <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
   `;
