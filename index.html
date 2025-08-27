@@ -522,6 +522,7 @@ renderNextBatch();
   }
 
   function generateCardHTML(item, index) {
+  function generateCardHTML(item, index) {
   const imageArray = item.img.split(',');
   const carouselHTML = imageArray.map((url, i) =>
     `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
@@ -532,11 +533,11 @@ renderNextBatch();
       ${carouselHTML}
     </div>
     <h3 class="title-text">${item.title}</h3>
-    ${item.desc ? ``<p class="txtline">${item.desc ? item.desc.replace(/\n/g, '<br>') : "Tap to explore this drop 🔍"}</p>`` : ""}
+    ${item.desc ? `<p class="txtline">${item.desc.replace(/\n/g, '<br>')}</p>` : ""}
     <div class="buy-divider"></div>
     <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
   `;
-  }
+          }
 
   function renderNextBatch() {
     const grid = document.querySelector("main.grid");
