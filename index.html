@@ -436,6 +436,9 @@ margin: 20px 0;
 border: none; /* Remove redundant border-top */
 opacity: 0.5; /* Softens the divider for editorial elegance */
 }
+.spacer {
+  height: 20px;
+}
 </style>
 </head>
 <body>
@@ -525,6 +528,7 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
       <div class="carousel" data-seed="${item.shuffleID}">
         ${carouselHTML}
       </div>
+      <div class="spacer"></div>
       <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
       <div class="buy-divider"></div>
       <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
