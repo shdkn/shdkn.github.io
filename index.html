@@ -512,30 +512,30 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
       const data = await res.json();
 
       allProducts = data
-        .filter(item => item.title && item.desc && item.img && item.link)
-        .sort((a, b) => Number(a.shuffleID) - Number(b.shuffleID));
+  .filter(item => item.title && item.img && item.link) // desc is now optional
+  .sort((a, b) => Number(a.shuffleID) - Number(b.shuffleID));
 
-      renderNextBatch();
+renderNextBatch();
     } catch (err) {
       console.error("Failed to load products:", err);
     }
   }
 
   function generateCardHTML(item, index) {
-    const imageArray = item.img.split(',');
-    const carouselHTML = imageArray.map((url, i) =>
-      `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
-    ).join('');
+  const imageArray = item.img.split(',');
+  const carouselHTML = imageArray.map((url, i) =>
+    `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
+  ).join('');
 
-    return `
-      <div class="carousel" data-seed="${item.shuffleID}">
-        ${carouselHTML}
-      </div>
-      <h3 class="title-text">${item.title}</h3>
-<p class="txtline">${item.desc}</p>
-<div class="buy-divider"></div>
-      <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
-    `;
+  return `
+    <div class="carousel" data-seed="${item.shuffleID}">
+      ${carouselHTML}
+    </div>
+    <h3 class="title-text">${item.title}</h3>
+    ${item.desc ? `<p class="txtline">${item.desc}</p>` : ""}
+    <div class="buy-divider"></div>
+    <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
+  `;
   }
 
   function renderNextBatch() {
