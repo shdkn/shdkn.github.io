@@ -96,6 +96,13 @@ font-weight: 400;
 margin-bottom: 4px;
 }
 
+.txtline {
+font-family: 'Assistant', sans-serif;
+font-size: 11px;
+font-weight: 300;
+margin-bottom: 4px;
+}  
+  
 /* Desktop override */
 @media (min-width: 769px) {
 .tagline {
@@ -524,7 +531,7 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
         ${carouselHTML}
       </div>
       <h3 class="title-text">${item.title}</h3>
-<p class="tagline">${item.desc}</p>
+<p class="txtline">${item.desc}</p>
 <div class="buy-divider"></div>
       <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
     `;
