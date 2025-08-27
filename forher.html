@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ShoeDukaan | Premium Footwear Catalog</title>
+<meta name="description" content="Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.">
+<meta name="keywords" content="premium shoes, footwear catalog, mobile-first grid, Shoe Dukaan, vertical product images, curated shoes, online shoe store">
+<meta name="author" content="ShareDukaan">
+<link rel="canonical" href="https://shdkn.carrd.co">
+<meta name="robots" content="index, follow">
+<link rel="icon" href="shdkn_fav_p.png" type="image/png">
+<script type="application/ld+json">
+{
+"@context": "https://schema.org",
+"@type": "WebSite",
+"name": "ShareDukaan",
+"url": "https://shdkn.carrd.co"
+}
+</script>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400&display=swap" rel="stylesheet">
+
+<style>
+:root {
+--max-width: 1440px;
+--side-padding: 18px;
+}
+
+body {
+overflow-x: hidden;
+margin: 0;
+padding: 0;
+font-family: 'Segoe UI', sans-serif;
+background: #1c1c1c;
+scroll-behavior: smooth;
+}
+
+@keyframes fadeInUp {
+from {
+opacity: 0;
+transform: translateY(20px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.layout-container {
+max-width: var(--max-width);
+margin: 0 auto;
+padding: 0 var(--side-padding);
+box-sizing: border-box;
+}
+
+.wrapper.grid-wrapper {
+max-width: var(--max-width);
+margin: 0 auto;
+padding: 0 var(--side-padding);
+}
+
+/* Header */
+.top-banner {
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: wrap;
+background-color: #333;
+color: #fff;
+padding: 12px var(--side-padding);
+position: relative;
+}
+
+.logo {
+width: 75px;
+height: auto;
+aspect-ratio: 1 / 1;
+object-fit: contain;
+}
+
+.header-right {
+display: flex;
+flex-direction: column;
+align-items: flex-end;
+text-align: center;
+flex: 1;
+}
+
+.tagline {
+font-family: 'Assistant', sans-serif;
+font-size: 12px;
+font-weight: 400;
+margin-bottom: 4px;
+}
+
+/* Desktop override */
+@media (min-width: 769px) {
+.tagline {
+white-space: normal;
+max-width: 320px; /* or whatever width fits your layout */
+line-height: 1.4;
+}
+}
+
+.telegram-link {
+font-family: 'Assistant', sans-serif;
+font-size: 13px;
+color: #ffcc00;
+text-decoration: none;
+font-weight: 500;
+}
+
+.telegram-link:hover,
+.telegram-link:focus {
+transition: background-color 0.3s ease;
+color: inherit; /* keep the text color unchanged */
+}
+
+
+/* Search Bar */
+.search-bar {
+padding: 8px 0;
+text-align: center;
+width: 100%;
+background-color: #1c1c1c;
+}
+
+#searchInput {
+width: 90%;
+max-width: 400px;
+padding: 10px 14px;
+font-size: 12px;
+border-radius: 4px;
+border: 1px solid #ccc;
+background-color: #fff;
+color: #000;
+}
+
+/* Grid */
+.grid {
+display: grid;
+grid-template-columns: 1fr;
+gap: 5px;
+padding: 8px 0;
+width: 100%;
+background-color: #1c1c1c;
+}
+
+@media (min-width: 1024px) {
+.grid {
+grid-template-columns: repeat(4, 1fr);
+}
+}
+
+@media (max-width: 768px) {
+.top-banner {
+padding: 12px 16px;
+}
+
+.header-right {
+align-items: flex-start;
+text-align: right;
+width: 100%;
+}
+
+
+.telegram-link {
+display: block;
+margin-left: auto;
+margin-right: 0;
+text-align: right;
+}
+
+.telegram-link:hover,
+.telegram-link:focus {
+transition: background-color 0.3s ease;
+color: inherit; /* keep the text color unchanged */
+}
+
+.tagline   {
+display: block;
+margin-left: auto;
+margin-right: 0;
+text-align: right;
+}
+
+.logo {
+height: 100px; /* or whatever size you want */
+margin-bottom: 8px;
+}
+}
+
+/* Card */
+.card {
+display: flex;
+flex-direction: column;
+justify-content: flex-start;
+align-items: center;
+padding: 6px; /* Balanced editorial spacing */
+width: 100%;
+max-width: 420px; /* Optional: locks visual width for consistency */
+background: #fff;
+border-radius: 12px; /* Soft premium edge */
+box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+box-sizing: border-box;
+aspect-ratio: 3 / 5; /* Taller vertical rhythm */
+overflow: hidden;
+opacity: 0;
+transform: translateY(20px);
+}
+
+ /* Carousel inside Card */
+.card .carousel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 5; /* Matches .card ratio */
+  overflow: hidden;
+  border-radius: 8px; /* Optional: soft inner crop */
+}
+ 
+.card .carousel img.active:hover {
+  filter: brightness(1.08);
+  transition: filter 0.3s ease;
+}
+
+ 
+.product-image {
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+border-radius: 8px;
+}
+
+.card.visible {
+animation: fadeInUp 0.6s ease forwards;
+}
+
+.title-text {
+font-family: 'Inter', sans-serif;
+font-weight: 300;
+font-size: 0.95em;
+color: #BABABA;
+margin-top: 15px;
+line-height: 1.1;
+text-align: center;
+max-width: 90%;   /* Or try 320px for fixed width */
+ margin: 0 auto;
+}
+
+.card:hover {
+transform: scale(1.03);
+box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+}
+
+.card img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+border-radius: 1px;
+display: block;
+}
+
+.action-button-text {
+font-family: 'Barlow', sans-serif;
+font-weight: 500;
+font-size: 11px;
+text-transform: uppercase;
+letter-spacing: 0.3px;
+}
+
+.buy-button { 
+margin-top:5px; 
+padding: 8px 18px 8px 0; /* Top: 8px, Right: 18px, Bottom: 8px, Left: 0 */
+background-color: rgba(30, 30, 30, 0.85); 
+color: #BABABA; 
+text-decoration: none; 
+border-radius: 2px; 
+transition: background-color 0.3s ease, opacity 0.3s ease; align-self: flex-start; 
+ align-self: flex-start;
+}
+
+ .buy-button-wrapper {
+  width: 100%;
+  margin-left: -6px; /* Cancels out the card’s 6px padding */
+  box-sizing: border-box;
+}
+
+.buy-button:hover {
+color: #005fa3;
+}
+
+.buy-button:hover,
+.buy-button:focus {
+background-color: #3B3B3B;
+opacity: 0.85;
+}
+
+/* Carousel */
+.carousel {
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel img {
+  position: absolute;
+  top: 0;
+  left: 100%; /* Start off-screen to the right */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+  transform: translateX(100%);
+  opacity: 0;
+  z-index: 0;
+}
+
+.carousel img.active {
+  transform: translateX(0%);
+  left: 0;
+  opacity: 1;
+  z-index: 1;
+}
+
+.carousel img.active:hover {
+transform: scale(1.03);
+transition: transform 0.3s ease;
+}
+
+/* Navigation */
+.nav-bar {
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 6px;
+padding: 6px 0;
+background-color: rgba(30, 30, 30, 0.85);
+backdrop-filter: blur(8px);
+box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+border-top: 1px solid #444;
+border-bottom: 1px solid #444;
+}
+
+.nav-list {
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 8px;
+list-style: none;
+margin: 0;
+padding: 0;
+}
+
+.nav-list li {
+display: flex;
+align-items: center;
+}
+
+.nav-btn {
+font-family: 'Assistant', sans-serif;
+font-size: 12px;
+font-weight: 400;
+color: #BABABA;
+text-transform: uppercase;
+text-decoration: none;
+padding: 6px 8px;
+transition: color 0.3s ease;
+}
+
+.nav-btn:hover,
+.nav-btn:focus {
+color: #fff;
+}
+
+.nav-separator {
+color: #555;
+font-size: 14px;
+user-select: none;
+}
+
+/* Back to Top */
+#backToTop {
+position: fixed;
+bottom: 24px;
+right: 24px;
+z-index: 100;
+background-color: #ffcc00;
+color: #000;
+border: none;
+border-radius: 20px;
+padding: 10px 18px;
+cursor: pointer;
+box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+display: none;
+transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#backToTop:hover {
+background-color: #ffd633;
+transform: scale(1.05);
+}
+
+/* Footer */
+.footer-banner {
+width: 100%;
+background-color: #333;
+color: #BDB9B9;
+padding: 4px 0;
+border-top: 1px solid #3A3A3A;
+opacity: 0.85;
+}
+
+.footer-content {
+text-align: center;
+font-family: 'Inter', sans-serif;
+font-weight: 300;
+font-size: 11px;
+line-height: 1.2;
+}
+.footer-tagline {
+font-weight: 500;
+margin-bottom: 4px;
+}
+
+.footer-branding {
+font-size: 12px;
+margin-bottom: 4px;
+}
+
+.footer-disclaimer {
+font-size: 12px;
+opacity: 0.85;
+}
+.buy-divider {
+width: 90%;
+height: 1px;
+background-color: #BDB9B9; /* Harmonizes with footer and banner tones */
+margin: 20px 0;
+border: none; /* Remove redundant border-top */
+opacity: 0.5; /* Softens the divider for editorial elegance */
+}
+.spacer {
+  height: 20px;
+}
+</style>
+</head>
+<body>
+<div class="wrapper grid-wrapper">
+<!-- Header -->
+<header class="top-banner layout-container">
+<div class="header-left">
+<img src="https://i.imgur.com/hp0QbkV.jpeg" alt="ShareDukaan Logo" class="logo">
+</div>
+<div class="header-right">
+<p class="tagline">Discover The Best Shoes & Accessories – All in One Place | Shop Smart!!</p>
+<a href="https://t.me/sharedukaan" class="telegram-link">For daily updates 👉 Telegram</a>
+</div>
+</header>
+
+<!-- Navigation -->
+<nav class="nav-bar layout-container" role="navigation" aria-label="Main site navigation">
+<ul class="nav-list">
+<li><a href="forhim.html" class="nav-btn">For-Him >></a></li>
+<li><span class="nav-separator">|</span></li>
+<li><a href="forher" class="nav-btn">For-Her >></a></li>
+<li><span class="nav-separator">|</span></li>
+<li><a href="https://shoedukaan.blogspot.com" class="nav-btn">Blog >></a></li>
+</ul>
+</nav>
+
+<!-- Search Bar -->
+<section class="search-bar layout-container" aria-label="Product search">
+<input type="text" id="searchInput" placeholder="Search products..." aria-label="Search products" />
+</section>
+
+<!-- Product Grid -->
+<main id="productGrid" class="grid layout-container" aria-label="Product catalog"></main>
+</div>
+
+<!-- Back to Top Button -->
+<button id="backToTop" title="Back to Top">Top</button>
+
+<!-- Footer -->
+<footer class="footer-banner">
+<div class="layout-container">
+<div class="footer-content">
+<p class="footer-tagline">Inspired by Google Keep’s brilliant simplicity</p>
+<p class="footer-branding">© 2025 ShareDukaan. All rights reserved.</p>
+<p class="footer-disclaimer">
+Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We may earn a small commission when you purchase through affiliate links, at no extra cost to you. Product prices and availability are subject to change. The actual product may differ slightly from the images shown above.
+</p>
+</div>
+</div>
+</footer>
+<!-- JavaScript -->
+<script>
+  const colors = [
+    "#3A3647", "#1C262E", "#692B17",
+    "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
+  ];
+
+  let allProducts = [];
+  let currentIndex = 0;
+  const batchSize = 12;
+
+  async function loadProducts() {
+    try {
+      const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+      const tabName = "for-him";
+      const url = `https://opensheet.elk.sh/${sheetID}/${tabName}`;
+      const res = await fetch(url);
+      const data = await res.json();
+
+      allProducts = data
+        .filter(item => item.title && item.img && item.link)
+        .sort((a, b) => Number(a.shuffleID) - Number(b.shuffleID));
+
+      renderNextBatch();
+    } catch (err) {
+      console.error("Failed to load products:", err);
+    }
+  }
+
+  function generateCardHTML(item, index) {
+    const imageArray = item.img.split(',');
+    const carouselHTML = imageArray.map((url, i) =>
+      `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
+    ).join('');
+
+    return `
+      <div class="carousel" data-seed="${item.shuffleID}">
+        ${carouselHTML}
+      </div>
+      <div class="spacer"></div>
+      <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
+      <div class="buy-divider"></div>
+      <div class="buy-button-wrapper">
+  <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
+</div>
+    `;
+  }
+
+  function renderNextBatch() {
+    const grid = document.querySelector("main.grid");
+    if (!grid) return;
+
+    const nextItems = allProducts.slice(currentIndex, currentIndex + batchSize);
+
+    nextItems.forEach((item, i) => {
+      const card = document.createElement("article");
+      card.className = "card";
+      card.setAttribute("role", "article");
+      card.setAttribute("aria-label", item.title);
+      card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
+      card.style.transitionDelay = `${i * 100}ms`;
+      card.innerHTML = generateCardHTML(item, i);
+
+      grid.appendChild(card);
+      observer.observe(card);
+    });
+
+    activateCarousels(".carousel");
+    currentIndex += batchSize;
+  }
+
+  function activateCarousels(selector = ".carousel") {
+    document.querySelectorAll(selector).forEach((carousel, index) => {
+      if (carousel.dataset.activated === "true") return;
+      carousel.dataset.activated = "true";
+
+      const images = carousel.querySelectorAll("img");
+      if (images.length <= 1) return;
+
+      let current = 0;
+
+      function shuffle() {
+        images.forEach((img, i) => img.classList.toggle("active", i === current));
+        current = (current + 1) % images.length;
+
+        const seed = Number(carousel.dataset.seed) || index;
+        const nextDelay = 2000 + (seed % 3000); // 2–5s based on seed
+        setTimeout(shuffle, nextDelay);
+      }
+
+      const initialDelay = Math.floor(Math.random() * 3000); // 0–3s stagger
+      setTimeout(shuffle, initialDelay);
+    });
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      entry.target.classList.toggle('visible', entry.isIntersecting);
+    });
+  }, {
+    threshold: 0.1
+  });
+
+  window.addEventListener("DOMContentLoaded", loadProducts);
+
+  window.addEventListener("scroll", () => {
+    const scrollY = window.scrollY;
+    const viewportHeight = window.innerHeight;
+    const fullHeight = document.body.offsetHeight;
+
+    if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < allProducts.length) {
+      renderNextBatch();
+    }
+
+    document.getElementById("backToTop").style.display = scrollY > 300 ? "block" : "none";
+  });
+
+  document.getElementById("backToTop").addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  document.getElementById("searchInput").addEventListener("input", function () {
+    const query = this.value.toLowerCase();
+    const grid = document.querySelector("main.grid");
+    if (!grid) return;
+
+    grid.innerHTML = "";
+    currentIndex = 0;
+
+    const filtered = allProducts.filter(item =>
+      item.title.toLowerCase().includes(query)
+    );
+
+    filtered.slice(0, batchSize).forEach((item, i) => {
+      const card = document.createElement("article");
+      card.className = "card";
+      card.setAttribute("role", "article");
+      card.setAttribute("aria-label", item.title);
+      card.style.backgroundColor = colors[i % colors.length];
+      card.style.transitionDelay = `${i * 100}ms`;
+      card.innerHTML = generateCardHTML(item, i);
+
+      grid.appendChild(card);
+      observer.observe(card);
+    });
+
+    activateCarousels(".carousel");
+  });
+</script>
+</body>
+</html>
