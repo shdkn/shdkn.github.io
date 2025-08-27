@@ -279,13 +279,19 @@ background-color: rgba(30, 30, 30, 0.85);
 color: #BABABA; 
 text-decoration: none; 
 border-radius: 2px; 
-transition: background-color 0.3s ease, opacity 0.3s ease; align-self: flex-start; }
+transition: background-color 0.3s ease, opacity 0.3s ease; align-self: flex-start; 
+ align-self: flex-start;
+}
 
+ .buy-button-wrapper {
+  width: 100%;
+  margin-left: -6px; /* Cancels out the card’s 6px padding */
+  box-sizing: border-box;
+}
 
 .buy-button:hover {
 color: #005fa3;
 }
-
 
 .buy-button:hover,
 .buy-button:focus {
@@ -531,7 +537,9 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
       <div class="spacer"></div>
       <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
       <div class="buy-divider"></div>
-      <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
+      <div class="buy-button-wrapper">
+  <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
+</div>
     `;
   }
 
