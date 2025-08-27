@@ -89,12 +89,20 @@ text-align: center;
 flex: 1;
 }
 
+.tagline {
+font-family: 'Assistant', sans-serif;
+font-size: 12px;
+font-weight: 400;
+margin-bottom: 4px;
+}
+
 /* Desktop override */
 @media (min-width: 769px) {
 .tagline {
-  white-space: pre-wrap;
-  max-width: 320px;
-  line-height: 1.4;
+white-space: normal;
+max-width: 320px; /* or whatever width fits your layout */
+line-height: 1.4;
+}
 }
 
 .telegram-link {
@@ -174,8 +182,6 @@ color: inherit; /* keep the text color unchanged */
 
 .tagline   {
 display: block;
-white-space: pre-wrap;     / ✅ preserves line breaks and wraps text /
-word-wrap: break-word;     / ✅ breaks long words if needed /
 margin-left: auto;
 margin-right: 0;
 text-align: right;
@@ -235,8 +241,6 @@ animation: fadeInUp 0.6s ease forwards;
 
 .title-text {
 font-family: 'Inter', sans-serif;
-white-space: pre-wrap;     /* ✅ preserves line breaks and wraps text */
-word-wrap: break-word;     /* ✅ breaks long words if needed */
 font-weight: 300;
 font-size: 0.95em;
 color: #BABABA;
@@ -500,7 +504,7 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
       const data = await res.json();
 
       allProducts = data
-        .filter(item => item.title && item.img && item.link) // desc is optional
+        .filter(item => item.title && item.img && item.link)
         .sort((a, b) => Number(a.shuffleID) - Number(b.shuffleID));
 
       renderNextBatch();
@@ -508,24 +512,23 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
       console.error("Failed to load products:", err);
     }
   }
-function generateCardHTML(item, index) {
-  const imageArray = item.img.split(',');
-  const carouselHTML = imageArray.map((url, i) =>
-    `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
-  ).join('');
 
-  const titleLines = item.title.split('\n').filter(line => line.trim() !== "");
-  const formattedTitle = titleLines.map(line => `<p class="title-text {">${line.trim()}</p>`).join('');
+  function generateCardHTML(item, index) {
+    const imageArray = item.img.split(',');
+    const carouselHTML = imageArray.map((url, i) =>
+      `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
+    ).join('');
 
-  return `
-    <div class="carousel" data-seed="${item.shuffleID}">
-      ${carouselHTML}
-    </div>
-    ${formattedTitle}
-    <div class="buy-divider"></div>
-    <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${titleLines[0]}">👉👉 Link</a>
-  `;
-  }                                                                                                  
+    return `
+      <div class="carousel" data-seed="${item.shuffleID}">
+        ${carouselHTML}
+      </div>
+      <h3 class="title-text">${item.title}</h3>
+      <div class="buy-divider"></div>
+      <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
+    `;
+  }
+
   function renderNextBatch() {
     const grid = document.querySelector("main.grid");
     if (!grid) return;
