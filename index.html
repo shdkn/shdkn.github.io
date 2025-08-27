@@ -94,8 +94,8 @@ tagline, .txtline {
       font-size: 15px;
       font-weight: 400;
       margin-bottom: 4px;
-          white-space: pre-wrap;     / ✅ preserves line breaks and wraps text /
-  word-wrap: break-word;     / ✅ breaks long words if needed /
+      white-space: pre-wrap;     / ✅ preserves line breaks and wraps text /   word-wrap: 
+      break-word;     / ✅ breaks long words if needed /
 }
 /* Desktop override */
 @media (min-width: 769px) {
@@ -243,6 +243,8 @@ animation: fadeInUp 0.6s ease forwards;
 
 .title-text {
 font-family: 'Inter', sans-serif;
+white-space: pre-wrap;     /* ✅ preserves line breaks and wraps text */
+word-wrap: break-word;     /* ✅ breaks long words if needed */
 font-weight: 300;
 font-size: 0.95em;
 color: #BABABA;
@@ -521,7 +523,7 @@ function generateCardHTML(item, index) {
   ).join('');
 
   const titleLines = item.title.split('\n').filter(line => line.trim() !== "");
-  const formattedTitle = titleLines.map(line => `<p class="tagline">${line.trim()}</p>`).join('');
+  const formattedTitle = titleLines.map(line => `<p class="title-text {">${line.trim()}</p>`).join('');
 
   return `
     <div class="carousel" data-seed="${item.shuffleID}">
