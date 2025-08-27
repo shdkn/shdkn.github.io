@@ -528,7 +528,7 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
   ).join('');
 
   const titleLines = item.title.split('\n').filter(line => line.trim() !== "");
-  const formattedTitle = titleLines.map(line => `<p class="txtline">${line.trim()}</p>`).join('');
+  const formattedTitle = titleLines.map(line => `<p class="tagline">${line.trim()}</p>`).join('');
 
   return `
     <div class="carousel" data-seed="${item.shuffleID}">
