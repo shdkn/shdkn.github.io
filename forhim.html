@@ -536,8 +536,21 @@ opacity: 0.5; /* Softens the divider for editorial elegance */
 </nav>
 <!-- Search Bar -->
 <section class="search-bar layout-container" aria-label="Product search">
-<input type="text" id="searchInput" placeholder="Search products..." aria-label="Search products" />
+  <input type="text" id="searchInput" placeholder="Search products..." aria-label="Search products" />
 </section>
+
+<script>
+  const input = document.getElementById("searchInput");
+
+  input.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+      const query = input.value.trim();
+      if (query) {
+        window.location.href = `/search?q=${encodeURIComponent(query)}`;
+      }
+    }
+  });
+</script>
 
 <!-- Product Grid -->
 <main id="productGrid" class="grid layout-container" aria-label="Product catalog"></main>
