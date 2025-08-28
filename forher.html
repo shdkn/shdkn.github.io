@@ -416,6 +416,16 @@ transition: transform 0.3s ease;
   user-select: none;
 }
 
+ .nav-btn.active img {
+  transform: scale(0.7);
+  transform-origin: top center;
+}
+
+.nav-btn.active .nav-text {
+  opacity: 1;
+  color: #fff;
+}
+
 /* Back to Top */
 #backToTop {
 position: fixed;
@@ -697,6 +707,11 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
 
     activateCarousels(".carousel");
   });
+ document.querySelectorAll('.nav-btn').forEach(link => {
+  if (link.href === window.location.href) {
+    link.classList.add('active');
+  }
+});
 </script>
 </body>
 </html>
