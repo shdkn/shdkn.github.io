@@ -1,5 +1,5 @@
 async function fetchCatalog() {
-  const csvUrl = 'YOUR_PUBLISHED_CSV_LINK_HERE'; // Replace with your actual link
+  const csvUrl = 'https://docs.google.com/spreadsheets/d/your-sheet-id/export?format=csv'; // Replace with your actual link
   const response = await fetch(csvUrl);
   const text = await response.text();
 
