@@ -504,6 +504,9 @@ opacity: 0.5; /* Softens the divider for editorial elegance */
 <a href="https://t.me/sharedukaan" class="telegram-link">For daily updates 👉 Telegram</a>
 </div>
 </header>
+ <section class="layout-container">
+  <h2 id="search-title">Search Results</h2>
+ </section>
 
 <!-- Navigation -->
 <nav class="nav-bar layout-container" role="navigation" aria-label="Main site navigation">
@@ -712,7 +715,13 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
     link.classList.add('active');
   }
 });
-
+const query = new URLSearchParams(window.location.search).get("q");
+if (query) {
+  const titleEl = document.getElementById("search-title");
+  if (titleEl) {
+    titleEl.textContent = `Search Results for: "${query}"`;
+  }
+ }
 </script>
 </body>
 </html>
