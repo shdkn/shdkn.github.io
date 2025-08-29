@@ -12,10 +12,10 @@
 <link rel="icon" href="shdkn_fav_p.png" type="image/png">
 <script type="application/ld+json">
 {
-"@context": "https://schema.org",
-"@type": "WebSite",
-"name": "ShareDukaan",
-"url": "https://shdkn.carrd.co"
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "ShareDukaan",
+  "url": "https://shdkn.carrd.co"
 }
 </script>
 <!-- Fonts -->
@@ -25,194 +25,192 @@
 
 <style>
 :root {
---max-width: 1440px;
---side-padding: 18px;
+  --max-width: 1440px;
+  --side-padding: 18px;
 }
 
 body {
-overflow-x: hidden;
-margin: 0;
-padding: 0;
-font-family: 'Segoe UI', sans-serif;
-background: #1c1c1c;
-scroll-behavior: smooth;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #1c1c1c;
+  scroll-behavior: smooth;
 }
 
 @keyframes fadeInUp {
-from {
-opacity: 0;
-transform: translateY(20px);
-}
-to {
-opacity: 1;
-transform: translateY(0);
-}
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .layout-container {
-max-width: var(--max-width);
-margin: 0 auto;
-padding: 0 var(--side-padding);
-box-sizing: border-box;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--side-padding);
+  box-sizing: border-box;
 }
 
 .wrapper.grid-wrapper {
-max-width: var(--max-width);
-margin: 0 auto;
-padding: 0 var(--side-padding);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--side-padding);
 }
 
 /* Header */
 .top-banner {
-display: flex;
-justify-content: space-between;
-align-items: center;
-flex-wrap: wrap;
-background-color: #333;
-color: #fff;
-padding: 12px var(--side-padding);
-position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: #333;
+  color: #fff;
+  padding: 12px var(--side-padding);
+  position: relative;
 }
 
 .logo {
-width: 75px;
-height: auto;
-aspect-ratio: 1 / 1;
-object-fit: contain;
+  width: 75px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
 }
 
 .header-right {
-display: flex;
-flex-direction: column;
-align-items: flex-end;
-text-align: center;
-flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: center;
+  flex: 1;
 }
 
 .tagline {
-font-family: 'Assistant', sans-serif;
-font-size: 12px;
-font-weight: 400;
-margin-bottom: 4px;
+  font-family: 'Assistant', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  margin-bottom: 4px;
 }
 
 /* Desktop override */
 @media (min-width: 769px) {
-.tagline {
-white-space: normal;
-max-width: 320px; /* or whatever width fits your layout */
-line-height: 1.4;
-}
+  .tagline {
+    white-space: normal;
+    max-width: 320px; /* or whatever width fits your layout */
+    line-height: 1.4;
+  }
 }
 
 .telegram-link {
-font-family: 'Assistant', sans-serif;
-font-size: 13px;
-color: #ffcc00;
-text-decoration: none;
-font-weight: 500;
+  font-family: 'Assistant', sans-serif;
+  font-size: 13px;
+  color: #ffcc00;
+  text-decoration: none;
+  font-weight: 500;
 }
 
 .telegram-link:hover,
 .telegram-link:focus {
-transition: background-color 0.3s ease;
-color: inherit; /* keep the text color unchanged */
+  transition: background-color 0.3s ease;
+  color: inherit; /* keep the text color unchanged */
 }
-
 
 /* Search Bar */
 .search-bar {
-padding: 8px 0;
-text-align: center;
-width: 100%;
-background-color: #1c1c1c;
+  padding: 8px 0;
+  text-align: center;
+  width: 100%;
+  background-color: #1c1c1c;
 }
 
 #searchInput {
-width: 90%;
-max-width: 400px;
-padding: 10px 14px;
-font-size: 12px;
-border-radius: 4px;
-border: 1px solid #ccc;
-background-color: #fff;
-color: #000;
+  width: 90%;
+  max-width: 400px;
+  padding: 10px 14px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #000;
 }
 
 /* Grid */
 .grid {
-display: grid;
-grid-template-columns: 1fr;
-gap: 5px;
-padding: 8px 0;
-width: 100%;
-background-color: #1c1c1c;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+  padding: 8px 0;
+  width: 100%;
+  background-color: #1c1c1c;
 }
 
 @media (min-width: 1024px) {
-.grid {
-grid-template-columns: repeat(4, 1fr);
-}
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
-.top-banner {
-padding: 12px 16px;
-}
+  .top-banner {
+    padding: 12px 16px;
+  }
 
-.header-right {
-align-items: flex-start;
-text-align: right;
-width: 100%;
-}
+  .header-right {
+    align-items: flex-start;
+    text-align: right;
+    width: 100%;
+  }
 
+  .telegram-link {
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+    text-align: right;
+  }
 
-.telegram-link {
-display: block;
-margin-left: auto;
-margin-right: 0;
-text-align: right;
-}
+  .telegram-link:hover,
+  .telegram-link:focus {
+    transition: background-color 0.3s ease;
+    color: inherit; /* keep the text color unchanged */
+  }
 
-.telegram-link:hover,
-.telegram-link:focus {
-transition: background-color 0.3s ease;
-color: inherit; /* keep the text color unchanged */
-}
+  .tagline   {
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+    text-align: right;
+  }
 
-.tagline   {
-display: block;
-margin-left: auto;
-margin-right: 0;
-text-align: right;
-}
-
-.logo {
-height: 100px; /* or whatever size you want */
-margin-bottom: 8px;
-}
+  .logo {
+    height: 100px; /* or whatever size you want */
+    margin-bottom: 8px;
+  }
 }
 
 /* Card */
 .card {
-display: flex;
-flex-direction: column;
-justify-content: flex-start;
-align-items: center;
-padding: 6px; /* Balanced editorial spacing */
-width: 100%;
-max-width: 420px; /* Optional: locks visual width for consistency */
-background: #fff;
-border-radius: 12px; /* Soft premium edge */
-box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-box-sizing: border-box;
-aspect-ratio: 3 / 5; /* Taller vertical rhythm */
-overflow: hidden;
-opacity: 0;
-transform: translateY(20px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 6px; /* Balanced editorial spacing */
+  width: 100%;
+  max-width: 420px; /* Optional: locks visual width for consistency */
+  background: #fff;
+  border-radius: 12px; /* Soft premium edge */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
+  aspect-ratio: 3 / 5; /* Taller vertical rhythm */
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
 }
 
- /* Carousel inside Card */
+/* Carousel inside Card */
 .card .carousel {
   position: relative;
   width: 100%;
@@ -220,83 +218,82 @@ transform: translateY(20px);
   overflow: hidden;
   border-radius: 8px; /* Optional: soft inner crop */
 }
- 
+
 .card .carousel img.active:hover {
   filter: brightness(1.08);
   transition: filter 0.3s ease;
 }
 
- 
 .product-image {
-width: 100%;
-height: 100%;
-object-fit: cover;
-display: block;
-border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 8px;
 }
 
 .card.visible {
-animation: fadeInUp 0.6s ease forwards;
+  animation: fadeInUp 0.6s ease forwards;
 }
 
 .title-text {
-font-family: 'Inter', sans-serif;
-font-weight: 300;
-font-size: 0.95em;
-color: #BABABA;
-margin-top: 15px;
-line-height: 1.1;
-text-align: center;
-max-width: 90%;   /* Or try 320px for fixed width */
- margin: 0 auto;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 0.95em;
+  color: #BABABA;
+  margin-top: 15px;
+  line-height: 1.1;
+  text-align: center;
+  max-width: 90%;   /* Or try 320px for fixed width */
+  margin: 0 auto;
 }
 
 .card:hover {
-transform: scale(1.03);
-box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+  transform: scale(1.03);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
 }
 
 .card img {
-width: 100%;
-height: 100%;
-object-fit: cover;
-border-radius: 1px;
-display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 1px;
+  display: block;
 }
 
 .action-button-text {
-font-family: 'Barlow', sans-serif;
-font-weight: 500;
-font-size: 11px;
-text-transform: uppercase;
-letter-spacing: 0.3px;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .buy-button { 
-margin-top:5px; 
-padding: 8px 18px 8px 0; /* Top: 8px, Right: 18px, Bottom: 8px, Left: 0 */
-background-color: rgba(30, 30, 30, 0.85); 
-color: #BABABA; 
-text-decoration: none; 
-border-radius: 2px; 
-transition: background-color 0.3s ease, opacity 0.3s ease; align-self: flex-start; 
- align-self: flex-start;
+  margin-top:5px; 
+  padding: 8px 18px 8px 0; /* Top: 8px, Right: 18px, Bottom: 8px, Left: 0 */
+  background-color: rgba(30, 30, 30, 0.85); 
+  color: #BABABA; 
+  text-decoration: none; 
+  border-radius: 2px; 
+  transition: background-color 0.3s ease, opacity 0.3s ease; align-self: flex-start; 
+  align-self: flex-start;
 }
 
- .buy-button-wrapper {
+.buy-button-wrapper {
   width: 100%;
-  margin-left: -6px; /* Cancels out the card’s 6px padding */
+  margin-left: -6px; /* Cancels out the card's 6px padding */
   box-sizing: border-box;
 }
 
 .buy-button:hover {
-color: #005fa3;
+  color: #005fa3;
 }
 
 .buy-button:hover,
 .buy-button:focus {
-background-color: #3B3B3B;
-opacity: 0.85;
+  background-color: #3B3B3B;
+  opacity: 0.85;
 }
 
 /* Carousel */
@@ -326,9 +323,10 @@ opacity: 0.85;
 }
 
 .carousel img.active:hover {
-transform: scale(1.03);
-transition: transform 0.3s ease;
+  transform: scale(1.03);
+  transition: transform 0.3s ease;
 }
+
 /* Navigation Bar */
 .nav-bar {
   display: flex;
@@ -407,7 +405,7 @@ transition: transform 0.3s ease;
 .nav-btn:hover .nav-text {
   opacity: 1;
 }
- 
+
 /* Optional Separator */
 .nav-separator {
   color: #555;
@@ -415,7 +413,7 @@ transition: transform 0.3s ease;
   user-select: none;
 }
 
- .nav-btn.active img {
+.nav-btn.active img {
   transform: scale(0.7);
   transform-origin: top center;
 }
@@ -427,64 +425,64 @@ transition: transform 0.3s ease;
 
 /* Back to Top */
 #backToTop {
-position: fixed;
-bottom: 24px;
-right: 24px;
-z-index: 100;
-background-color: #ffcc00;
-color: #000;
-border: none;
-border-radius: 20px;
-padding: 10px 18px;
-cursor: pointer;
-box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-display: none;
-transition: background-color 0.3s ease, transform 0.3s ease;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 100;
+  background-color: #ffcc00;
+  color: #000;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  display: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 #backToTop:hover {
-background-color: #ffd633;
-transform: scale(1.05);
+  background-color: #ffd633;
+  transform: scale(1.05);
 }
 
 /* Footer */
 .footer-banner {
-width: 100%;
-background-color: #333;
-color: #BDB9B9;
-padding: 4px 0;
-border-top: 1px solid #3A3A3A;
-opacity: 0.85;
+  width: 100%;
+  background-color: #333;
+  color: #BDB9B9;
+  padding: 4px 0;
+  border-top: 1px solid #3A3A3A;
+  opacity: 0.85;
 }
 
 .footer-content {
-text-align: center;
-font-family: 'Inter', sans-serif;
-font-weight: 300;
-font-size: 11px;
-line-height: 1.2;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 11px;
+  line-height: 1.2;
 }
 .footer-tagline {
-font-weight: 500;
-margin-bottom: 4px;
+  font-weight: 500;
+  margin-bottom: 4px;
 }
 
 .footer-branding {
-font-size: 12px;
-margin-bottom: 4px;
+  font-size: 12px;
+  margin-bottom: 4px;
 }
 
 .footer-disclaimer {
-font-size: 12px;
-opacity: 0.85;
+  font-size: 12px;
+  opacity: 0.85;
 }
 .buy-divider {
-width: 90%;
-height: 1px;
-background-color: #BDB9B9; /* Harmonizes with footer and banner tones */
-margin: 20px 0;
-border: none; /* Remove redundant border-top */
-opacity: 0.5; /* Softens the divider for editorial elegance */
+  width: 90%;
+  height: 1px;
+  background-color: #BDB9B9; /* Harmonizes with footer and banner tones */
+  margin: 20px 0;
+  border: none; /* Remove redundant border-top */
+  opacity: 0.5; /* Softens the divider for editorial elegance */
 }
 .spacer {
   height: 20px;
@@ -493,54 +491,54 @@ opacity: 0.5; /* Softens the divider for editorial elegance */
 </head>
 <body>
 <div class="wrapper grid-wrapper">
-<!-- Header -->
-<header class="top-banner layout-container">
-<div class="header-left">
-<img src="https://i.imgur.com/hp0QbkV.jpeg" alt="ShareDukaan Logo" class="logo">
-</div>
-<div class="header-right">
-<p class="tagline">Discover The Best Shoes & Accessories – All in One Place | Shop Smart!!</p>
-<a href="https://t.me/sharedukaan" class="telegram-link">For daily updates 👉 Telegram</a>
-</div>
-</header>
+  <!-- Header -->
+  <header class="top-banner layout-container">
+    <div class="header-left">
+      <img src="https://i.imgur.com/hp0QbkV.jpeg" alt="ShareDukaan Logo" class="logo">
+    </div>
+    <div class="header-right">
+      <p class="tagline">Discover The Best Shoes & Accessories – All in One Place | Shop Smart!!</p>
+      <a href="https://t.me/sharedukaan" class="telegram-link">For daily updates 👉 Telegram</a>
+    </div>
+  </header>
 
-<!-- Navigation -->
-<nav class="nav-bar layout-container" role="navigation" aria-label="Main site navigation">
-<ul class="nav-list">
-<li>
-  <a href="index.html" class="nav-btn">
-    <img src="assets/Home_P.png" alt="Explore" width="40" height="40" />
-    <span class="nav-text">Explore</span>
-  </a>
-</li>
+  <!-- Navigation -->
+  <nav class="nav-bar layout-container" role="navigation" aria-label="Main site navigation">
+    <ul class="nav-list">
+      <li>
+        <a href="index.html" class="nav-btn">
+          <img src="assets/Home_P.png" alt="Explore" width="40" height="40" />
+          <span class="nav-text">Explore</span>
+        </a>
+      </li>
 
-<li><span class="nav-separator">|</span></li>
-<li>
-  <a href="forhim.html" class="nav-btn">
-    <img src="assets/Men_P.png" alt="For Him" width="40" height="40" />
-    <span class="nav-text">For Him</span>
-  </a>
-</li>
+      <li><span class="nav-separator">|</span></li>
+      <li>
+        <a href="forhim.html" class="nav-btn">
+          <img src="assets/Men_P.png" alt="For Him" width="40" height="40" />
+          <span class="nav-text">For Him</span>
+        </a>
+      </li>
 
-<li><span class="nav-separator">|</span></li>
-<li>
-  <a href="forher.html" class="nav-btn">
-    <img src="assets/Women_P.png" alt="For Her" width="40" height="40" />
-    <span class="nav-text">For Her</span>
-  </a>
-</li>
+      <li><span class="nav-separator">|</span></li>
+      <li>
+        <a href="forher.html" class="nav-btn">
+          <img src="assets/Women_P.png" alt="For Her" width="40" height="40" />
+          <span class="nav-text">For Her</span>
+        </a>
+      </li>
 
-<li><span class="nav-separator">|</span></li>
-<li><a href="https://shoedukaan.blogspot.com" class="nav-btn">Blog >></a></li>
-</ul>
-</nav>
-<!-- Search Bar -->
-<section class="search-bar layout-container" aria-label="Product search">
-<input type="text" id="searchInput" placeholder="Search products..." aria-label="Search products" />
-</section>
+      <li><span class="nav-separator">|</span></li>
+      <li><a href="https://shoedukaan.blogspot.com" class="nav-btn">Blog >></a></li>
+    </ul>
+  </nav>
+  <!-- Search Bar -->
+  <section class="search-bar layout-container" aria-label="Product search">
+    <input type="text" id="searchInput" placeholder="Search products..." aria-label="Search products" />
+  </section>
 
-<!-- Product Grid -->
-<main id="productGrid" class="grid layout-container" aria-label="Product catalog"></main>
+  <!-- Product Grid -->
+  <main id="productGrid" class="grid layout-container" aria-label="Product catalog"></main>
 </div>
 
 <!-- Back to Top Button -->
@@ -548,16 +546,17 @@ opacity: 0.5; /* Softens the divider for editorial elegance */
 
 <!-- Footer -->
 <footer class="footer-banner">
-<div class="layout-container">
-<div class="footer-content">
-<p class="footer-tagline">Inspired by Google Keep’s brilliant simplicity</p>
-<p class="footer-branding">© 2025 ShareDukaan. All rights reserved.</p>
-<p class="footer-disclaimer">
-Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We may earn a small commission when you purchase through affiliate links, at no extra cost to you. Product prices and availability are subject to change. The actual product may differ slightly from the images shown above.
-</p>
-</div>
-</div>
+  <div class="layout-container">
+    <div class="footer-content">
+      <p class="footer-tagline">Inspired by Google Keep's brilliant simplicity</p>
+      <p class="footer-branding">© 2025 ShareDukaan. All rights reserved.</p>
+      <p class="footer-disclaimer">
+        Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We may earn a small commission when you purchase through affiliate links, at no extra cost to you. Product prices and availability are subject to change. The actual product may differ slightly from the images shown above.
+      </p>
+    </div>
+  </div>
 </footer>
+
 <!-- JavaScript -->
 <script>
   const colors = [
@@ -566,24 +565,101 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
   ];
 
   let allProducts = [];
+  let filteredProducts = [];
+  let allProductsForSearch = []; // This will store combined data for search
   let currentIndex = 0;
   const batchSize = 12;
+  let isSearching = false;
+  let searchTimeout = null;
+
+  // Determine current page category and corresponding sheet tab
+  function getCurrentCategory() {
+    const path = window.location.pathname;
+    if (path.includes('forhim.html')) return 'for-him';
+    if (path.includes('forher.html')) return 'for-her';
+    return 'links'; // index.html or other pages
+  }
+
+  // Improved function to remove duplicates
+  function removeDuplicates(products) {
+    const seen = new Set();
+    const uniqueProducts = [];
+    
+    for (const product of products) {
+      // Create a unique identifier using title and first image URL
+      const firstImage = product.img.split(',')[0].trim().toLowerCase();
+      const identifier = `${product.title.toLowerCase()}-${firstImage}`;
+      
+      if (!seen.has(identifier)) {
+        seen.add(identifier);
+        uniqueProducts.push(product);
+      }
+    }
+    
+    return uniqueProducts;
+  }
 
   async function loadProducts() {
     try {
       const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
-      const tabName = "for-him";
-      const url = `https://opensheet.elk.sh/${sheetID}/${tabName}`;
+      const currentCategory = getCurrentCategory();
+      
+      // Load data only from the relevant tab for this page
+      const url = `https://opensheet.elk.sh/${sheetID}/${currentCategory}`;
       const res = await fetch(url);
       const data = await res.json();
-
+      
+      // Process products
       allProducts = data
         .filter(item => item.title && item.img && item.link)
-        .sort((a, b) => Number(a.shuffleID) - Number(b.shuffleID));
+        .sort((a, b) => {
+          if (a.shuffleID && b.shuffleID) {
+            return Number(a.shuffleID) - Number(b.shuffleID);
+          }
+          return a.title.localeCompare(b.title);
+        });
+      
+      filteredProducts = allProducts;
+
+      // Pre-load all products for search in the background
+      loadAllProductsForSearch();
 
       renderNextBatch();
     } catch (err) {
       console.error("Failed to load products:", err);
+    }
+  }
+
+  // Function to load all products for global search
+  async function loadAllProductsForSearch() {
+    try {
+      const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+      const tabs = ["links", "for-him", "for-her"];
+      const allData = [];
+      
+      for (const tab of tabs) {
+        const url = `https://opensheet.elk.sh/${sheetID}/${tab}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        // Add source information to each item
+        const dataWithSource = data.map(item => ({ ...item, __source: tab }));
+        allData.push(...dataWithSource);
+      }
+      
+      // Remove duplicates and store for search
+      allProductsForSearch = removeDuplicates(allData
+        .filter(item => item.title && item.img && item.link)
+        .sort((a, b) => {
+          if (a.shuffleID && b.shuffleID) {
+            return Number(a.shuffleID) - Number(b.shuffleID);
+          }
+          return a.title.localeCompare(b.title);
+        }));
+        
+      console.log(`Loaded ${allProductsForSearch.length} unique products for search`);
+    } catch (err) {
+      console.error("Failed to load all products for search:", err);
     }
   }
 
@@ -594,23 +670,23 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
     ).join('');
 
     return `
-      <div class="carousel" data-seed="${item.shuffleID}">
+      <div class="carousel" data-seed="${item.shuffleID || index}">
         ${carouselHTML}
       </div>
       <div class="spacer"></div>
       <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
       <div class="buy-divider"></div>
       <div class="buy-button-wrapper">
-  <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
-</div>
+        <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
+      </div>
     `;
   }
 
   function renderNextBatch() {
     const grid = document.querySelector("main.grid");
-    if (!grid) return;
+    if (!grid || filteredProducts.length === 0) return;
 
-    const nextItems = allProducts.slice(currentIndex, currentIndex + batchSize);
+    const nextItems = filteredProducts.slice(currentIndex, currentIndex + batchSize);
 
     nextItems.forEach((item, i) => {
       const card = document.createElement("article");
@@ -619,7 +695,7 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
       card.setAttribute("aria-label", item.title);
       card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
       card.style.transitionDelay = `${i * 100}ms`;
-      card.innerHTML = generateCardHTML(item, i);
+      card.innerHTML = generateCardHTML(item, currentIndex + i);
 
       grid.appendChild(card);
       observer.observe(card);
@@ -668,7 +744,7 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
     const viewportHeight = window.innerHeight;
     const fullHeight = document.body.offsetHeight;
 
-    if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < allProducts.length) {
+    if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < filteredProducts.length && !isSearching) {
       renderNextBatch();
     }
 
@@ -680,18 +756,64 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
   });
 
   document.getElementById("searchInput").addEventListener("input", function () {
-    const query = this.value.toLowerCase();
+    // Clear any existing timeout
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
+    
+    // Set a new timeout to delay the search
+    searchTimeout = setTimeout(() => {
+      const query = this.value.toLowerCase().trim();
+      const grid = document.querySelector("main.grid");
+      if (!grid) return;
+
+      grid.innerHTML = "";
+      currentIndex = 0;
+
+      if (query === "") {
+        // If search is empty, show regular products for this page
+        isSearching = false;
+        filteredProducts = allProducts;
+        renderNextBatch();
+      } else {
+        // Set searching flag
+        isSearching = true;
+        
+        // Search through all products from all tabs
+        // Make sure we have the data loaded
+        if (allProductsForSearch.length === 0) {
+          // Show loading message
+          grid.innerHTML = '<div style="color: white; text-align: center; padding: 20px;">Loading search results...</div>';
+          
+          // Load all products for search
+          loadAllProductsForSearch().then(() => {
+            // After loading, perform the search
+            filteredProducts = allProductsForSearch.filter(item =>
+              item.title.toLowerCase().includes(query)
+            );
+            
+            // Render results
+            renderSearchResults();
+          });
+        } else {
+          // We already have the search data
+          filteredProducts = allProductsForSearch.filter(item =>
+            item.title.toLowerCase().includes(query)
+          );
+          
+          // Render results
+          renderSearchResults();
+        }
+      }
+    }, 300); // 300ms delay before executing search
+  });
+
+  function renderSearchResults() {
     const grid = document.querySelector("main.grid");
     if (!grid) return;
 
-    grid.innerHTML = "";
-    currentIndex = 0;
-
-    const filtered = allProducts.filter(item =>
-      item.title.toLowerCase().includes(query)
-    );
-
-    filtered.slice(0, batchSize).forEach((item, i) => {
+    // Render the first batch
+    filteredProducts.slice(0, batchSize).forEach((item, i) => {
       const card = document.createElement("article");
       card.className = "card";
       card.setAttribute("role", "article");
@@ -705,13 +827,14 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
     });
 
     activateCarousels(".carousel");
-  });
- document.querySelectorAll('.nav-btn').forEach(link => {
-  if (link.href === window.location.href) {
-    link.classList.add('active');
   }
-});
 
+  document.querySelectorAll('.nav-btn').forEach(link => {
+    if (link.href === window.location.href) {
+      link.classList.add('active');
+    }
+  });
+</script>
 </script>
 </body>
 </html>
