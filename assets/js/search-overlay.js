@@ -1,3 +1,5 @@
+let allProducts = [];
+
 // 1. Load products from Google Sheet
 async function loadProducts(tabName = "search-data") {
   const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
@@ -7,11 +9,11 @@ async function loadProducts(tabName = "search-data") {
     const res = await fetch(url);
     const data = await res.json();
 
-    const filtered = data
+    allProducts = data
       .filter(item => item.title && item.img && item.link)
       .sort((a, b) => Number(a.shuffleID) - Number(b.shuffleID));
 
-    renderListView(filtered);
+    renderListView(allProducts); // Initial full render
   } catch (err) {
     console.error("Error loading products:", err);
   }
@@ -21,6 +23,11 @@ async function loadProducts(tabName = "search-data") {
 function renderListView(products) {
   const container = document.getElementById("search-results");
   container.innerHTML = "";
+
+  if (products.length === 0) {
+    container.innerHTML = '<p>No products found.</p>';
+    return;
+  }
 
   products.forEach(item => {
     const card = document.createElement("div");
@@ -43,10 +50,20 @@ const overlayInput = document.getElementById("overlaySearchInput");
 
 searchInput.addEventListener("click", () => {
   overlay.classList.remove("hidden");
-  overlayInput.focus(); // Auto-focuses overlay input
+  setTimeout(() => overlayInput.focus(), 100); // Auto-focus
   loadProducts(); // Load all products initially
 });
 
+// 4. Close overlay
 document.getElementById("closeOverlay").addEventListener("click", () => {
   overlay.classList.add("hidden");
+});
+
+// 5. Live filtering as user types
+overlayInput.addEventListener("input", () => {
+  const query = overlayInput.value.toLowerCase();
+  const results = allProducts.filter(item =>
+    item.title.toLowerCase().includes(query)
+  );
+  renderListView(results);
 });
