@@ -3,256 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product - ShoeDukaan</title>
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Premium Footwear - ShoeDukaan" />
-    <meta property="og:description" content="Discover amazing shoes at ShoeDukaan" />
-    <meta property="og:image" content="https://i.imgur.com/placeholder.jpg" />
-    <meta property="og:url" content="https://sharedukaan.github.io/product.html" />
-    <meta property="og:type" content="website" />
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Premium Footwear - ShoeDukaan" />
-    <meta name="twitter:description" content="Discover amazing shoes at ShoeDukaan" />
-    <meta name="twitter:image" content="https://i.imgur.com/placeholder.jpg" />
-    
+    <title>Product Page - ShoeDukaan</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background: #1c1c1c;
-            color: #fff;
-            line-height: 1.6;
+            color: white;
             padding: 20px;
+            text-align: center;
         }
         .container {
-            max-width: 1000px;
-            margin: 0 auto;
+            max-width: 600px;
+            margin: 50px auto;
             background: #2a2a2a;
-            padding: 20px;
+            padding: 30px;
             border-radius: 10px;
         }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #444;
-        }
-        .back-button {
+        h1 {
             color: #ffcc00;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .logo {
-            color: #ffcc00;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #ccc;
-        }
-        .error {
-            text-align: center;
-            padding: 40px;
-            color: #e74c3c;
-        }
-        .product-container {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-        .product-images, .product-info {
-            flex: 1;
-            min-width: 300px;
-        }
-        .main-image {
-            width: 100%;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-        .product-title {
-            color: #ffcc00;
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-        .product-description {
-            color: #ccc;
             margin-bottom: 20px;
         }
-        .product-price {
-            color: #2ecc71;
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-        }
-        .buy-button, .share-button {
-            padding: 12px 25px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-        }
-        .buy-button {
-            background: #ffcc00;
-            color: #000;
-        }
-        .share-button {
-            background: #3498db;
-            color: white;
-        }
-        @media (max-width: 768px) {
-            .product-container { flex-direction: column; }
-            .action-buttons { flex-direction: column; }
+        .url-display {
+            background: #333;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            word-break: break-all;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <a href="javascript:history.back()" class="back-button">← Back</a>
-            <div class="logo">ShoeDukaan</div>
+        <h1>ShoeDukaan Product Page</h1>
+        <p>This page is working correctly!</p>
+        <div class="url-display">
+            <strong>Current URL:</strong><br>
+            <span id="current-url"></span>
         </div>
-        
-        <div id="product-data">
-            <div class="loading">Loading product details...</div>
+        <p>URL Parameters:</p>
+        <div class="url-display">
+            <strong>Permanent ID:</strong> <span id="permanent-id"></span><br>
+            <strong>Source:</strong> <span id="source-param"></span>
         </div>
+        <p><a href="index.html" style="color: #ffcc00;">← Back to Home</a></p>
     </div>
 
     <script>
-        // Get URL parameters
+        // Display current URL
+        document.getElementById('current-url').textContent = window.location.href;
+        
+        // Get and display URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const permanentId = urlParams.get('permanentId');
         const sourceParam = urlParams.get('source');
         
-        // Configuration
-        const SHEET_ID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+        document.getElementById('permanent-id').textContent = permanentId || 'None';
+        document.getElementById('source-param').textContent = sourceParam || 'None';
         
-        // Determine which sheet to use
-        function determineSourceFromId(permanentId) {
-            if (!permanentId) return 'links';
-            if (permanentId.startsWith('L')) return 'links';
-            if (permanentId.startsWith('M')) return 'for-him';
-            if (permanentId.startsWith('W')) return 'for-her';
-            return sourceParam || 'links';
-        }
-        
-        // Update meta tags for social media
-        function updateMetaTags(product) {
-            const images = product.img ? product.img.split(',').map(img => img.trim()) : [];
-            const firstImage = images.length > 0 ? images[0] : 'https://i.imgur.com/placeholder.jpg';
-            const currentUrl = window.location.href;
-            
-            // Update meta tags
-            document.querySelector('meta[property="og:title"]').content = product.title || 'ShoeDukaan Product';
-            document.querySelector('meta[property="og:description"]').content = product.description || 'Amazing footwear from ShoeDukaan';
-            document.querySelector('meta[property="og:image"]').content = firstImage;
-            document.querySelector('meta[property="og:url"]').content = currentUrl;
-            
-            document.querySelector('meta[name="twitter:title"]').content = product.title || 'ShoeDukaan Product';
-            document.querySelector('meta[name="twitter:description"]').content = product.description || 'Amazing footwear from ShoeDukaan';
-            document.querySelector('meta[name="twitter:image"]').content = firstImage;
-            
-            document.title = `${product.title || 'Product'} | ShoeDukaan`;
-        }
-        
-        // Load product data
-        async function loadProduct() {
-            if (!permanentId) {
-                showError("No product specified. Please use a valid product link.");
-                return;
-            }
-            
-            try {
-                const sourceTab = determineSourceFromId(permanentId);
-                const url = `https://opensheet.elk.sh/${SHEET_ID}/${sourceTab}`;
-                const response = await fetch(url);
-                
-                if (!response.ok) throw new Error('Failed to fetch data');
-                
-                const data = await response.json();
-                const product = data.find(item => item.permanentId === permanentId);
-                
-                if (product) {
-                    renderProduct(product);
-                    updateMetaTags(product);
-                } else {
-                    showError("Product not found.");
-                }
-            } catch (error) {
-                showError("Error loading product. Please try again.");
-            }
-        }
-        
-        // Render product
-        function renderProduct(product) {
-            const images = product.img ? product.img.split(',').map(img => img.trim()) : [];
-            const firstImage = images.length > 0 ? images[0] : '';
-            
-            document.getElementById('product-data').innerHTML = `
-                <div class="product-container">
-                    <div class="product-images">
-                        ${firstImage ? `<img src="${firstImage}" alt="${product.title}" class="main-image">` : ''}
-                    </div>
-                    <div class="product-info">
-                        <h1 class="product-title">${product.title || 'Product'}</h1>
-                        <div class="product-description">
-                            ${product.description || 'Check out this amazing product.'}
-                        </div>
-                        ${product.price ? `<div class="product-price">${product.price}</div>` : ''}
-                        <div class="action-buttons">
-                            <a href="${product.link}" target="_blank" class="buy-button">Buy Now</a>
-                            <button class="share-button" onclick="shareProduct()">Share</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-        
-        // Share function
-        async function shareProduct() {
-            const shareData = {
-                title: document.title,
-                text: 'Check out this product on ShoeDukaan!',
-                url: window.location.href
-            };
-            
-            try {
-                if (navigator.share) {
-                    await navigator.share(shareData);
-                } else {
-                    await navigator.clipboard.writeText(window.location.href);
-                    alert('Link copied to clipboard!');
-                }
-            } catch (error) {
-                await navigator.clipboard.writeText(window.location.href);
-                alert('Link copied to clipboard!');
-            }
-        }
-        
-        // Show error
-        function showError(message) {
-            document.getElementById('product-data').innerHTML = `
-                <div class="error">
-                    <h2>Error</h2>
-                    <p>${message}</p>
-                    <p><a href="index.html" style="color: #ffcc00;">Return to homepage</a></p>
-                </div>
-            `;
-        }
-        
-        // Load product on page load
-        window.addEventListener('DOMContentLoaded', loadProduct);
+        console.log('URL Parameters:', { permanentId, sourceParam });
     </script>
 </body>
 </html>
