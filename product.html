@@ -1,36 +1,338 @@
-// In product.html
-const urlParams = new URLSearchParams(window.location.search);
-const permanentId = urlParams.get('permanentId');
-const sourceParam = urlParams.get('source');
-
-// Determine which sheet to use based on permanentId prefix
-function determineSourceFromId(permanentId) {
-    if (permanentId.startsWith('L')) return 'links';
-    if (permanentId.startsWith('M')) return 'for-him';
-    if (permanentId.startsWith('W')) return 'for-her';
-    return sourceParam || 'links'; // fallback
-}
-
-const sourceTab = determineSourceFromId(permanentId);
-
-// Then fetch the specific product from the appropriate sheet tab
-async function loadProduct() {
-    try {
-        const url = `https://opensheet.elk.sh/YOUR_SHEET_ID/${sourceTab}`;
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        // Find product by permanentId
-        const product = data.find(item => item.permanentId === permanentId);
-        
-        if (product) {
-            // Display the product
-            renderProduct(product);
-        } else {
-            document.getElementById('product-content').innerHTML = '<p>Product not found.</p>';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product - ShoeDukaan</title>
+    
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:title" content="Loading product..." id="og-title">
+    <meta property="og:description" content="Check out this product on ShoeDukaan" id="og-description">
+    <meta property="og:image" content="" id="og-image">
+    <meta property="og:url" content="" id="og-url">
+    <meta property="og:type" content="product.item">
+    <meta property="og:site_name" content="ShoeDukaan">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Loading product..." id="twitter-title">
+    <meta name="twitter:description" content="Check out this product on ShoeDukaan" id="twitter-description">
+    <meta name="twitter:image" content="" id="twitter-image">
+    <meta name="twitter:site" content="@ShoeDukaan">
+    
+    <!-- Standard Meta Tags -->
+    <meta name="description" content="Check out this product on ShoeDukaan" id="meta-description">
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #1c1c1c;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
         }
-    } catch (error) {
-        console.error('Error loading product:', error);
-        document.getElementById('product-content').innerHTML = '<p>Error loading product.</p>';
-    }
-}
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        .product-image {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .image-gallery {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .thumbnail:hover, .thumbnail.active {
+            border-color: #ffcc00;
+        }
+        .back-button {
+            color: #ffcc00;
+            text-decoration: none;
+            margin-bottom: 20px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        .back-button:hover {
+            text-decoration: underline;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+        }
+        .error {
+            text-align: center;
+            padding: 40px;
+            color: #e74c3c;
+        }
+        .product-title {
+            color: #ffcc00;
+            margin-bottom: 15px;
+        }
+        .product-description {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+        .product-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2ecc71;
+            margin-bottom: 20px;
+        }
+        .buy-button {
+            display: inline-block;
+            background: #ffcc00;
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        .buy-button:hover {
+            background: #ffd633;
+        }
+        .share-button {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-left: 10px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .share-button:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="javascript:history.back()" class="back-button">← Back to Products</a>
+        <div id="product-content">
+            <div class="loading">Loading product details...</div>
+        </div>
+    </div>
+
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const permanentId = urlParams.get('permanentId');
+        const sourceParam = urlParams.get('source');
+        
+        // Your Google Sheets ID
+        const SHEET_ID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+        
+        // Determine which sheet to use based on permanentId prefix
+        function determineSourceFromId(permanentId) {
+            if (permanentId && permanentId.startsWith('L')) return 'links';
+            if (permanentId && permanentId.startsWith('M')) return 'for-him';
+            if (permanentId && permanentId.startsWith('W')) return 'for-her';
+            return sourceParam || 'links'; // fallback
+        }
+        
+        const sourceTab = determineSourceFromId(permanentId);
+        
+        // Fix image URL for social media previews
+        function fixImageUrlForSocialMedia(imageUrl) {
+            if (!imageUrl) return '';
+            
+            let fixedUrl = imageUrl;
+            
+            // If image is from Imgur, use the direct image format
+            if (imageUrl.includes('i.imgur.com')) {
+                // Convert Imgur gallery links to direct image links
+                if (imageUrl.includes('/gallery/')) {
+                    const imgurId = imageUrl.split('/gallery/')[1].split('.')[0];
+                    fixedUrl = `https://i.imgur.com/${imgurId}.jpg`;
+                }
+                // Ensure it's a direct image link (not a page)
+                else if (!imageUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+                    fixedUrl = imageUrl + '.jpg';
+                }
+            }
+            
+            return fixedUrl;
+        }
+        
+        // Update meta tags for social media
+        function updateMetaTags(product) {
+            const images = product.img ? product.img.split(',').map(img => img.trim()) : [];
+            const firstImage = images.length > 0 ? fixImageUrlForSocialMedia(images[0]) : '';
+            const currentUrl = window.location.href;
+            
+            // Update Open Graph tags
+            document.querySelector('meta[property="og:title"]').setAttribute('content', product.title || 'Product on ShoeDukaan');
+            document.querySelector('meta[property="og:description"]').setAttribute('content', product.description || `Check out ${product.title} on ShoeDukaan`);
+            document.querySelector('meta[property="og:image"]').setAttribute('content', firstImage);
+            document.querySelector('meta[property="og:url"]').setAttribute('content', currentUrl);
+            
+            // Update Twitter tags
+            document.querySelector('meta[name="twitter:title"]').setAttribute('content', product.title || 'Product on ShoeDukaan');
+            document.querySelector('meta[name="twitter:description"]').setAttribute('content', product.description || `Check out ${product.title} on ShoeDukaan`);
+            document.querySelector('meta[name="twitter:image"]').setAttribute('content', firstImage);
+            
+            // Update standard meta description
+            document.querySelector('meta[name="description"]').setAttribute('content', product.description || `Check out ${product.title} on ShoeDukaan`);
+            
+            // Update page title
+            document.title = `${product.title} | ShoeDukaan`;
+        }
+        
+        // Share product function
+        async function shareProduct() {
+            const productTitle = document.querySelector('.product-title')?.textContent || 'Check out this product';
+            const productImage = document.querySelector('.product-image')?.src || '';
+            const productUrl = window.location.href;
+            
+            const shareData = {
+                title: productTitle,
+                text: `Check out ${productTitle} on ShoeDukaan!`,
+                url: productUrl
+            };
+            
+            // Try to use native share dialog
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    console.log('Product shared successfully');
+                } catch (error) {
+                    if (error.name !== 'AbortError') {
+                        console.error('Error sharing:', error);
+                        copyToClipboard(productUrl, productTitle);
+                    }
+                }
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                copyToClipboard(productUrl, productTitle);
+            }
+        }
+        
+        // Fallback function to copy to clipboard
+        function copyToClipboard(text, productTitle) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert(`Link for "${productTitle}" copied to clipboard!`);
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+                prompt('Copy this URL to share:', text);
+            });
+        }
+        
+        // Load product data from Google Sheets
+        async function loadProduct() {
+            if (!permanentId) {
+                showError("No product ID specified. Please use a valid product link.");
+                return;
+            }
+            
+            try {
+                const url = `https://opensheet.elk.sh/${SHEET_ID}/${sourceTab}`;
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data || data.length === 0) {
+                    showError("No products found in this category.");
+                    return;
+                }
+                
+                // Find product by permanentId
+                const product = data.find(item => item.permanentId === permanentId);
+                
+                if (product) {
+                    renderProduct(product);
+                    updateMetaTags(product);
+                } else {
+                    showError("Product not found. It may have been removed or the link is incorrect.");
+                }
+            } catch (error) {
+                console.error('Error loading product:', error);
+                showError("Error loading product details. Please try again later.");
+            }
+        }
+        
+        // Render product details
+        function renderProduct(product) {
+            const images = product.img ? product.img.split(',').map(img => img.trim()) : [];
+            const firstImage = images.length > 0 ? images[0] : '';
+            
+            let galleryHTML = '';
+            if (images.length > 1) {
+                galleryHTML = `
+                    <div class="image-gallery">
+                        ${images.map((img, index) => `
+                            <img src="${img}" class="thumbnail ${index === 0 ? 'active' : ''}" 
+                                 alt="View ${index + 1}" onclick="changeImage(this, '${img}')">
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            document.getElementById('product-content').innerHTML = `
+                <h1 class="product-title">${product.title || 'Unknown Product'}</h1>
+                ${firstImage ? `
+                    <img src="${firstImage}" alt="${product.title}" class="product-image" id="main-product-image">
+                    ${galleryHTML}
+                ` : ''}
+                <div class="product-description">
+                    ${product.description || 'Check out this amazing product from ShoeDukaan.'}
+                </div>
+                ${product.price ? `<div class="product-price">Price: ${product.price}</div>` : ''}
+                <div>
+                    <a href="${product.link}" target="_blank" class="buy-button">Buy Now</a>
+                    <button class="share-button" onclick="shareProduct()">Share Product</button>
+                </div>
+            `;
+        }
+        
+        // Change main image when thumbnail is clicked
+        function changeImage(thumb, imageUrl) {
+            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+            thumb.classList.add('active');
+            document.getElementById('main-product-image').src = imageUrl;
+        }
+        
+        // Show error message
+        function showError(message) {
+            document.getElementById('product-content').innerHTML = `
+                <div class="error">
+                    <h2>Error</h2>
+                    <p>${message}</p>
+                    <p><a href="index.html" class="back-button">Return to homepage</a></p>
+                </div>
+            `;
+        }
+        
+        // Load product when page loads
+        window.addEventListener('DOMContentLoaded', loadProduct);
+    </script>
+</body>
+    </html>
