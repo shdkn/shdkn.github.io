@@ -535,10 +535,15 @@ opacity: 0.5; /* Softens the divider for editorial elegance */
 <li><a href="https://shoedukaan.blogspot.com" class="nav-btn">Blog >></a></li>
 </ul>
 </nav>
-<!-- Search Bar -->
+<!-- New trigger for overlay -->
 <section class="search-bar layout-container" aria-label="Product search">
-<input type="text" id="searchInput" placeholder="Search products..." aria-label="Search products" />
+  <button onclick="document.getElementById('searchOverlay').style.display='block'" class="search-trigger">
+    🔍 Search All Products
+  </button>
 </section>
+
+<!-- Placeholder for injected overlay -->
+<div id="search-overlay-container"></div>
 
 <!-- Product Grid -->
 <main id="productGrid" class="grid layout-container" aria-label="Product catalog"></main>
