@@ -621,51 +621,77 @@ body {
       return 'links';
   }
 
-  // Share product function
-  async function shareProduct(title, image, buyUrl, permanentId) {
-      console.log('shareProduct called with:', title, permanentId);
-      
-      // Get current category for the source parameter
-      const currentCategory = getCurrentCategory();
-      
-      // Create the product page URL
-      const productPageUrl = `${window.location.origin}/product.html?permanentId=${permanentId}&source=${currentCategory}`;
-      
-      // Create share data
-      const shareData = {
-          title: title,
-          text: `Check out ${title} on ShoeDukaan!`,
-          url: productPageUrl
-      };
-      
-      console.log('Sharing product:', shareData);
-      
-      // Try to use native share dialog
-      if (navigator.share) {
-          try {
-              await navigator.share(shareData);
-              console.log('Product shared successfully:', title);
-          } catch (error) {
-              if (error.name !== 'AbortError') {
-                  console.error('Error sharing:', error);
-                  // Fallback to copy method
-                  copyToClipboard(productPageUrl, title);
-              }
-          }
-      } else {
-          // Fallback for browsers that don't support Web Share API
-          copyToClipboard(productPageUrl, title);
-      }
-  }
-
-  // Fallback function to copy to clipboard
-  function copyToClipboard(text, productTitle) {
-      navigator.clipboard.writeText(text).then(() => {
-          alert(`Link for "${productTitle}" copied to clipboard!`);
-      }).catch(err => {
-          console.error('Could not copy text: ', err);
-          prompt('Copy this URL to share:', text);
-      });
+// Share product function
+async function shareProduct(title, image, buyUrl, permanentId) {
+    console.log('shareProduct called with:', title, permanentId);
+    
+    // Get current category for the source parameter
+    const currentCategory = getCurrentCategory();
+    
+    // Create the product page URL
+    const productPageUrl = `${window.location.origin}/product.html?permanentId=${permanentId}&source=${currentCategory}`;
+    
+    // Fix image URL for social media previews
+    // Some platforms don't like direct image links from Imgur/CDNs
+    let previewImageUrl = image;
+    
+    // If image is from Imgur, use the direct image format
+    if (image.includes('i.imgur.com')) {
+        // Convert Imgur gallery links to direct image links
+        if (image.includes('/gallery/')) {
+            const imgurId = image.split('/gallery/')[1].split('.')[0];
+            previewImageUrl = `https://i.imgur.com/${imgurId}.jpg`;
+        }
+        // Ensure it's a direct image link (not a page)
+        else if (!image.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+            previewImageUrl = image + '.jpg';
+        }
+    }
+    
+    console.log('Using preview image:', previewImageUrl);
+    
+    // Create share data
+    const shareData = {
+        title: title,
+        text: `Check out ${title} on ShoeDukaan!`,
+        url: productPageUrl
+    };
+    
+    // For platforms that support sharing images
+    if (navigator.share && navigator.canShare) {
+        try {
+            // Check if we can share files
+            const testShareData = { files: [] };
+            if (navigator.canShare(testShareData)) {
+                // Try to fetch and share the image as a file
+                try {
+                    const response = await fetch(previewImageUrl);
+                    const blob = await response.blob();
+                    const file = new File([blob], 'product-image.jpg', { type: blob.type });
+                    
+                    shareData.files = [file];
+                } catch (fileError) {
+                    console.log('Could not share image as file, falling back to URL');
+                    // Fallback to just sharing the URL
+                }
+            }
+            
+            await navigator.share(shareData);
+            console.log('Product shared successfully:', title);
+        } catch (error) {
+            if (error.name !== 'AbortError') {
+                console.error('Error sharing:', error);
+                // Fallback to copy method
+                copyToClipboard(productPageUrl, title);
+            }
+        }
+    } else {
+        // Fallback for browsers that don't support Web Share API
+        copyToClipboard(productPageUrl, title);
+    }
+    
+    // For social media platforms, we need to ensure our product page has proper meta tags
+    // This is handled in product.html
   }
 
   // Your existing loadProducts function
