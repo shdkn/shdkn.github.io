@@ -648,158 +648,179 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
 </footer>
 <!-- JavaScript -->
 <script>
-  const colors = [
-    "#3A3647", "#1C262E", "#692B17",
-    "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
-  ];
+    const colors = [
+        "#3A3647", "#1C262E", "#692B17",
+        "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
+    ];
+    let allProducts = [];
+    let currentIndex = 0;
+    const batchSize = 12;
 
-  let allProducts = [];
-  let currentIndex = 0;
-  const batchSize = 12;
+    // New variables for the search overlay
+    const searchInput = document.getElementById("searchInput");
+    const searchOverlay = document.getElementById("search-overlay");
+    const closeOverlayBtn = document.getElementById("close-overlay");
+    const resultsContainer = document.getElementById("search-results-container");
 
-  async function loadProducts() {
-    try {
-      const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
-      const tabName = "search-data";
-      const url = `https://opensheet.elk.sh/${sheetID}/${tabName}`;
-      const res = await fetch(url);
-      const data = await res.json();
-
-      allProducts = data
-        .filter(item => item.title && item.img && item.link)
-        .sort((a, b) => Number(a.shuffleID) - Number(b.shuffleID));
-
-      renderNextBatch();
-    } catch (err) {
-      console.error("Failed to load products:", err);
-    }
-  }
-
-  function generateCardHTML(item, index) {
-    const imageArray = item.img.split(',');
-    const carouselHTML = imageArray.map((url, i) =>
-      `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
-    ).join('');
-
-    return `
-      <div class="carousel" data-seed="${item.shuffleID}">
-        ${carouselHTML}
-      </div>
-      <div class="spacer"></div>
-      <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
-      <div class="buy-divider"></div>
-      <div class="buy-button-wrapper">
-  <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
-</div>
-    `;
-  }
-
-  function renderNextBatch() {
-    const grid = document.querySelector("main.grid");
-    if (!grid) return;
-
-    const nextItems = allProducts.slice(currentIndex, currentIndex + batchSize);
-
-    nextItems.forEach((item, i) => {
-      const card = document.createElement("article");
-      card.className = "card";
-      card.setAttribute("role", "article");
-      card.setAttribute("aria-label", item.title);
-      card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
-      card.style.transitionDelay = `${i * 100}ms`;
-      card.innerHTML = generateCardHTML(item, i);
-
-      grid.appendChild(card);
-      observer.observe(card);
-    });
-
-    activateCarousels(".carousel");
-    currentIndex += batchSize;
-  }
-
-  function activateCarousels(selector = ".carousel") {
-    document.querySelectorAll(selector).forEach((carousel, index) => {
-      if (carousel.dataset.activated === "true") return;
-      carousel.dataset.activated = "true";
-
-      const images = carousel.querySelectorAll("img");
-      if (images.length <= 1) return;
-
-      let current = 0;
-
-      function shuffle() {
-        images.forEach((img, i) => img.classList.toggle("active", i === current));
-        current = (current + 1) % images.length;
-
-        const seed = Number(carousel.dataset.seed) || index;
-        const nextDelay = 2000 + (seed % 3000); // 2–5s based on seed
-        setTimeout(shuffle, nextDelay);
-      }
-
-      const initialDelay = Math.floor(Math.random() * 3000); // 0–3s stagger
-      setTimeout(shuffle, initialDelay);
-    });
-  }
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      entry.target.classList.toggle('visible', entry.isIntersecting);
-    });
-  }, {
-    threshold: 0.1
-  });
-
-  window.addEventListener("DOMContentLoaded", loadProducts);
-
-  window.addEventListener("scroll", () => {
-    const scrollY = window.scrollY;
-    const viewportHeight = window.innerHeight;
-    const fullHeight = document.body.offsetHeight;
-
-    if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < allProducts.length) {
-      renderNextBatch();
+    async function loadProducts() {
+        try {
+            const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+            const tabName = "search-data";
+            const url = `https://opensheet.elk.sh/${sheetID}/${tabName}`;
+            const res = await fetch(url);
+            const data = await res.json();
+            allProducts = data
+                .filter(item => item.title && item.img && item.link)
+                .sort((a, b) => Number(a.shuffleID) - Number(b.shuffleID));
+            renderNextBatch();
+        } catch (err) {
+            console.error("Failed to load products:", err);
+        }
     }
 
-    document.getElementById("backToTop").style.display = scrollY > 300 ? "block" : "none";
-  });
+    function generateCardHTML(item, index) {
+        const imageArray = item.img.split(',');
+        const carouselHTML = imageArray.map((url, i) =>
+            `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
+        ).join('');
+        return `
+            <div class="carousel" data-seed="${item.shuffleID}">
+                ${carouselHTML}
+            </div>
+            <div class="spacer"></div>
+            <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
+            <div class="buy-divider"></div>
+            <div class="buy-button-wrapper">
+                <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
+            </div>
+        `;
+    }
 
-  document.getElementById("backToTop").addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
+    function renderNextBatch() {
+        const grid = document.querySelector("main.grid");
+        if (!grid) return;
 
-  document.getElementById("searchInput").addEventListener("input", function () {
-    const query = this.value.toLowerCase();
-    const grid = document.querySelector("main.grid");
-    if (!grid) return;
+        const nextItems = allProducts.slice(currentIndex, currentIndex + batchSize);
+        nextItems.forEach((item, i) => {
+            const card = document.createElement("article");
+            card.className = "card";
+            card.setAttribute("role", "article");
+            card.setAttribute("aria-label", item.title);
+            card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
+            card.style.transitionDelay = `${i * 100}ms`;
+            card.innerHTML = generateCardHTML(item, i);
 
-    grid.innerHTML = "";
-    currentIndex = 0;
+            grid.appendChild(card);
+            observer.observe(card);
+        });
+        activateCarousels(".carousel");
+        currentIndex += batchSize;
+    }
 
-    const filtered = allProducts.filter(item =>
-      item.title.toLowerCase().includes(query)
-    );
+    function activateCarousels(selector = ".carousel") {
+        document.querySelectorAll(selector).forEach((carousel, index) => {
+            if (carousel.dataset.activated === "true") return;
+            carousel.dataset.activated = "true";
 
-    filtered.slice(0, batchSize).forEach((item, i) => {
-      const card = document.createElement("article");
-      card.className = "card";
-      card.setAttribute("role", "article");
-      card.setAttribute("aria-label", item.title);
-      card.style.backgroundColor = colors[i % colors.length];
-      card.style.transitionDelay = `${i * 100}ms`;
-      card.innerHTML = generateCardHTML(item, i);
+            const images = carousel.querySelectorAll("img");
+            if (images.length <= 1) return;
 
-      grid.appendChild(card);
-      observer.observe(card);
+            let current = 0;
+
+            function shuffle() {
+                images.forEach((img, i) => img.classList.toggle("active", i === current));
+                current = (current + 1) % images.length;
+
+                const seed = Number(carousel.dataset.seed) || index;
+                const nextDelay = 2000 + (seed % 3000);
+                setTimeout(shuffle, nextDelay);
+            }
+
+            const initialDelay = Math.floor(Math.random() * 3000);
+            setTimeout(shuffle, initialDelay);
+        });
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            entry.target.classList.toggle('visible', entry.isIntersecting);
+        });
+    }, {
+        threshold: 0.1
     });
 
-    activateCarousels(".carousel");
-  });
- document.querySelectorAll('.nav-btn').forEach(link => {
-  if (link.href === window.location.href) {
-    link.classList.add('active');
-  }
-});
+    // Replace the old event listener with this new one for the search overlay
+    searchInput.addEventListener("input", function () {
+        const query = this.value.toLowerCase();
 
-</script>
+        // Show the overlay if the user starts typing
+        if (query !== "") {
+            searchOverlay.style.display = "flex";
+        } else {
+            searchOverlay.style.display = "none";
+            resultsContainer.innerHTML = "";
+        }
+
+        const filteredProducts = allProducts.filter(item =>
+            item.title.toLowerCase().includes(query)
+        );
+
+        renderResults(filteredProducts);
+    });
+
+    // Add a new event listener to close the overlay
+    closeOverlayBtn.addEventListener("click", () => {
+        searchOverlay.style.display = "none";
+        searchInput.value = ""; // Clear the input field
+        resultsContainer.innerHTML = ""; // Clear results
+    });
+
+    // A new function to render results inside the overlay
+    function renderResults(products) {
+        if (products.length === 0) {
+            resultsContainer.innerHTML = "<p>No products found matching your search.</p>";
+            return;
+        }
+
+        const html = products.map(item => `
+            <a href="${item.link}" target="_blank" class="search-result-card">
+                <img src="${item.img}" alt="${item.title}">
+                <div class="search-result-info">
+                    <h4>${item.title}</h4>
+                    <p>${item.description}</p>
+                </div>
+            </a>
+        `).join('');
+
+        resultsContainer.innerHTML = html;
+    }
+
+    window.addEventListener("DOMContentLoaded", loadProducts);
+
+    window.addEventListener("scroll", () => {
+        const scrollY = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const fullHeight = document.body.offsetHeight;
+
+        if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < allProducts.length) {
+            renderNextBatch();
+        }
+
+        document.getElementById("backToTop").style.display = scrollY > 300 ? "block" : "none";
+    });
+
+    document.getElementById("backToTop").addEventListener("click", () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+
+    document.querySelectorAll('.nav-btn').forEach(link => {
+        if (link.href === window.location.href) {
+            link.classList.add('active');
+        }
+    });
+</script>      
 </body>
 </html>
