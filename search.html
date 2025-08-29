@@ -122,6 +122,36 @@
     }
 
     // Future steps will add search filtering and overlay injection
+function renderResults(items) {
+  const container = document.getElementById('searchResults');
+  container.innerHTML = '';
+
+  items.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <img src="${item.img.split(',')[0]}" alt="${item.title}" />
+      <div class="card-content">
+        <h3>${item.title}</h3>
+        <a href="${item.link}" target="_blank">View</a>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadProducts();
+
+  const input = document.getElementById('searchQuery');
+  input.addEventListener('input', () => {
+    const query = input.value.toLowerCase();
+    const results = allProducts.filter(p =>
+      p.title.toLowerCase().includes(query)
+    );
+    renderResults(results);
+  });
+});
   </script>
 </body>
 </html>
