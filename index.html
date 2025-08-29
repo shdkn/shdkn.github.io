@@ -490,6 +490,29 @@ opacity: 0.5; /* Softens the divider for editorial elegance */
 .spacer {
   height: 20px;
 }
+ .overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #fff;
+  z-index: 9999;
+  overflow-y: auto;
+  padding: 2rem;
+}
+.overlay.hidden {
+  display: none;
+}
+.list-view .product-card {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+}
+.product-card img {
+  width: 80px;
+  height: auto;
+ }
 </style>
 </head>
 <body>
