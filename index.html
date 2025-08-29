@@ -622,7 +622,6 @@ body {
   }
 
 // Share product function
-// Share product function
 async function shareProduct(title, image, buyUrl, permanentId) {
     console.log('shareProduct called with:', title, permanentId);
     
@@ -630,8 +629,7 @@ async function shareProduct(title, image, buyUrl, permanentId) {
     const currentCategory = getCurrentCategory();
     
     // Create the product page URL
-    const productPageUrl = `${window.location.origin}/product.html?permanentId=${permanentId}&source=${currentCategory}`;
-    
+const productPageUrl = `${window.location.origin}/product.html#permanentId=${permanentId}&source=${currentCategory}`;    
     // Fix image URL for social media previews
     // Some platforms don't like direct image links from Imgur/CDNs
     let previewImageUrl = image;
