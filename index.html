@@ -558,8 +558,7 @@
             </div>
         </div>
     </footer>
-    <script>
-        const colors = [
+   const colors = [
             "#3A3647", "#1C262E", "#692B17",
             "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
         ];
@@ -602,4 +601,109 @@
                     <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
                 </div>
             `;
-       
+        }
+        function renderNextBatch() {
+            const grid = document.querySelector("main.grid");
+            if (!grid) return;
+            const nextItems = allProducts.slice(currentIndex, currentIndex + batchSize);
+            nextItems.forEach((item, i) => {
+                const card = document.createElement("article");
+                card.className = "card";
+                card.setAttribute("role", "article");
+                card.setAttribute("aria-label", item.title);
+                card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
+                card.style.transitionDelay = `${i * 100}ms`;
+                card.innerHTML = generateCardHTML(item, i);
+                grid.appendChild(card);
+                observer.observe(card);
+            });
+            activateCarousels(".carousel");
+            currentIndex += batchSize;
+        }
+        function activateCarousels(selector = ".carousel") {
+            document.querySelectorAll(selector).forEach((carousel, index) => {
+                if (carousel.dataset.activated === "true") return;
+                carousel.dataset.activated = "true";
+                const images = carousel.querySelectorAll("img");
+                if (images.length <= 1) return;
+                let current = 0;
+                function shuffle() {
+                    images.forEach((img, i) => img.classList.toggle("active", i === current));
+                    current = (current + 1) % images.length;
+                    const seed = Number(carousel.dataset.seed) || index;
+                    const nextDelay = 2000 + (seed % 3000);
+                    setTimeout(shuffle, nextDelay);
+                }
+                const initialDelay = Math.floor(Math.random() * 3000);
+                setTimeout(shuffle, initialDelay);
+            });
+        }
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                entry.target.classList.toggle('visible', entry.isIntersecting);
+            });
+        }, {
+            threshold: 0.1
+        });
+        // The correct search input event listener
+        searchInput.addEventListener("input", function () {
+            const query = this.value.toLowerCase();
+            // Show the overlay if the user starts typing
+            if (query !== "") {
+                searchOverlay.style.display = "flex";
+            } else {
+                searchOverlay.style.display = "none";
+                resultsContainer.innerHTML = "";
+            }
+            const filteredProducts = allProducts.filter(item =>
+                item.title.toLowerCase().includes(query)
+            );
+            renderResults(filteredProducts);
+        });
+        // Event listener to close the overlay
+        closeOverlayBtn.addEventListener("click", () => {
+            searchOverlay.style.display = "none";
+            searchInput.value = "";
+            resultsContainer.innerHTML = "";
+        });
+        // A new function to render results inside the overlay
+        function renderResults(products) {
+            if (products.length === 0) {
+                resultsContainer.innerHTML = "<p>No products found matching your search.</p>";
+                return;
+            }
+            const html = products.map(item => `
+                <a href="${item.link}" target="_blank" class="search-result-card">
+                    <img src="${item.img}" alt="${item.title}">
+                    <div class="search-result-info">
+                        <h4>${item.title}</h4>
+                        <p>${item.description}</p>
+                    </div>
+                </a>
+            `).join('');
+            resultsContainer.innerHTML = html;
+        }
+        window.addEventListener("DOMContentLoaded", loadProducts);
+        window.addEventListener("scroll", () => {
+            const scrollY = window.scrollY;
+            const viewportHeight = window.innerHeight;
+            const fullHeight = document.body.offsetHeight;
+            if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < allProducts.length) {
+                renderNextBatch();
+            }
+            document.getElementById("backToTop").style.display = scrollY > 300 ? "block" : "none";
+        });
+        document.getElementById("backToTop").addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+        document.querySelectorAll('.nav-btn').forEach(link => {
+            if (link.href === window.location.href) {
+                link.classList.add('active');
+            }
+        });
+    </script>
+</body>
+    </html>
