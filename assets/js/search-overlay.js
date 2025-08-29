@@ -1,75 +1,66 @@
-let allProducts = [];
-
 document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("searchInput");
   const overlay = document.getElementById("searchOverlay");
-  const overlayInput = document.getElementById("overlaySearchInput");
-  const closeBtn = document.getElementById("closeOverlay");
+  const resultsContainer = document.getElementById("search-results");
 
-  // 1. Load products from Google Sheet
-  async function loadProducts(tabName = "search-data") {
-    const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
-    const url = `https://opensheet.elk.sh/${sheetID}/${tabName}`;
-
+  async function fetchSearchData() {
     try {
-      const res = await fetch(url);
-      const data = await res.json();
-
-      allProducts = data
-        .filter(item => item.title && item.img && item.link)
-        .sort((a, b) => Number(a.shuffleID) - Number(b.shuffleID));
-
-      renderListView(allProducts); // Initial full render
-    } catch (err) {
-      console.error("Error loading products:", err);
+      const response = await fetch("https://sheetdata.com/api/search-data");
+      return await response.json();
+    } catch (error) {
+      console.error("Search data fetch failed:", error);
+      return [];
     }
   }
 
-  // 2. Render products in list view
-  function renderListView(products) {
-    const container = document.getElementById("search-results");
-    container.innerHTML = "";
+  function filterResults(data, query) {
+    return data.filter((item) =>
+      item.name.toLowerCase().includes(query.toLowerCase())
+    );
+  }
 
-    if (products.length === 0) {
-      container.innerHTML = '<p>No products found.</p>';
+  function renderResults(filtered) {
+    resultsContainer.innerHTML = "";
+    if (filtered.length === 0) {
+      resultsContainer.innerHTML = "<p>No results found.</p>";
       return;
     }
 
-    products.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "product-card list-item";
-      card.innerHTML = `
-        <img src="${item.img}" alt="${item.title}" />
+    filtered.forEach((item) => {
+      const result = document.createElement("div");
+      result.className = "search-result";
+      result.innerHTML = `
+        <img src="${item.image}" alt="${item.name}" />
         <div>
-          <h3>${item.title}</h3>
-          <a href="${item.link}" target="_blank" rel="noopener">View</a>
+          <h4>${item.name}</h4>
+          <p>${item.price}</p>
         </div>
       `;
-      container.appendChild(card);
+      resultsContainer.appendChild(result);
     });
   }
 
-  // 3. Trigger overlay and focus input
-  if (searchInput && overlay && overlayInput) {
-    searchInput.addEventListener("click", () => {
-      overlay.classList.remove("hidden");
-      setTimeout(() => overlayInput.focus(), 100);
-      loadProducts(); // Load all products initially
-    });
+  searchInput.addEventListener("input", async (e) => {
+    const query = e.target.value;
+    if (!query) {
+      resultsContainer.innerHTML = "";
+      return;
+    }
 
-    overlayInput.addEventListener("input", () => {
-      const query = overlayInput.value.toLowerCase();
-      const results = allProducts.filter(item =>
-        item.title.toLowerCase().includes(query)
-      );
-      renderListView(results);
-    });
-  }
+    const data = await fetchSearchData();
+    const filtered = filterResults(data, query);
+    renderResults(filtered);
+  });
 
-  // 4. Close overlay
-  if (closeBtn) {
-    closeBtn.addEventListener("click", () => {
+  searchInput.addEventListener("focus", () => {
+    overlay.classList.remove("hidden");
+  });
+
+  overlay.addEventListener("click", (e) => {
+    if (e.target.id === "searchOverlay") {
       overlay.classList.add("hidden");
-    });
-  }
+      searchInput.value = "";
+      resultsContainer.innerHTML = "";
+    }
+  });
 });
