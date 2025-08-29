@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product - ShoeDukaan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #1c1c1c;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        .product-image {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .back-button {
+            color: #ffcc00;
+            text-decoration: none;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="javascript:history.back()" class="back-button">← Back to Products</a>
+        <div id="product-content">
+            <p>Loading product...</p>
+        </div>
+    </div>
+
+    <script>
+        // Get product ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+        
+        // In a real implementation, you would fetch product details from your sheet
+        // For now, we'll just show the product ID
+        document.getElementById('product-content').innerHTML = `
+            <h1>Product ${productId}</h1>
+            <p>Product details would be loaded here based on the ID.</p>
+            <p>In a full implementation, this page would fetch data from your Google Sheets.</p>
+        `;
+    </script>
+</body>
+</html>
