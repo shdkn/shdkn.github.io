@@ -487,48 +487,6 @@ body {
 .spacer {
   height: 20px;
 }
-  .share-button {
-    margin-top: 5px;
-    padding: 8px 12px;
-    background-color: rgba(30, 30, 30, 0.85);
-    color: #BABABA;
-    text-decoration: none;
-    border-radius: 2px;
-    transition: background-color 0.3s ease, opacity 0.3s ease;
-    border: none;
-    cursor: pointer;
-    font-family: 'Barlow', sans-serif;
-    font-weight: 500;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    display: inline-block;
-    margin-left: 5px;
-}
-
-.share-button:hover {
-    background-color: #3B3B3B;
-    opacity: 0.85;
-    color: #005fa3;
-}
-
-/* For the buy-button-wrapper to accommodate both buttons */
-.buy-button-wrapper {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-left: -6px;
-    box-sizing: border-box;
-}
-
-.buy-button {
-    flex: 2;
-    margin-right: 5px;
-}
-
-.share-button {
-    flex: 1;
-  }
 </style>
 </head>
 <body>
@@ -705,32 +663,22 @@ body {
     }
   }
 
-function generateCardHTML(item, index) {
+  function generateCardHTML(item, index) {
     const imageArray = item.img.split(',');
     const carouselHTML = imageArray.map((url, i) =>
-        `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
+      `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
     ).join('');
 
-    // Clean the title for use in JavaScript
-    const cleanTitle = item.title.replace(/'/g, "\\'").replace(/"/g, '\\"');
-    const firstImage = imageArray[0].trim();
-    
-    // Use permanentId with prefix (L, M, or W)
-    const productId = item.permanentId;
-    
     return `
-        <div class="carousel" data-seed="${item.shuffleID || index}">
-            ${carouselHTML}
-        </div>
-        <div class="spacer"></div>
-        <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
-        <div class="buy-divider"></div>
-        <div class="buy-button-wrapper">
-            <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Buy Now</a>
-            <button class="share-button action-button-text" onclick="shareProduct('${cleanTitle}', '${firstImage}', '${item.link}', '${productId}')" aria-label="Share ${item.title}">
-                📤 Share
-            </button>
-        </div>
+      <div class="carousel" data-seed="${item.shuffleID || index}">
+        ${carouselHTML}
+      </div>
+      <div class="spacer"></div>
+      <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
+      <div class="buy-divider"></div>
+      <div class="buy-button-wrapper">
+        <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
+      </div>
     `;
   }
 
@@ -757,49 +705,6 @@ function generateCardHTML(item, index) {
     currentIndex += batchSize;
   }
 
-// Share product function
-async function shareProduct(title, image, url, permanentId) {
-    // Determine source from permanentId prefix
-    let source;
-    if (permanentId.startsWith('L')) {
-        source = 'links';
-    } else if (permanentId.startsWith('M')) {
-        source = 'for-him';
-    } else if (permanentId.startsWith('W')) {
-        source = 'for-her';
-    } else {
-        source = 'links'; // fallback
-    }
-    
-    // Create share data
-    const shareData = {
-        title: title,
-        text: `Check out ${title} on ShoeDukaan!`,
-        url: `${window.location.origin}/product.html?permanentId=${permanentId}&source=${source}`
-    };
-    
-    // Try to use native share dialog
-    if (navigator.share) {
-        try {
-            await navigator.share(shareData);
-            console.log('Product shared:', title);
-        } catch (error) {
-            if (error.name !== 'AbortError') {
-                console.error('Error sharing:', error);
-            }
-        }
-    } else {
-        // Fallback: copy to clipboard
-        try {
-            await navigator.clipboard.writeText(shareData.url);
-            alert('Product link copied to clipboard!');
-        } catch (err) {
-            console.error('Could not copy text: ', err);
-            prompt('Copy this URL to share:', shareData.url);
-        }
-    }
-  }
-                           }
   function activateCarousels(selector = ".carousel") {
     document.querySelectorAll(selector).forEach((carousel, index) => {
       if (carousel.dataset.activated === "true") return;
