@@ -3,64 +3,519 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Page - ShoeDukaan</title>
+    <title>Product - ShoeDukaan</title>
+    
+    <!-- Social Media Meta Tags -->
+    <meta property="og:title" content="Premium Product - ShoeDukaan" />
+    <meta property="og:description" content="Discover amazing products at ShoeDukaan" />
+    <meta property="og:image" content="https://i.imgur.com/placeholder.jpg" />
+    <meta property="og:url" content="" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Premium Product - ShoeDukaan" />
+    <meta name="twitter:description" content="Discover amazing products at ShoeDukaan" />
+    <meta name="twitter:image" content="https://i.imgur.com/placeholder.jpg" />
+    <meta name="description" content="Discover amazing products at ShoeDukaan" />
+    
     <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #1c1c1c;
-            color: white;
+            color: #fff;
+            line-height: 1.6;
             padding: 20px;
-            text-align: center;
+            min-height: 100vh;
         }
+        
         .container {
-            max-width: 600px;
-            margin: 50px auto;
+            max-width: 1200px;
+            margin: 0 auto;
             background: #2a2a2a;
-            padding: 30px;
+            padding: 20px;
             border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
-        h1 {
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #444;
+        }
+        
+        .back-button {
             color: #ffcc00;
-            margin-bottom: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
         }
-        .url-display {
-            background: #333;
-            padding: 15px;
-            border-radius: 5px;
+        
+        .back-button:hover {
+            background-color: rgba(255, 204, 0, 0.1);
+        }
+        
+        .logo {
+            color: #ffcc00;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #ccc;
+            font-size: 18px;
+        }
+        
+        .error {
+            text-align: center;
+            padding: 50px 20px;
+            color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 8px;
             margin: 20px 0;
-            word-break: break-all;
+        }
+        
+        .error a {
+            color: #ffcc00;
+            text-decoration: none;
+            margin-top: 15px;
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 204, 0, 0.1);
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .error a:hover {
+            background: rgba(255, 204, 0, 0.2);
+        }
+        
+        .product-container {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .product-images {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .product-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .main-image {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .image-gallery {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+        
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .thumbnail:hover {
+            border-color: #ffcc00;
+            transform: scale(1.05);
+        }
+        
+        .thumbnail.active {
+            border-color: #ffcc00;
+            box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.5);
+        }
+        
+        .product-title {
+            color: #ffcc00;
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .product-description {
+            color: #ccc;
+            margin-bottom: 25px;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+        
+        .product-price {
+            color: #2ecc71;
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .buy-button, .share-button {
+            padding: 16px 32px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 140px;
+        }
+        
+        .buy-button {
+            background: #ffcc00;
+            color: #000;
+            box-shadow: 0 4px 0 #d4ac0d;
+        }
+        
+        .buy-button:hover {
+            background: #ffd633;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #d4ac0d;
+        }
+        
+        .buy-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 0 #d4ac0d;
+        }
+        
+        .share-button {
+            background: #3498db;
+            color: white;
+            box-shadow: 0 4px 0 #2874a6;
+        }
+        
+        .share-button:hover {
+            background: #5dade2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #2874a6;
+        }
+        
+        .share-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 0 #2874a6;
+        }
+        
+        @media (max-width: 768px) {
+            .product-container { 
+                flex-direction: column; 
+            }
+            
+            .action-buttons { 
+                flex-direction: column; 
+                width: 100%;
+            }
+            
+            .buy-button, .share-button {
+                width: 100%;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .product-title {
+                font-size: 26px;
+            }
+        }
+        
+        .debug-info {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            font-size: 14px;
+            color: #aaa;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>ShoeDukaan Product Page</h1>
-        <p>This page is working correctly!</p>
-        <div class="url-display">
-            <strong>Current URL:</strong><br>
-            <span id="current-url"></span>
+        <div class="header">
+            <a href="index.html" class="back-button">← Back to Home</a>
+            <div class="logo">ShoeDukaan</div>
         </div>
-        <p>URL Parameters:</p>
-        <div class="url-display">
-            <strong>Permanent ID:</strong> <span id="permanent-id"></span><br>
-            <strong>Source:</strong> <span id="source-param"></span>
+        
+        <div id="product-data">
+            <div class="loading">Loading product details...</div>
         </div>
-        <p><a href="index.html" style="color: #ffcc00;">← Back to Home</a></p>
+        
+        <div class="debug-info" id="debug-info" style="display: none;">
+            <strong>Debug Information:</strong>
+            <div id="debug-content"></div>
+        </div>
     </div>
 
     <script>
-        // Display current URL
-        document.getElementById('current-url').textContent = window.location.href;
+        // Get hash parameters instead of query parameters (for GitHub Pages compatibility)
+        function getHashParams() {
+            const hash = window.location.hash.substring(1);
+            const params = new URLSearchParams(hash);
+            const result = {
+                permanentId: params.get('permanentId'),
+                source: params.get('source')
+            };
+            
+            // Show debug info
+            const debugInfo = document.getElementById('debug-info');
+            const debugContent = document.getElementById('debug-content');
+            
+            if (debugInfo && debugContent) {
+                debugInfo.style.display = 'block';
+                debugContent.innerHTML = `
+                    <div>Hash: ${window.location.hash || 'None'}</div>
+                    <div>Permanent ID: ${result.permanentId || 'None'}</div>
+                    <div>Source: ${result.source || 'None'}</div>
+                    <div>Full URL: ${window.location.href}</div>
+                `;
+            }
+            
+            return result;
+        }
         
-        // Get and display URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const permanentId = urlParams.get('permanentId');
-        const sourceParam = urlParams.get('source');
+        const hashParams = getHashParams();
+        const permanentId = hashParams.permanentId;
+        const sourceParam = hashParams.source;
         
-        document.getElementById('permanent-id').textContent = permanentId || 'None';
-        document.getElementById('source-param').textContent = sourceParam || 'None';
+        // Configuration
+        const SHEET_ID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
         
-        console.log('URL Parameters:', { permanentId, sourceParam });
+        console.log('Hash Parameters:', { permanentId, sourceParam });
+        
+        // Determine which sheet to use based on permanentId prefix
+        function determineSourceFromId(permanentId) {
+            if (!permanentId) return 'links';
+            if (permanentId.startsWith('L')) return 'links';
+            if (permanentId.startsWith('M')) return 'for-him';
+            if (permanentId.startsWith('W')) return 'for-her';
+            return sourceParam || 'links';
+        }
+        
+        // Fix image URL for social media previews
+        function fixImageUrlForSocialMedia(imageUrl) {
+            if (!imageUrl) return 'https://i.imgur.com/placeholder.jpg';
+            
+            // If image is from Imgur, ensure it's a direct image link
+            if (imageUrl.includes('imgur.com')) {
+                // Handle different Imgur URL formats
+                if (imageUrl.includes('/gallery/')) {
+                    const imgurId = imageUrl.split('/gallery/')[1].split('/')[0];
+                    return `https://i.imgur.com/${imgurId}.jpg`;
+                }
+                else if (imageUrl.includes('i.imgur.com/')) {
+                    const imgurId = imageUrl.split('i.imgur.com/')[1].split('.')[0];
+                    return `https://i.imgur.com/${imgurId}.jpg`;
+                }
+            }
+            
+            return imageUrl;
+        }
+        
+        // Update meta tags for social media
+        function updateMetaTags(product) {
+            const images = product.img ? product.img.split(',').map(img => img.trim()) : [];
+            const firstImage = images.length > 0 ? fixImageUrlForSocialMedia(images[0]) : 'https://i.imgur.com/placeholder.jpg';
+            const currentUrl = window.location.href;
+            const productTitle = product.title || 'Amazing Product - ShoeDukaan';
+            const productDescription = product.description || 'Check out this fantastic product on ShoeDukaan';
+            
+            // Update Open Graph tags
+            document.querySelector('meta[property="og:title"]').content = productTitle;
+            document.querySelector('meta[property="og:description"]').content = productDescription;
+            document.querySelector('meta[property="og:image"]').content = firstImage;
+            document.querySelector('meta[property="og:url"]').content = currentUrl;
+            
+            // Update Twitter tags
+            document.querySelector('meta[name="twitter:title"]').content = productTitle;
+            document.querySelector('meta[name="twitter:description"]').content = productDescription;
+            document.querySelector('meta[name="twitter:image"]').content = firstImage;
+            
+            // Update standard meta description
+            document.querySelector('meta[name="description"]').content = productDescription;
+            
+            // Update page title
+            document.title = `${productTitle} | ShoeDukaan`;
+            
+            console.log('Social media meta tags updated:', { productTitle, firstImage, currentUrl });
+        }
+        
+        // Load product data from Google Sheets
+        async function loadProduct() {
+            if (!permanentId) {
+                showError("No product specified. Please use a valid product link from our homepage.");
+                return;
+            }
+            
+            try {
+                const sourceTab = determineSourceFromId(permanentId);
+                const url = `https://opensheet.elk.sh/${SHEET_ID}/${sourceTab}`;
+                
+                console.log('Fetching data from:', url);
+                
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status} error: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data || data.length === 0) {
+                    showError("No products found in this category. Please try again later.");
+                    return;
+                }
+                
+                // Find product by permanentId
+                const product = data.find(item => item.permanentId === permanentId);
+                
+                if (product) {
+                    renderProduct(product);
+                    updateMetaTags(product);
+                } else {
+                    showError(`Product with ID "${permanentId}" not found. It may have been removed or the link is incorrect.`);
+                }
+            } catch (error) {
+                console.error('Error loading product:', error);
+                showError("Error loading product details. Please check your connection and try again.");
+            }
+        }
+        
+        // Render product details
+        function renderProduct(product) {
+            const images = product.img ? product.img.split(',').map(img => img.trim()) : [];
+            const firstImage = images.length > 0 ? images[0] : '';
+            
+            let galleryHTML = '';
+            if (images.length > 1) {
+                galleryHTML = `
+                    <div class="image-gallery">
+                        ${images.map((img, index) => `
+                            <img src="${img}" class="thumbnail ${index === 0 ? 'active' : ''}" 
+                                 alt="View ${index + 1}" onclick="changeImage(this, '${img}')">
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            document.getElementById('product-data').innerHTML = `
+                <div class="product-container">
+                    <div class="product-images">
+                        ${firstImage ? `
+                            <img src="${firstImage}" alt="${product.title}" class="main-image" id="main-product-image">
+                            ${galleryHTML}
+                        ` : '<p>No image available</p>'}
+                    </div>
+                    <div class="product-info">
+                        <h1 class="product-title">${product.title || 'Unknown Product'}</h1>
+                        <div class="product-description">
+                            ${product.description || 'Check out this amazing product from ShoeDukaan.'}
+                        </div>
+                        ${product.price ? `<div class="product-price">Price: ${product.price}</div>` : ''}
+                        <div class="action-buttons">
+                            <a href="${product.link}" target="_blank" class="buy-button">Buy Now</a>
+                            <button class="share-button" onclick="shareProduct()">Share Product</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Change main image when thumbnail is clicked
+        function changeImage(thumb, imageUrl) {
+            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+            thumb.classList.add('active');
+            document.getElementById('main-product-image').src = imageUrl;
+        }
+        
+        // Share product function
+        async function shareProduct() {
+            const productTitle = document.querySelector('.product-title')?.textContent || 'Check out this product';
+            const productUrl = window.location.href;
+            
+            const shareData = {
+                title: productTitle,
+                text: `Check out ${productTitle} on ShoeDukaan!`,
+                url: productUrl
+            };
+            
+            // Try to use native share dialog
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    console.log('Product shared successfully');
+                } catch (error) {
+                    if (error.name !== 'AbortError') {
+                        console.error('Error sharing:', error);
+                        copyToClipboard(productUrl, productTitle);
+                    }
+                }
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                copyToClipboard(productUrl, productTitle);
+            }
+        }
+        
+        // Fallback function to copy to clipboard
+        function copyToClipboard(text, productTitle) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert(`Link for "${productTitle}" copied to clipboard!`);
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+                prompt('Copy this URL to share:', text);
+            });
+        }
+        
+        // Show error message
+        function showError(message) {
+            document.getElementById('product-data').innerHTML = `
+                <div class="error">
+                    <h2>Error</h2>
+                    <p>${message}</p>
+                    <a href="index.html">← Return to Homepage</a>
+                </div>
+            `;
+        }
+        
+        // Load product when page loads
+        window.addEventListener('DOMContentLoaded', loadProduct);
     </script>
 </body>
-</html>
+    </html>
