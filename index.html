@@ -539,7 +539,20 @@ opacity: 0.5; /* Softens the divider for editorial elegance */
 <section class="search-bar layout-container" aria-label="Product search">
 <input type="text" id="searchInput" placeholder="Search products..." aria-label="Search products" />
 </section>
+<div class="searchbar">
+    <input type="text" id="searchInput" placeholder="Search..." autocomplete="off" aria-label="Search">
+</div>
 
+<div id="search-overlay">
+    <div id="search-overlay-content">
+        <button id="close-overlay" aria-label="Close search results">✖️</button>
+        <div id="search-results-container">
+            </div>
+    </div>
+</div>
+<main class="grid" id="productGrid">
+</main>
+ 
 <!-- Product Grid -->
 <main id="productGrid" class="grid layout-container" aria-label="Product catalog"></main>
 </div>
