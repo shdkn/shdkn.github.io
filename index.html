@@ -490,29 +490,6 @@ opacity: 0.5; /* Softens the divider for editorial elegance */
 .spacer {
   height: 20px;
 }
- .overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: #fff;
-  z-index: 9999;
-  overflow-y: auto;
-  padding: 2rem;
-}
-.overlay.hidden {
-  display: none;
-}
-.list-view .product-card {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 1rem;
-}
-.product-card img {
-  width: 80px;
-  height: auto;
- }
 </style>
 </head>
 <body>
@@ -737,13 +714,5 @@ Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We ma
 });
 
 </script>
-<div id="searchOverlay" class="overlay hidden">
-  <div class="overlay-content">
-    <button id="closeOverlay" class="close-btn">×</button>
-    <input type="text" id="overlaySearchInput" placeholder="Search products..." />
-    <div id="search-results" class="list-view"></div>
-  </div>
-</div>
 </body>
-
 </html>
