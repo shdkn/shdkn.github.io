@@ -599,6 +599,49 @@ body {
     return uniqueProducts;
   }
 
+ // Share product function
+async function shareProduct(title, image, url, permanentId) {
+    // Determine source from permanentId prefix
+    let source;
+    if (permanentId.startsWith('L')) {
+        source = 'links';
+    } else if (permanentId.startsWith('M')) {
+        source = 'for-him';
+    } else if (permanentId.startsWith('W')) {
+        source = 'for-her';
+    } else {
+        source = 'links'; // fallback
+    }
+    
+    // Create share data
+    const shareData = {
+        title: title,
+        text: `Check out ${title} on ShoeDukaan!`,
+        url: `${window.location.origin}/product.html?permanentId=${permanentId}&source=${source}`
+    };
+    
+    // Try to use native share dialog
+    if (navigator.share) {
+        try {
+            await navigator.share(shareData);
+            console.log('Product shared:', title);
+        } catch (error) {
+            if (error.name !== 'AbortError') {
+                console.error('Error sharing:', error);
+            }
+        }
+    } else {
+        // Fallback: copy to clipboard
+        try {
+            await navigator.clipboard.writeText(shareData.url);
+            alert('Product link copied to clipboard!');
+        } catch (err) {
+            console.error('Could not copy text: ', err);
+            prompt('Copy this URL to share:', shareData.url);
+        }
+    }
+  }
+  
   async function loadProducts() {
     try {
       const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
@@ -661,24 +704,34 @@ body {
     } catch (err) {
       console.error("Failed to load all products for search:", err);
     }
-  }
-
+  }  
+  
   function generateCardHTML(item, index) {
     const imageArray = item.img.split(',');
     const carouselHTML = imageArray.map((url, i) =>
-      `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
+        `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
     ).join('');
 
+    // Clean the title for use in JavaScript
+    const cleanTitle = item.title.replace(/'/g, "\\'").replace(/"/g, '\\"');
+    const firstImage = imageArray[0].trim();
+    
+    // Use permanentId with prefix (L, M, or W)
+    const productId = item.permanentId;
+    
     return `
-      <div class="carousel" data-seed="${item.shuffleID || index}">
-        ${carouselHTML}
-      </div>
-      <div class="spacer"></div>
-      <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
-      <div class="buy-divider"></div>
-      <div class="buy-button-wrapper">
-        <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
-      </div>
+        <div class="carousel" data-seed="${item.shuffleID || index}">
+            ${carouselHTML}
+        </div>
+        <div class="spacer"></div>
+        <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
+        <div class="buy-divider"></div>
+        <div class="buy-button-wrapper">
+            <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Buy Now</a>
+            <button class="share-button action-button-text" onclick="shareProduct('${cleanTitle}', '${firstImage}', '${item.link}', '${productId}')" aria-label="Share ${item.title}">
+                📤 Share
+            </button>
+        </div>
     `;
   }
 
