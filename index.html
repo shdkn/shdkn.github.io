@@ -487,6 +487,48 @@ body {
 .spacer {
   height: 20px;
 }
+  .share-button {
+    margin-top: 5px;
+    padding: 8px 12px;
+    background-color: rgba(30, 30, 30, 0.85);
+    color: #BABABA;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.share-button:hover {
+    background-color: #3B3B3B;
+    opacity: 0.85;
+    color: #005fa3;
+}
+
+/* For the buy-button-wrapper to accommodate both buttons */
+.buy-button-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-left: -6px;
+    box-sizing: border-box;
+}
+
+.buy-button {
+    flex: 2;
+    margin-right: 5px;
+}
+
+.share-button {
+    flex: 1;
+  }
 </style>
 </head>
 <body>
@@ -572,6 +614,83 @@ body {
   let isSearching = false;
   let searchTimeout = null;
 
+  // ... your existing JavaScript code ...
+
+  // ===== ADD THE SHARE PRODUCT FUNCTION HERE =====
+  // Share product function
+  async function shareProduct(title, image, buyUrl, permanentId) {
+      // Get current category for the source parameter
+      const currentCategory = getCurrentCategory();
+      
+      // Create the product page URL
+      const productPageUrl = `${window.location.origin}/product.html?permanentId=${permanentId}&source=${currentCategory}`;
+      
+      // Create share data
+      const shareData = {
+          title: title,
+          text: `Check out ${title} on ShoeDukaan!`,
+          url: productPageUrl
+      };
+      
+      console.log('Sharing product:', shareData); // For debugging
+      
+      // Try to use native share dialog
+      if (navigator.share) {
+          try {
+              await navigator.share(shareData);
+              console.log('Product shared successfully:', title);
+              
+              // Track the share event (optional)
+              trackShareEvent(title, permanentId);
+          } catch (error) {
+              // User canceled the share, no need to show error
+              if (error.name !== 'AbortError') {
+                  console.error('Error sharing:', error);
+                  // Fallback to copy method
+                  copyToClipboard(productPageUrl, title);
+              }
+          }
+      } else {
+          // Fallback for browsers that don't support Web Share API
+          copyToClipboard(productPageUrl, title);
+      }
+  }
+
+  // Fallback function to copy to clipboard
+  function copyToClipboard(text, productTitle) {
+      navigator.clipboard.writeText(text).then(() => {
+          alert(`Link for "${productTitle}" copied to clipboard!`);
+      }).catch(err => {
+          console.error('Could not copy text: ', err);
+          // Show prompt as final fallback
+          prompt('Copy this URL to share:', text);
+      });
+  }
+
+  // Optional: Function to track share events
+  function trackShareEvent(productTitle, productId) {
+      // Here you can add analytics tracking
+      console.log(`Product shared: ${productTitle} (ID: ${productId})`);
+      
+      // Example: Send to Google Analytics if available
+      if (typeof gtag !== 'undefined') {
+          gtag('event', 'share', {
+              'event_category': 'Product',
+              'event_label': productTitle,
+              'value': productId
+          });
+      }
+  }
+
+  // Helper function to escape quotes
+  function escapeQuotes(str) {
+      return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
+  }
+  // ===== END OF SHARE PRODUCT FUNCTION =====
+
+  // ... the rest of your existing JavaScript code ...
+  // (like your generateCardHTML function, loadProducts function, etc.)
+  
   // Determine current page category and corresponding sheet tab
   function getCurrentCategory() {
     const path = window.location.pathname;
@@ -666,22 +785,30 @@ body {
   function generateCardHTML(item, index) {
     const imageArray = item.img.split(',');
     const carouselHTML = imageArray.map((url, i) =>
-      `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
+        `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
     ).join('');
 
+    // Clean the values for use in JavaScript
+    const cleanTitle = escapeQuotes(item.title);
+    const firstImage = escapeQuotes(imageArray[0].trim());
+    const buyUrl = escapeQuotes(item.link);
+    const permanentId = escapeQuotes(item.permanentId);
+    
     return `
-      <div class="carousel" data-seed="${item.shuffleID || index}">
-        ${carouselHTML}
-      </div>
-      <div class="spacer"></div>
-      <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
-      <div class="buy-divider"></div>
-      <div class="buy-button-wrapper">
-        <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
-      </div>
+        <div class="carousel" data-seed="${item.shuffleID || index}">
+            ${carouselHTML}
+        </div>
+        <div class="spacer"></div>
+        <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
+        <div class="buy-divider"></div>
+        <div class="buy-button-wrapper">
+            <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Buy Now</a>
+            <button class="share-button action-button-text" onclick="shareProduct('${cleanTitle}', '${firstImage}', '${buyUrl}', '${permanentId}')" aria-label="Share ${item.title}">
+                📤 Share
+            </button>
+        </div>
     `;
   }
-
   function renderNextBatch() {
     const grid = document.querySelector("main.grid");
     if (!grid || filteredProducts.length === 0) return;
