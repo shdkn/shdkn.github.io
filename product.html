@@ -5,40 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product - ShoeDukaan</title>
     
-    <!-- Open Graph Meta Tags for Social Media -->
-    <meta property="og:title" content="Premium Product - ShoeDukaan" id="og-title">
-    <meta property="og:description" content="Discover amazing products at ShoeDukaan" id="og-description">
-    <meta property="og:image" content="https://i.imgur.com/placeholder.jpg" id="og-image">
-    <meta property="og:url" content="" id="og-url">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="ShoeDukaan">
+    <!-- Open Graph Meta Tags with Absolute URLs -->
+    <meta property="og:title" content="Premium Footwear - ShoeDukaan" />
+    <meta property="og:description" content="Discover amazing shoes at ShoeDukaan" />
+    <meta property="og:image" content="https://i.imgur.com/example.jpg" />
+    <meta property="og:url" content="https://yourdomain.com/product.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ShoeDukaan" />
     
     <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Premium Product - ShoeDukaan" id="twitter-title">
-    <meta name="twitter:description" content="Discover amazing products at ShoeDukaan" id="twitter-description">
-    <meta name="twitter:image" content="https://i.imgur.com/placeholder.jpg" id="twitter-image">
-    
-    <!-- Standard Meta Tags -->
-    <meta name="description" content="Discover amazing products at ShoeDukaan" id="meta-description">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Premium Footwear - ShoeDukaan" />
+    <meta name="twitter:description" content="Discover amazing shoes at ShoeDukaan" />
+    <meta name="twitter:image" content="https://i.imgur.com/example.jpg" />
     
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #1c1c1c;
             color: #fff;
-            margin: 0;
-            padding: 0;
+            line-height: 1.6;
         }
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
         .header {
             background: #2a2a2a;
             padding: 15px 20px;
-            border-radius: 10px 10px 0 0;
+            border-radius: 10px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -62,20 +64,31 @@
         .product-content {
             background: #2a2a2a;
             padding: 30px;
-            border-radius: 0 0 10px 10px;
-            margin-top: 2px;
+            border-radius: 10px;
         }
-        .loading, .error {
+        .loading {
             text-align: center;
             padding: 60px 20px;
             font-size: 18px;
+            color: #ccc;
         }
         .error {
+            text-align: center;
+            padding: 40px 20px;
             color: #e74c3c;
+        }
+        .error a {
+            color: #ffcc00;
+            text-decoration: none;
+            margin-top: 15px;
+            display: inline-block;
+        }
+        .error a:hover {
+            text-decoration: underline;
         }
         .product-container {
             display: flex;
-            gap: 30px;
+            gap: 40px;
             flex-wrap: wrap;
         }
         .product-images {
@@ -88,6 +101,7 @@
         }
         .main-image {
             width: 100%;
+            max-width: 500px;
             border-radius: 8px;
             margin-bottom: 15px;
         }
@@ -95,6 +109,7 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            margin-bottom: 20px;
         }
         .thumbnail {
             width: 80px;
@@ -164,6 +179,11 @@
             .action-buttons {
                 flex-direction: column;
             }
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -187,41 +207,30 @@
         const permanentId = urlParams.get('permanentId');
         const sourceParam = urlParams.get('source');
         
-        // Your Google Sheets ID
+        // Configuration - UPDATE THIS WITH YOUR ACTUAL SHEET ID
         const SHEET_ID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+        const WEBSITE_URL = window.location.origin || "https://yourdomain.com";
         
         // Determine which sheet to use based on permanentId prefix
         function determineSourceFromId(permanentId) {
-            if (permanentId && permanentId.startsWith('L')) return 'links';
-            if (permanentId && permanentId.startsWith('M')) return 'for-him';
-            if (permanentId && permanentId.startsWith('W')) return 'for-her';
-            return sourceParam || 'links'; // fallback
+            if (!permanentId) return 'links';
+            if (permanentId.startsWith('L')) return 'links';
+            if (permanentId.startsWith('M')) return 'for-him';
+            if (permanentId.startsWith('W')) return 'for-her';
+            return sourceParam || 'links';
         }
         
         // Fix image URL for social media previews
         function fixImageUrlForSocialMedia(imageUrl) {
-            if (!imageUrl) return '';
+            if (!imageUrl) return 'https://i.imgur.com/placeholder.jpg';
             
-            // If image is from Imgur, ensure it's a direct image link
-            if (imageUrl.includes('imgur.com')) {
-                // Handle different Imgur URL formats
-                if (imageUrl.includes('/gallery/')) {
-                    const imgurId = imageUrl.split('/gallery/')[1].split('/')[0];
-                    return `https://i.imgur.com/${imgurId}.jpg`;
-                }
-                else if (imageUrl.includes('i.imgur.com/')) {
-                    const imgurId = imageUrl.split('i.imgur.com/')[1].split('.')[0];
-                    return `https://i.imgur.com/${imgurId}.jpg`;
-                }
-                else if (imageUrl.includes('imgur.com/a/')) {
-                    // Album link - we can't handle this well, use placeholder
-                    return 'https://i.imgur.com/placeholder.jpg';
-                }
-            }
-            
-            // For other URLs, ensure they have an image extension
-            if (!imageUrl.match(/\.(jpg|jpeg|png|gif|webp|bmp)$/i)) {
-                return imageUrl + '.jpg';
+            // Ensure URL is absolute
+            if (imageUrl.startsWith('//')) {
+                imageUrl = 'https:' + imageUrl;
+            } else if (imageUrl.startsWith('/')) {
+                imageUrl = WEBSITE_URL + imageUrl;
+            } else if (!imageUrl.startsWith('http')) {
+                imageUrl = WEBSITE_URL + '/' + imageUrl;
             }
             
             return imageUrl;
@@ -229,33 +238,31 @@
         
         // Update meta tags for social media
         function updateMetaTags(product) {
-            const images = product.img ? product.img.split(',').map(img => img.trim()) : [];
-            const firstImage = images.length > 0 ? fixImageUrlForSocialMedia(images[0]) : '';
+            const images = product.img ? product.img.split(',').map(img => fixImageUrlForSocialMedia(img.trim())) : [];
+            const firstImage = images.length > 0 ? images[0] : 'https://i.imgur.com/placeholder.jpg';
             const currentUrl = window.location.href;
             const productTitle = product.title || 'Amazing Product - ShoeDukaan';
             const productDescription = product.description || 'Check out this fantastic product on ShoeDukaan';
             
             // Update Open Graph tags
-            document.querySelector('meta[property="og:title"]').setAttribute('content', productTitle);
-            document.querySelector('meta[property="og:description"]').setAttribute('content', productDescription);
-            document.querySelector('meta[property="og:image"]').setAttribute('content', firstImage);
-            document.querySelector('meta[property="og:url"]').setAttribute('content', currentUrl);
+            document.querySelector('meta[property="og:title"]').content = productTitle;
+            document.querySelector('meta[property="og:description"]').content = productDescription;
+            document.querySelector('meta[property="og:image"]').content = firstImage;
+            document.querySelector('meta[property="og:url"]').content = currentUrl;
             
             // Update Twitter tags
-            document.querySelector('meta[name="twitter:title"]').setAttribute('content', productTitle);
-            document.querySelector('meta[name="twitter:description"]').setAttribute('content', productDescription);
-            document.querySelector('meta[name="twitter:image"]').setAttribute('content', firstImage);
+            document.querySelector('meta[name="twitter:title"]').content = productTitle;
+            document.querySelector('meta[name="twitter:description"]').content = productDescription;
+            document.querySelector('meta[name="twitter:image"]').content = firstImage;
             
             // Update standard meta description
-            document.querySelector('meta[name="description"]').setAttribute('content', productDescription);
+            document.querySelector('meta[name="description"]').content = productDescription;
             
             // Update page title
             document.title = `${productTitle} | ShoeDukaan`;
             
-            console.log('Meta tags updated for social sharing:');
-            console.log('- Title:', productTitle);
-            console.log('- Image:', firstImage);
-            console.log('- URL:', currentUrl);
+            console.log('Social media meta tags updated:');
+            console.log('Image URL:', firstImage);
         }
         
         // Share product function
@@ -269,29 +276,24 @@
                 url: productUrl
             };
             
-            // Try to use native share dialog
             if (navigator.share) {
                 try {
                     await navigator.share(shareData);
-                    console.log('Product shared successfully');
                 } catch (error) {
                     if (error.name !== 'AbortError') {
-                        console.error('Error sharing:', error);
                         copyToClipboard(productUrl, productTitle);
                     }
                 }
             } else {
-                // Fallback for browsers that don't support Web Share API
                 copyToClipboard(productUrl, productTitle);
             }
         }
         
-        // Fallback function to copy to clipboard
+        // Copy to clipboard fallback
         function copyToClipboard(text, productTitle) {
             navigator.clipboard.writeText(text).then(() => {
                 alert(`Link for "${productTitle}" copied to clipboard!`);
-            }).catch(err => {
-                console.error('Could not copy text: ', err);
+            }).catch(() => {
                 prompt('Copy this URL to share:', text);
             });
         }
@@ -299,7 +301,7 @@
         // Load product data from Google Sheets
         async function loadProduct() {
             if (!permanentId) {
-                showError("No product ID specified. Please use a valid product link.");
+                showError("Product not specified. Please use a valid product link.");
                 return;
             }
             
@@ -309,28 +311,21 @@
                 const response = await fetch(url);
                 
                 if (!response.ok) {
-                    throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
+                    throw new Error(`Server returned ${response.status} error`);
                 }
                 
                 const data = await response.json();
-                
-                if (!data || data.length === 0) {
-                    showError("No products found in this category.");
-                    return;
-                }
-                
-                // Find product by permanentId
                 const product = data.find(item => item.permanentId === permanentId);
                 
                 if (product) {
                     renderProduct(product);
                     updateMetaTags(product);
                 } else {
-                    showError("Product not found. It may have been removed or the link is incorrect.");
+                    showError("Product not found. It may have been removed.");
                 }
             } catch (error) {
-                console.error('Error loading product:', error);
-                showError("Error loading product details. Please try again later.");
+                console.error('Error:', error);
+                showError("Could not load product details. Please try again later.");
             }
         }
         
@@ -387,7 +382,7 @@
                 <div class="error">
                     <h2>Error</h2>
                     <p>${message}</p>
-                    <p><a href="index.html" class="back-button">Return to homepage</a></p>
+                    <a href="index.html">← Return to homepage</a>
                 </div>
             `;
         }
