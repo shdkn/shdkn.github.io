@@ -487,6 +487,48 @@ body {
 .spacer {
   height: 20px;
 }
+  .share-button {
+    margin-top: 5px;
+    padding: 8px 12px;
+    background-color: rgba(30, 30, 30, 0.85);
+    color: #BABABA;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-family: 'Barlow', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.share-button:hover {
+    background-color: #3B3B3B;
+    opacity: 0.85;
+    color: #005fa3;
+}
+
+/* For the buy-button-wrapper to accommodate both buttons */
+.buy-button-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-left: -6px;
+    box-sizing: border-box;
+}
+
+.buy-button {
+    flex: 2;
+    margin-right: 5px;
+}
+
+.share-button {
+    flex: 1;
+  }
 </style>
 </head>
 <body>
