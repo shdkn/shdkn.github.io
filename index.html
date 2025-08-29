@@ -558,7 +558,7 @@ body {
 </footer>
 
 <!-- JavaScript -->
-		<script>
+<script>
   const colors = [
     "#3A3647", "#1C262E", "#692B17",
     "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
@@ -570,6 +570,7 @@ body {
   let currentIndex = 0;
   const batchSize = 12;
   let isSearching = false;
+  let searchTimeout = null;
 
   // Determine current page category and corresponding sheet tab
   function getCurrentCategory() {
@@ -743,7 +744,7 @@ body {
     const viewportHeight = window.innerHeight;
     const fullHeight = document.body.offsetHeight;
 
-    if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < filteredProducts.length) {
+    if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < filteredProducts.length && !isSearching) {
       renderNextBatch();
     }
 
@@ -755,46 +756,56 @@ body {
   });
 
   document.getElementById("searchInput").addEventListener("input", function () {
-    const query = this.value.toLowerCase().trim();
-    const grid = document.querySelector("main.grid");
-    if (!grid) return;
+    // Clear any existing timeout
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
+    
+    // Set a new timeout to delay the search
+    searchTimeout = setTimeout(() => {
+      const query = this.value.toLowerCase().trim();
+      const grid = document.querySelector("main.grid");
+      if (!grid) return;
 
-    grid.innerHTML = "";
-    currentIndex = 0;
+      grid.innerHTML = "";
+      currentIndex = 0;
 
-    if (query === "") {
-      // If search is empty, show regular products for this page
-      isSearching = false;
-      filteredProducts = allProducts;
-    } else {
-      // Search through all products from all tabs
-      isSearching = true;
-      
-      // If we haven't loaded all products for search yet, do it now
-      if (allProductsForSearch.length === 0) {
-        // Show loading message
-        grid.innerHTML = '<div style="color: white; text-align: center; padding: 20px;">Loading search results...</div>';
+      if (query === "") {
+        // If search is empty, show regular products for this page
+        isSearching = false;
+        filteredProducts = allProducts;
+        renderNextBatch();
+      } else {
+        // Set searching flag
+        isSearching = true;
         
-        // Load all products for search
-        loadAllProductsForSearch().then(() => {
-          // After loading, perform the search
+        // Search through all products from all tabs
+        // Make sure we have the data loaded
+        if (allProductsForSearch.length === 0) {
+          // Show loading message
+          grid.innerHTML = '<div style="color: white; text-align: center; padding: 20px;">Loading search results...</div>';
+          
+          // Load all products for search
+          loadAllProductsForSearch().then(() => {
+            // After loading, perform the search
+            filteredProducts = allProductsForSearch.filter(item =>
+              item.title.toLowerCase().includes(query)
+            );
+            
+            // Render results
+            renderSearchResults();
+          });
+        } else {
+          // We already have the search data
           filteredProducts = allProductsForSearch.filter(item =>
             item.title.toLowerCase().includes(query)
           );
           
           // Render results
           renderSearchResults();
-        });
-        return;
-      } else {
-        // We already have the search data
-        filteredProducts = allProductsForSearch.filter(item =>
-          item.title.toLowerCase().includes(query)
-        );
+        }
       }
-    }
-
-    renderSearchResults();
+    }, 300); // 300ms delay before executing search
   });
 
   function renderSearchResults() {
@@ -823,6 +834,7 @@ body {
       link.classList.add('active');
     }
   });
+</script>
 </script>
 </body>
 </html>
