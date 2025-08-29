@@ -6,49 +6,94 @@
     <title>Product - ShoeDukaan</title>
     
     <!-- Open Graph Meta Tags for Social Media -->
-    <meta property="og:title" content="Loading product..." id="og-title">
-    <meta property="og:description" content="Check out this product on ShoeDukaan" id="og-description">
-    <meta property="og:image" content="" id="og-image">
+    <meta property="og:title" content="Premium Product - ShoeDukaan" id="og-title">
+    <meta property="og:description" content="Discover amazing products at ShoeDukaan" id="og-description">
+    <meta property="og:image" content="https://i.imgur.com/placeholder.jpg" id="og-image">
     <meta property="og:url" content="" id="og-url">
-    <meta property="og:type" content="product.item">
+    <meta property="og:type" content="website">
     <meta property="og:site_name" content="ShoeDukaan">
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Loading product..." id="twitter-title">
-    <meta name="twitter:description" content="Check out this product on ShoeDukaan" id="twitter-description">
-    <meta name="twitter:image" content="" id="twitter-image">
-    <meta name="twitter:site" content="@ShoeDukaan">
+    <meta name="twitter:title" content="Premium Product - ShoeDukaan" id="twitter-title">
+    <meta name="twitter:description" content="Discover amazing products at ShoeDukaan" id="twitter-description">
+    <meta name="twitter:image" content="https://i.imgur.com/placeholder.jpg" id="twitter-image">
     
     <!-- Standard Meta Tags -->
-    <meta name="description" content="Check out this product on ShoeDukaan" id="meta-description">
+    <meta name="description" content="Discover amazing products at ShoeDukaan" id="meta-description">
     
     <style>
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #1c1c1c;
             color: #fff;
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
-            background: #2a2a2a;
             padding: 20px;
-            border-radius: 12px;
         }
-        .product-image {
+        .header {
+            background: #2a2a2a;
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .back-button {
+            color: #ffcc00;
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .back-button:hover {
+            text-decoration: underline;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+        .product-content {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 0 0 10px 10px;
+            margin-top: 2px;
+        }
+        .loading, .error {
+            text-align: center;
+            padding: 60px 20px;
+            font-size: 18px;
+        }
+        .error {
+            color: #e74c3c;
+        }
+        .product-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .product-images {
+            flex: 1;
+            min-width: 300px;
+        }
+        .product-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        .main-image {
             width: 100%;
-            max-width: 400px;
             border-radius: 8px;
-            margin-bottom: 20px;
-            display: block;
+            margin-bottom: 15px;
         }
         .image-gallery {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
             flex-wrap: wrap;
         }
         .thumbnail {
@@ -62,50 +107,36 @@
         .thumbnail:hover, .thumbnail.active {
             border-color: #ffcc00;
         }
-        .back-button {
-            color: #ffcc00;
-            text-decoration: none;
-            margin-bottom: 20px;
-            display: inline-block;
-            font-weight: bold;
-        }
-        .back-button:hover {
-            text-decoration: underline;
-        }
-        .loading {
-            text-align: center;
-            padding: 40px;
-            font-size: 18px;
-        }
-        .error {
-            text-align: center;
-            padding: 40px;
-            color: #e74c3c;
-        }
         .product-title {
             color: #ffcc00;
+            font-size: 28px;
             margin-bottom: 15px;
         }
         .product-description {
             line-height: 1.6;
             margin-bottom: 20px;
             color: #ccc;
+            font-size: 16px;
         }
         .product-price {
             font-size: 24px;
             font-weight: bold;
             color: #2ecc71;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
         }
         .buy-button {
             display: inline-block;
             background: #ffcc00;
             color: #000;
-            padding: 12px 24px;
+            padding: 15px 30px;
             border-radius: 4px;
             text-decoration: none;
             font-weight: bold;
-            margin-top: 20px;
             transition: background-color 0.3s;
         }
         .buy-button:hover {
@@ -115,12 +146,10 @@
             display: inline-block;
             background: #3498db;
             color: white;
-            padding: 12px 24px;
+            padding: 15px 30px;
             border-radius: 4px;
             text-decoration: none;
             font-weight: bold;
-            margin-top: 20px;
-            margin-left: 10px;
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
@@ -128,13 +157,27 @@
         .share-button:hover {
             background: #2980b9;
         }
+        @media (max-width: 768px) {
+            .product-container {
+                flex-direction: column;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="javascript:history.back()" class="back-button">← Back to Products</a>
-        <div id="product-content">
-            <div class="loading">Loading product details...</div>
+        <div class="header">
+            <a href="javascript:history.back()" class="back-button">← Back to Products</a>
+            <div class="logo">ShoeDukaan</div>
+        </div>
+        
+        <div class="product-content">
+            <div id="product-data">
+                <div class="loading">Loading product details...</div>
+            </div>
         </div>
     </div>
 
@@ -155,28 +198,33 @@
             return sourceParam || 'links'; // fallback
         }
         
-        const sourceTab = determineSourceFromId(permanentId);
-        
         // Fix image URL for social media previews
         function fixImageUrlForSocialMedia(imageUrl) {
             if (!imageUrl) return '';
             
-            let fixedUrl = imageUrl;
-            
-            // If image is from Imgur, use the direct image format
-            if (imageUrl.includes('i.imgur.com')) {
-                // Convert Imgur gallery links to direct image links
+            // If image is from Imgur, ensure it's a direct image link
+            if (imageUrl.includes('imgur.com')) {
+                // Handle different Imgur URL formats
                 if (imageUrl.includes('/gallery/')) {
-                    const imgurId = imageUrl.split('/gallery/')[1].split('.')[0];
-                    fixedUrl = `https://i.imgur.com/${imgurId}.jpg`;
+                    const imgurId = imageUrl.split('/gallery/')[1].split('/')[0];
+                    return `https://i.imgur.com/${imgurId}.jpg`;
                 }
-                // Ensure it's a direct image link (not a page)
-                else if (!imageUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
-                    fixedUrl = imageUrl + '.jpg';
+                else if (imageUrl.includes('i.imgur.com/')) {
+                    const imgurId = imageUrl.split('i.imgur.com/')[1].split('.')[0];
+                    return `https://i.imgur.com/${imgurId}.jpg`;
+                }
+                else if (imageUrl.includes('imgur.com/a/')) {
+                    // Album link - we can't handle this well, use placeholder
+                    return 'https://i.imgur.com/placeholder.jpg';
                 }
             }
             
-            return fixedUrl;
+            // For other URLs, ensure they have an image extension
+            if (!imageUrl.match(/\.(jpg|jpeg|png|gif|webp|bmp)$/i)) {
+                return imageUrl + '.jpg';
+            }
+            
+            return imageUrl;
         }
         
         // Update meta tags for social media
@@ -184,29 +232,35 @@
             const images = product.img ? product.img.split(',').map(img => img.trim()) : [];
             const firstImage = images.length > 0 ? fixImageUrlForSocialMedia(images[0]) : '';
             const currentUrl = window.location.href;
+            const productTitle = product.title || 'Amazing Product - ShoeDukaan';
+            const productDescription = product.description || 'Check out this fantastic product on ShoeDukaan';
             
             // Update Open Graph tags
-            document.querySelector('meta[property="og:title"]').setAttribute('content', product.title || 'Product on ShoeDukaan');
-            document.querySelector('meta[property="og:description"]').setAttribute('content', product.description || `Check out ${product.title} on ShoeDukaan`);
+            document.querySelector('meta[property="og:title"]').setAttribute('content', productTitle);
+            document.querySelector('meta[property="og:description"]').setAttribute('content', productDescription);
             document.querySelector('meta[property="og:image"]').setAttribute('content', firstImage);
             document.querySelector('meta[property="og:url"]').setAttribute('content', currentUrl);
             
             // Update Twitter tags
-            document.querySelector('meta[name="twitter:title"]').setAttribute('content', product.title || 'Product on ShoeDukaan');
-            document.querySelector('meta[name="twitter:description"]').setAttribute('content', product.description || `Check out ${product.title} on ShoeDukaan`);
+            document.querySelector('meta[name="twitter:title"]').setAttribute('content', productTitle);
+            document.querySelector('meta[name="twitter:description"]').setAttribute('content', productDescription);
             document.querySelector('meta[name="twitter:image"]').setAttribute('content', firstImage);
             
             // Update standard meta description
-            document.querySelector('meta[name="description"]').setAttribute('content', product.description || `Check out ${product.title} on ShoeDukaan`);
+            document.querySelector('meta[name="description"]').setAttribute('content', productDescription);
             
             // Update page title
-            document.title = `${product.title} | ShoeDukaan`;
+            document.title = `${productTitle} | ShoeDukaan`;
+            
+            console.log('Meta tags updated for social sharing:');
+            console.log('- Title:', productTitle);
+            console.log('- Image:', firstImage);
+            console.log('- URL:', currentUrl);
         }
         
         // Share product function
         async function shareProduct() {
             const productTitle = document.querySelector('.product-title')?.textContent || 'Check out this product';
-            const productImage = document.querySelector('.product-image')?.src || '';
             const productUrl = window.location.href;
             
             const shareData = {
@@ -250,6 +304,7 @@
             }
             
             try {
+                const sourceTab = determineSourceFromId(permanentId);
                 const url = `https://opensheet.elk.sh/${SHEET_ID}/${sourceTab}`;
                 const response = await fetch(url);
                 
@@ -296,19 +351,25 @@
                 `;
             }
             
-            document.getElementById('product-content').innerHTML = `
-                <h1 class="product-title">${product.title || 'Unknown Product'}</h1>
-                ${firstImage ? `
-                    <img src="${firstImage}" alt="${product.title}" class="product-image" id="main-product-image">
-                    ${galleryHTML}
-                ` : ''}
-                <div class="product-description">
-                    ${product.description || 'Check out this amazing product from ShoeDukaan.'}
-                </div>
-                ${product.price ? `<div class="product-price">Price: ${product.price}</div>` : ''}
-                <div>
-                    <a href="${product.link}" target="_blank" class="buy-button">Buy Now</a>
-                    <button class="share-button" onclick="shareProduct()">Share Product</button>
+            document.getElementById('product-data').innerHTML = `
+                <div class="product-container">
+                    <div class="product-images">
+                        ${firstImage ? `
+                            <img src="${firstImage}" alt="${product.title}" class="main-image" id="main-product-image">
+                            ${galleryHTML}
+                        ` : '<p>No image available</p>'}
+                    </div>
+                    <div class="product-info">
+                        <h1 class="product-title">${product.title || 'Unknown Product'}</h1>
+                        <div class="product-description">
+                            ${product.description || 'Check out this amazing product from ShoeDukaan.'}
+                        </div>
+                        ${product.price ? `<div class="product-price">Price: ${product.price}</div>` : ''}
+                        <div class="action-buttons">
+                            <a href="${product.link}" target="_blank" class="buy-button">Buy Now</a>
+                            <button class="share-button" onclick="shareProduct()">Share Product</button>
+                        </div>
+                    </div>
                 </div>
             `;
         }
@@ -322,7 +383,7 @@
         
         // Show error message
         function showError(message) {
-            document.getElementById('product-content').innerHTML = `
+            document.getElementById('product-data').innerHTML = `
                 <div class="error">
                     <h2>Error</h2>
                     <p>${message}</p>
