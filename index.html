@@ -269,23 +269,6 @@ body {
   letter-spacing: 0.3px;
 }
 
-.buy-button { 
-  margin-top:5px; 
-  padding: 8px 18px 8px 0; /* Top: 8px, Right: 18px, Bottom: 8px, Left: 0 */
-  background-color: rgba(30, 30, 30, 0.85); 
-  color: #BABABA; 
-  text-decoration: none; 
-  border-radius: 2px; 
-  transition: background-color 0.3s ease, opacity 0.3s ease; align-self: flex-start; 
-  align-self: flex-start;
-}
-
-.buy-button-wrapper {
-  width: 100%;
-  margin-left: -6px; /* Cancels out the card's 6px padding */
-  box-sizing: border-box;
-}
-
 .buy-button:hover {
   color: #005fa3;
 }
@@ -488,65 +471,47 @@ body {
   height: 20px;
 }
   /* Share Button Styles */
-.share-button {
-    margin-top: 5px;
-    padding: 8px 12px;
-    background-color: rgba(30, 30, 30, 0.85);
-    color: #BABABA;
-    text-decoration: none;
-    border-radius: 2px;
-    transition: background-color 0.3s ease, opacity 0.3s ease;
-    border: none;
-    cursor: pointer;
-    font-family: 'Barlow', sans-serif;
-    font-weight: 500;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    display: inline-block;
-    margin-left: 5px;
-}
-
-.share-button:hover {
-    background-color: #3B3B3B;
-    opacity: 0.85;
-    color: #005fa3;
-}
-
-/* For the buy-button-wrapper to accommodate both buttons */
+/* Buy Button Wrapper - Keep buttons in one line */
 .buy-button-wrapper {
     display: flex;
     justify-content: space-between;
-    width: 50%;
+    width: 100%;
     margin-left: -6px;
     box-sizing: border-box;
-    flex-wrap: wrap;
+    gap: 5px; /* Space between buttons */
+    flex-wrap: nowrap; /* Prevent wrapping to next line */
 }
 
+/* Buy Now Button */
 .buy-button {
-    flex: 2;
-    margin-right: 5px;
+    flex: 2; /* Takes more space */
+    margin-right: 0; /* Remove right margin since we use gap */
     min-width: 120px;
+    text-align: center;
+    white-space: nowrap;
 }
 
+/* Share Button */
 .share-button {
-    flex: 1;
-    min-width: 50px;
+    flex: 1; /* Takes less space */
+    min-width: 80px;
+    margin-left: 0; /* Remove left margin since we use gap */
+    text-align: center;
+    white-space: nowrap;
 }
 
-/* Mobile Responsiveness */
+/* Mobile Responsiveness - Stack on small screens */
 @media (max-width: 480px) {
     .buy-button-wrapper {
-        flex-direction: column;
+        flex-direction: column; /* Stack vertically on mobile */
+        gap: 8px;
     }
     
     .buy-button, .share-button {
-        width: 50%;
-        margin: 5px 0;
-        text-align: center;
+        width: 100%;
+        margin: 0;
     }
-      }
-</style>
+      }</style>
 </head>
 <body>
 <div class="wrapper grid-wrapper">
