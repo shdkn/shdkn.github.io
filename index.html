@@ -815,44 +815,38 @@ body {
       threshold: 0.1
   });
 
-  // Search function that works across all pages
-  function performSearch(query) {
-      const grid = document.getElementById("productGrid");
-      if (!grid) return;
+ 1// Search function that works across all pages
+function performSearch(query) {
+    const grid = document.getElementById("productGrid");
+    if (!grid) return;
 
-      grid.innerHTML = "";
-      currentIndex = 0;
+    // Clear the grid to avoid duplication
+    grid.innerHTML = "";
+    currentIndex = 0;
 
-      if (query === "") {
-          // If no query, show products from current category
-          const currentCategory = getCurrentCategory();
-          if (currentCategory && currentCategory !== 'all') {
-              filteredProducts = allProducts.filter(product => product.category === currentCategory);
-          } else {
-              filteredProducts = allProducts;
-          }
-      } else {
-          // If there's a query, search across all products
-          filteredProducts = allProducts.filter(item =>
-              item.title.toLowerCase().includes(query)
-          );
-      }
+    if (query === "") {
+        // If no query, reset filteredProducts to the current category's products
+        const currentCategory = getCurrentCategory();
+        if (currentCategory && currentCategory !== 'all') {
+            filteredProducts = allProducts.filter(product => product.category === currentCategory);
+        } else {
+            filteredProducts = allProducts;
+        }
+    } else {
+        // If there's a query, search across all products
+        filteredProducts = allProducts.filter(item =>
+            item.title.toLowerCase().includes(query)
+        );
+    }
+    
+    if (filteredProducts.length === 0) {
+        grid.innerHTML = '<div class="error-message">No products match your search.</div>';
+    } else {
+        // Correctly render the first batch of results
+        renderNextBatch();
+    }
+            }
       
-      if (filteredProducts.length === 0) {
-          grid.innerHTML = '<div class="error-message">No products match your search.</div>';
-      } else {
-          filteredProducts.slice(0, batchSize).forEach((item, i) => {
-              const card = document.createElement("article");
-              card.className = "card";
-              card.setAttribute("role", "article");
-              card.setAttribute("aria-label", item.title);
-              card.style.backgroundColor = colors[i % colors.length];
-              card.style.transitionDelay = `${i * 100}ms`;
-              card.innerHTML = generateCardHTML(item, i);
-
-              grid.appendChild(card);
-              observer.observe(card);
-          });
 
           activateCarousels(".carousel");
       }
