@@ -846,36 +846,73 @@ function performSearch() {
   });
 
   // Initialize the page
-  window.addEventListener("DOMContentLoaded", function() {
-      // Load products from all categories
-      loadAllProducts();
-      
-      // Set up search functionality
-      const searchInput = document.getElementById("searchInput");
-      if (searchInput) {
-          // Check if there's a search query in the URL
-          const urlParams = new URLSearchParams(window.location.search);
-          const searchQuery = urlParams.get('search');
-          if (searchQuery) {
-              searchInput.value = searchQuery;
-              // Perform search after products are loaded
-              setTimeout(() => performSearch(searchQuery), 1000);
-          }
-          
-          searchInput.addEventListener("input", function() {
-              const query = this.value.toLowerCase();
-              performSearch(query);
-              
-              // Update URL with search query
-              const url = new URL(window.location);
-              if (query) {
-                  url.searchParams.set('search', query);
-              } else {
-                  url.searchParams.delete('search');
-              }
-              window.history.replaceState({}, '', url);
-          });
-      }
+window.addEventListener("DOMContentLoaded", function () {
+    // Load products from all categories
+    loadAllProducts();
+
+    // Set up search functionality
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+        // Check if there's a search query in the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchQuery = urlParams.get("search");
+        if (searchQuery) {
+            searchInput.value = searchQuery;
+            // Perform search after products are loaded
+            setTimeout(() => {
+                performSearch(searchQuery);
+            }, 1000);
+        }
+
+        searchInput.addEventListener("input", function () {
+            const query = this.value.toLowerCase();
+            performSearch(query);
+
+            // Update URL with search query
+            const url = new URL(window.location);
+            if (query) {
+                url.searchParams.set("search", query);
+            } else {
+                url.searchParams.delete("search");
+            }
+            window.history.replaceState({}, "", url);
+        });
+    }
+
+    // Set up scroll event for infinite scrolling
+    window.addEventListener("scroll", () => {
+        const scrollY = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const fullHeight = document.body.offsetHeight;
+
+        if (
+            scrollY + viewportHeight >= fullHeight - 100 &&
+            currentIndex < filteredProducts.length
+        ) {
+            renderNextBatch();
+        }
+
+        const backToTopBtn = document.getElementById("backToTop");
+        if (backToTopBtn) {
+            backToTopBtn.style.display = scrollY > 300 ? "block" : "none";
+        }
+    });
+});
+
+// Updated performSearch function to prevent double rendering
+function performSearch(query) {
+    filteredProducts = products.filter((item) => {
+        return (
+            item.title.toLowerCase().includes(query) ||
+            item.description.toLowerCase().includes(query) ||
+            item.category.toLowerCase().includes(query)
+        );
+    });
+
+    grid.innerHTML = ""; // Clear previous results
+    currentIndex = 0; // Reset batch index
+    renderNextBatch(); // Use centralized rendering logic
+  }
       
       // Set up scroll event for infinite scrolling
       window.addEventListener("scroll", () => {
