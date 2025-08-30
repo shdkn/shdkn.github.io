@@ -370,24 +370,21 @@ body {
   height: 100%;
   overflow: hidden;
   border-radius: 8px;
+  background: #333;
 }
 
 .product-image-container .carousel img {
   position: absolute;
   top: 0;
-  left: 100%;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s ease, opacity 0.6s ease;
-  transform: translateX(100%);
   opacity: 0;
-  z-index: 0;
+  transition: opacity 0.6s ease;
 }
 
 .product-image-container .carousel img.active {
-  transform: translateX(0%);
-  left: 0;
   opacity: 1;
   z-index: 1;
 }
@@ -579,22 +576,31 @@ body {
 .product-card .carousel {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 5;
+  height: 60%;
   overflow: hidden;
   border-radius: 8px;
+  background: #333;
+}
+
+.product-card .carousel img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.product-card .carousel img.active {
+  opacity: 1;
+  z-index: 1;
 }
 
 .product-card .carousel img.active:hover {
   filter: brightness(1.08);
   transition: filter 0.3s ease;
-}
-
-.product-card-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: 8px;
 }
 
 .product-card-title {
@@ -935,12 +941,12 @@ body {
     productLoading.style.display = 'none';
     productDetail.style.display = 'grid';
     
-    const imageArray = product.img ? product.img.split(',') : [];
+    const imageArray = product.img ? product.img.split(',').map(url => url.trim()).filter(url => url) : [];
     const carouselHTML = imageArray.length > 0 ? 
       imageArray.map((url, i) => 
-        `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${product.title || 'Product Image'}" />`
+        `<img src="${url}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${product.title || 'Product Image'}" onerror="this.src='https://via.placeholder.com/300x500?text=No+Image';" />`
       ).join('') : 
-      `<img src="https://via.placeholder.com/500x500?text=No+Image" class="active" loading="lazy" alt="No Image" />`;
+      `<img src="https://via.placeholder.com/300x500?text=No+Image" class="active" loading="lazy" alt="No Image" />`;
     
     const productHTML = `
       <div class="product-image-container" role="region" aria-label="Product images">
@@ -960,7 +966,7 @@ body {
         <div class="buy-divider"></div>
         <div class="product-actions">
           <a href="${product.link || '#'}" target="_blank" class="buy-button" aria-label="Buy ${product.title || 'product'}">👉👉 Buy Now</a>
-          <button class="share-button" data-title="${escapeQuotes(product.title || 'product')}" data-image="${imageArray[0] ? escapeQuotes(imageArray[0].trim()) : ''}" data-url="${escapeQuotes(product.link || '#')}" data-id="${escapeQuotes(product.permanentId || '0')}" aria-label="Share ${product.title || 'product'}">📤 Share</button>
+          <button class="share-button" data-title="${escapeQuotes(product.title || 'product')}" data-image="${imageArray[0] || ''}" data-url="${escapeQuotes(product.link || '#')}" data-id="${escapeQuotes(product.permanentId || '0')}" aria-label="Share ${product.title || 'product'}">📤 Share</button>
         </div>
         <div class="product-meta">
           ${product.category ? `<div><strong>Category:</strong> ${product.category}</div>` : ''}
@@ -984,19 +990,22 @@ body {
       const res = await fetch(url);
       
       if (!res.ok) {
-        console.error(`Failed to fetch similar products: ${res.status}`);
+        console.error(`Failed to fetch similar products for ${category}: ${res.status}`);
         return;
       }
       
       const data = await res.json();
+      console.log(`Fetched similar products for ${category}:`, data); // Debug log
       const similarProducts = data
         .filter(item => item.permanentId !== excludeId && item.title && item.img && item.link)
         .sort(() => 0.5 - Math.random())
         .slice(0, 4);
       
+      console.log(`Filtered similar products:`, similarProducts); // Debug log
       displaySimilarProducts(similarProducts);
     } catch (err) {
       console.error("Failed to load similar products:", err);
+      document.getElementById('similarProducts').innerHTML = '<div class="error-message">Failed to load similar products.</div>';
     }
   }
   
@@ -1010,12 +1019,13 @@ body {
     }
     
     const productsHTML = products.map((product, i) => {
-      const imageArray = product.img ? product.img.split(',') : [];
+      const imageArray = product.img ? product.img.split(',').map(url => url.trim()).filter(url => url) : [];
+      console.log(`Product ${product.title} images:`, imageArray); // Debug log
       const carouselHTML = imageArray.length > 0 ? 
         imageArray.map((url, i) => 
-          `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${product.title}" />`
+          `<img src="${url}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${product.title}" onerror="this.src='https://via.placeholder.com/300x500?text=No+Image';" />`
         ).join('') : 
-        `<img src="https://via.placeholder.com/300x200?text=No+Image" class="active" loading="lazy" alt="No Image" />`;
+        `<img src="https://via.placeholder.com/300x500?text=No+Image" class="active" loading="lazy" alt="No Image" />`;
       
       return `
         <article class="product-card" role="article" aria-label="${product.title}" style="background-color: ${colors[i % colors.length]}; transition-delay: ${i * 100}ms;">
