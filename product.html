@@ -1,140 +1,886 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product - ShoeDukaan</title>
-    
-    <!-- Social Media Meta Tags -->
-    <meta property="og:title" content="Premium Product - ShoeDukaan" />
-    <meta property="og:description" content="Discover amazing products at ShoeDukaan" />
-    <meta property="og:image" content="https://i.imgur.com/placeholder.jpg" />
-    <meta property="og:url" content="" />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Premium Product - ShoeDukaan" />
-    <meta name="twitter:description" content="Discover amazing products at ShoeDukaan" />
-    <meta name="twitter:image" content="https://i.imgur.com/placeholder.jpg" />
-    <meta name="description" content="Discover amazing products at ShoeDukaan" />
-    
-    <style>
-        /* Your existing CSS remains mostly the same */
-        /* Added better mobile styles */
-        @media (max-width: 480px) {
-            .product-title {
-                font-size: 22px;
-            }
-            
-            .product-price {
-                font-size: 20px;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .buy-button, .share-button {
-                width: 100%;
-            }
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ShoeDukaan | Product Details</title>
+<meta name="description" content="Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.">
+<meta name="keywords" content="premium shoes, footwear catalog, mobile-first grid, Shoe Dukaan, vertical product images, curated shoes, online shoe store">
+<meta name="author" content="ShareDukaan">
+<link rel="canonical" href="https://shdkn.carrd.co">
+<meta name="robots" content="index, follow">
+<link rel="icon" href="shdkn_fav_p.png" type="image/png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "ShareDukaan",
+  "url": "https://shdkn.carrd.co"
+}
+</script>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --max-width: 1440px;
+  --side-padding: 18px;
+  --primary-color: #ffcc00;
+  --dark-bg: #1c1c1c;
+  --card-bg: #fff;
+  --text-light: #BABABA;
+  --text-dark: #333;
+}
+
+body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--dark-bg);
+  scroll-behavior: smooth;
+  color: #fff;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.layout-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--side-padding);
+  box-sizing: border-box;
+}
+
+.wrapper {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--side-padding);
+}
+
+/* Header */
+.top-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: #333;
+  color: #fff;
+  padding: 12px var(--side-padding);
+  position: relative;
+}
+
+.logo {
+  width: 75px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+}
+
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: center;
+  flex: 1;
+}
+
+.tagline {
+  font-family: 'Assistant', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+/* Desktop override */
+@media (min-width: 769px) {
+  .tagline {
+    white-space: normal;
+    max-width: 320px;
+    line-height: 1.4;
+  }
+}
+
+.telegram-link {
+  font-family: 'Assistant', sans-serif;
+  font-size: 13px;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.telegram-link:hover,
+.telegram-link:focus {
+  transition: background-color 0.3s ease;
+  color: inherit;
+}
+
+/* Navigation Bar */
+.nav-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  background-color: rgba(30, 30, 30, 0.85);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border-top: 1px solid #444;
+  border-bottom: 1px solid #444;
+}
+
+/* Nav List */
+.nav-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Nav Item */
+.nav-list li {
+  display: flex;
+  align-items: center;
+}
+
+/* Nav Button with Image + Text */
+.nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 40px;
+  height: 40px;
+  text-decoration: none;
+  font-family: 'Assistant', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-light);
+  text-transform: uppercase;
+  overflow: hidden;
+  position: relative;
+}
+
+/* PNG Icon */
+.nav-btn img {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease;
+}
+
+/* Text Label (hidden by default) */
+.nav-text {
+  position: absolute;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  font-size: 10px;
+  color: #fff;
+  text-align: center;
+  width: 100%;
+}
+
+/* Hover Behavior */
+.nav-btn:hover img {
+  transform: scale(0.7);
+  transform-origin: top center;
+}
+
+.nav-btn:hover .nav-text {
+  opacity: 1;
+}
+
+/* Optional Separator */
+.nav-separator {
+  color: #555;
+  font-size: 14px;
+  user-select: none;
+}
+
+.nav-btn.active img {
+  transform: scale(0.7);
+  transform-origin: top center;
+}
+
+.nav-btn.active .nav-text {
+  opacity: 1;
+  color: #fff;
+}
+
+/* Back to Top */
+#backToTop {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 100;
+  background-color: var(--primary-color);
+  color: #000;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  display: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#backToTop:hover {
+  background-color: #ffd633;
+  transform: scale(1.05);
+}
+
+/* Footer */
+.footer-banner {
+  width: 100%;
+  background-color: #333;
+  color: #BDB9B9;
+  padding: 4px 0;
+  border-top: 1px solid #3A3A3A;
+  opacity: 0.85;
+  margin-top: 40px;
+}
+
+.footer-content {
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 11px;
+  line-height: 1.2;
+}
+.footer-tagline {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.footer-branding {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.footer-disclaimer {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* Product Page Specific Styles */
+.product-container {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  background-color: var(--primary-color);
+  color: #000;
+  text-decoration: none;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #ffd633;
+  transform: translateX(-4px);
+}
+
+.product-detail {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+}
+
+@media (min-width: 768px) {
+  .product-detail {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.product-image-container {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.product-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+.product-info {
+  padding: 20px;
+}
+
+.product-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 28px;
+  margin: 0 0 15px 0;
+  color: #fff;
+}
+
+.product-description {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-light);
+  margin-bottom: 25px;
+}
+
+.product-price {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 24px;
+  color: var(--primary-color);
+  margin-bottom: 25px;
+}
+
+.product-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+@media (min-width: 480px) {
+  .product-actions {
+    flex-direction: row;
+  }
+}
+
+.buy-button, .share-button {
+  padding: 14px 28px;
+  border-radius: 6px;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  text-decoration: none;
+}
+
+.buy-button {
+  background-color: var(--primary-color);
+  color: #000;
+  border: none;
+}
+
+.buy-button:hover {
+  background-color: #ffd633;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 204, 0, 0.3);
+}
+
+.share-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.share-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.loading-message {
+  text-align: center;
+  padding: 60px 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  color: var(--text-light);
+}
+
+.error-message {
+  text-align: center;
+  padding: 60px 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  color: #ff6b6b;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.product-features {
+  margin: 25px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.product-features li {
+  padding: 8px 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: var(--text-light);
+  position: relative;
+  padding-left: 25px;
+}
+
+.product-features li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.product-meta {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+.similar-products {
+  margin-top: 60px;
+}
+
+.section-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  margin-bottom: 25px;
+  color: #fff;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.section-title:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background-color: var(--primary-color);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.product-card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.product-card-info {
+  padding: 15px;
+}
+
+.product-card-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  margin: 0 0 10px 0;
+  color: #fff;
+  line-height: 1.4;
+}
+
+.product-card-price {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--primary-color);
+}
+
+.product-card-actions {
+  padding: 15px;
+  padding-top: 0;
+}
+
+.product-card-link {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  background-color: var(--primary-color);
+  color: #000;
+  text-decoration: none;
+  border-radius: 5px;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.product-card-link:hover {
+  background-color: #ffd633;
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <!-- Added navigation to match index.html -->
-        <nav class="nav-bar" style="margin-bottom: 20px;">
-            <ul class="nav-list">
-                <li>
-                    <a href="index.html" class="nav-btn">
-                        <img src="assets/Home_P.png" alt="Home" width="40" height="40" />
-                        <span class="nav-text">Home</span>
-                    </a>
-                </li>
-                <li><span class="nav-separator">|</span></li>
-                <li>
-                    <a href="forhim.html" class="nav-btn">
-                        <img src="assets/Men_P.png" alt="For Him" width="40" height="40" />
-                        <span class="nav-text">For Him</span>
-                    </a>
-                </li>
-                <li><span class="nav-separator">|</span></li>
-                <li>
-                    <a href="forher.html" class="nav-btn">
-                        <img src="assets/Women_P.png" alt="For Her" width="40" height="40" />
-                        <span class="nav-text">For Her</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-
-        <div class="header">
-            <a href="index.html" class="back-button">← Back to Home</a>
-            <div class="logo">ShoeDukaan</div>
-        </div>
-        
-        <div id="product-data">
-            <div class="loading">Loading product details...</div>
-        </div>
+<div class="wrapper">
+  <!-- Header -->
+  <header class="top-banner layout-container">
+    <div class="header-left">
+      <img src="https://i.imgur.com/hp0QbkV.jpeg" alt="ShareDukaan Logo" class="logo">
     </div>
+    <div class="header-right">
+      <p class="tagline">Discover The Best Shoes & Accessories – All in One Place | Shop Smart!!</p>
+      <a href="https://t.me/sharedukaan" class="telegram-link">For daily updates 👉 Telegram</a>
+    </div>
+  </header>
 
-    <script>
-        // Improved parameter handling
-        function getProductParams() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const hashParams = new URLSearchParams(window.location.hash.substring(1));
-            
-            // Prefer query parameters, fall back to hash
-            return {
-                permanentId: urlParams.get('id') || urlParams.get('permanentId') || hashParams.get('id') || hashParams.get('permanentId'),
-                source: urlParams.get('source') || hashParams.get('source') || 'links'
-            };
+  <!-- Navigation -->
+  <nav class="nav-bar layout-container" role="navigation" aria-label="Main site navigation">
+    <ul class="nav-list">
+      <li>
+        <a href="index.html" class="nav-btn">
+          <img src="assets/Home_P.png" alt="Explore" width="40" height="40" />
+          <span class="nav-text">Explore</span>
+        </a>
+      </li>
+
+      <li><span class="nav-separator">|</span></li>
+      <li>
+        <a href="forhim.html" class="nav-btn">
+          <img src="assets/Men_P.png" alt="For Him" width="40" height="40" />
+          <span class="nav-text">For Him</span>
+        </a>
+      </li>
+
+      <li><span class="nav-separator">|</span></li>
+      <li>
+        <a href="forher.html" class="nav-btn">
+          <img src="assets/Women_P.png" alt="For Her" width="40" height="40" />
+          <span class="nav-text">For Her</span>
+        </a>
+      </li>
+
+      <li><span class="nav-separator">|</span></li>
+      <li><a href="https://shoedukaan.blogspot.com" class="nav-btn">Blog >></a></li>
+    </ul>
+  </nav>
+
+  <!-- Product Content -->
+  <main class="layout-container">
+    <a href="index.html" class="back-button">← Back to Home</a>
+    
+    <div class="product-container">
+      <div id="productLoading" class="loading-message">
+        <span class="loading-spinner"></span> Loading product details...
+      </div>
+      
+      <div id="productError" class="error-message" style="display: none;">
+        Product not found. Please check the URL or return to the homepage.
+      </div>
+      
+      <div id="productDetail" class="product-detail" style="display: none;">
+        <!-- Product content will be inserted here by JavaScript -->
+      </div>
+    </div>
+    
+    <div class="similar-products">
+      <h2 class="section-title">You Might Also Like</h2>
+      <div id="similarProducts" class="products-grid">
+        <!-- Similar products will be inserted here by JavaScript -->
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Back to Top Button -->
+<button id="backToTop" title="Back to Top">Top</button>
+
+<!-- Footer -->
+<footer class="footer-banner">
+  <div class="layout-container">
+    <div class="footer-content">
+      <p class="footer-tagline">Inspired by Google Keep's brilliant simplicity</p>
+      <p class="footer-branding">© 2025 ShareDukaan. All rights reserved.</p>
+      <p class="footer-disclaimer">
+        Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We may earn a small commission when you purchase through affiliate links, at no extra cost to you. Product prices and availability are subject to change. The actual product may differ slightly from the images shown above.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<!-- JavaScript -->
+<script>
+  // Utility function to escape quotes
+  function escapeQuotes(str) {
+    return String(str).replace(/"/g, '&quot;');
+  }
+
+  // Get URL parameters
+  function getUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      permanentId: params.get('permanentId'),
+      source: params.get('source')
+    };
+  }
+
+  // Load product details
+  async function loadProductDetail() {
+    const { permanentId, source } = getUrlParams();
+    
+    if (!permanentId) {
+      showError();
+      return;
+    }
+    
+    try {
+      const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+      const categories = ['links', 'for-him', 'for-her'];
+      
+      let product = null;
+      
+      // Search for the product in all categories
+      for (const category of categories) {
+        const url = `https://opensheet.elk.sh/${sheetID}/${category}`;
+        const res = await fetch(url);
+        
+        if (!res.ok) continue;
+        
+        const data = await res.json();
+        const foundProduct = data.find(item => item.permanentId === permanentId);
+        
+        if (foundProduct) {
+          product = { ...foundProduct, category };
+          break;
         }
+      }
+      
+      if (product) {
+        displayProduct(product);
+        loadSimilarProducts(product.category, permanentId);
+      } else {
+        showError();
+      }
+    } catch (err) {
+      console.error("Failed to load product:", err);
+      showError();
+    }
+  }
+  
+  // Display product details
+  function displayProduct(product) {
+    const productDetail = document.getElementById('productDetail');
+    const productLoading = document.getElementById('productLoading');
+    
+    // Hide loading, show product detail
+    productLoading.style.display = 'none';
+    productDetail.style.display = 'grid';
+    
+    // Create product HTML
+    const imageArray = product.img ? product.img.split(',') : [];
+    const firstImage = imageArray.length > 0 ? imageArray[0].trim() : 'https://via.placeholder.com/500x500?text=No+Image';
+    
+    const productHTML = `
+      <div class="product-image-container">
+        <img src="${firstImage}" alt="${product.title || 'Product Image'}" class="product-image">
+      </div>
+      <div class="product-info">
+        <h1 class="product-title">${product.title || 'Unknown Product'}</h1>
         
-        const { permanentId, source } = getProductParams();
-        const productCache = {};
+        ${product.description ? `<div class="product-description">${product.description}</div>` : ''}
         
-        // Rest of your JavaScript with added caching
-        async function loadProduct() {
-            if (!permanentId) {
-                showError("No product specified. Please use a valid product link.");
-                return;
-            }
-            
-            // Check cache first
-            if (productCache[permanentId]) {
-                renderProduct(productCache[permanentId]);
-                updateMetaTags(productCache[permanentId]);
-                return;
-            }
-            
-            try {
-                // ... your existing loading code
-                
-                // Cache the product
-                if (product) {
-                    productCache[permanentId] = product;
-                }
-            } catch (error) {
-                console.error('Error loading product:', error);
-                showError("Error loading product details. Please try again.");
-            }
+        ${product.price ? `<div class="product-price">${product.price}</div>` : ''}
+        
+        ${product.features ? `
+          <ul class="product-features">
+            ${product.features.split(',').map(feature => `<li>${feature.trim()}</li>`).join('')}
+          </ul>
+        ` : ''}
+        
+        <div class="product-actions">
+          <a href="${product.link || '#'}" target="_blank" class="buy-button">Buy Now</a>
+          <button class="share-button" onclick="shareProduct()">Share Product</button>
+        </div>
+        
+        <div class="product-meta">
+          ${product.category ? `<div><strong>Category:</strong> ${product.category}</div>` : ''}
+          ${product.source ? `<div><strong>Source:</strong> ${product.source}</div>` : ''}
+        </div>
+      </div>
+    `;
+    
+    productDetail.innerHTML = productHTML;
+  }
+  
+  // Load similar products
+  async function loadSimilarProducts(category, excludeId) {
+    try {
+      const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+      const url = `https://opensheet.elk.sh/${sheetID}/${category}`;
+      const res = await fetch(url);
+      
+      if (!res.ok) return;
+      
+      const data = await res.json();
+      // Filter out the current product and get 4 random products
+      const similarProducts = data
+        .filter(item => item.permanentId !== excludeId && item.title && item.img && item.link)
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 4);
+      
+      displaySimilarProducts(similarProducts);
+    } catch (err) {
+      console.error("Failed to load similar products:", err);
+    }
+  }
+  
+  // Display similar products
+  function displaySimilarProducts(products) {
+    const similarProductsContainer = document.getElementById('similarProducts');
+    
+    if (products.length === 0) {
+      similarProductsContainer.innerHTML = '<p>No similar products found.</p>';
+      return;
+    }
+    
+    const productsHTML = products.map(product => {
+      const imageArray = product.img ? product.img.split(',') : [];
+      const firstImage = imageArray.length > 0 ? imageArray[0].trim() : 'https://via.placeholder.com/300x200?text=No+Image';
+      
+      return `
+        <div class="product-card">
+          <img src="${firstImage}" alt="${product.title}" class="product-card-image">
+          <div class="product-card-info">
+            <h3 class="product-card-title">${product.title}</h3>
+            ${product.price ? `<div class="product-card-price">${product.price}</div>` : ''}
+          </div>
+          <div class="product-card-actions">
+            <a href="/product.html?permanentId=${product.permanentId}" class="product-card-link">View Details</a>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    similarProductsContainer.innerHTML = productsHTML;
+  }
+  
+  // Show error message
+  function showError() {
+    const productLoading = document.getElementById('productLoading');
+    const productError = document.getElementById('productError');
+    
+    productLoading.style.display = 'none';
+    productError.style.display = 'block';
+  }
+  
+  // Share product function
+  async function shareProduct() {
+    const { permanentId, source } = getUrlParams();
+    const productTitle = document.querySelector('.product-title')?.textContent || 'Check out this product';
+    
+    const productPageUrl = `${window.location.origin}${window.location.pathname}?permanentId=${permanentId}&source=${source || 'direct'}`;
+    
+    const shareData = {
+      title: productTitle,
+      text: `Check out ${productTitle} on ShoeDukaan!`,
+      url: productPageUrl
+    };
+    
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          copyToClipboard(productPageUrl, productTitle);
         }
-        
-        // Add image error handling
-        function addImageErrorHandling() {
-            document.addEventListener('error', function(e) {
-                if (e.target.tagName === 'IMG') {
-                    e.target.src = 'https://i.imgur.com/placeholder.jpg';
-                    e.target.alt = 'Image not available';
-                }
-            }, true);
-        }
-        
-        // Initialize when DOM is loaded
-        window.addEventListener('DOMContentLoaded', function() {
-            loadProduct();
-            addImageErrorHandling();
-        });
-    </script>
+      }
+    } else {
+      copyToClipboard(productPageUrl, productTitle);
+    }
+  }
+  
+  // Fallback function to copy to clipboard
+  function copyToClipboard(text, productTitle) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert(`Link for "${productTitle}" copied to clipboard!`);
+    }).catch(err => {
+      console.error('Could not copy text: ', err);
+      prompt('Copy this URL to share:', text);
+    });
+  }
+  
+  // Initialize the page
+  window.addEventListener("DOMContentLoaded", function() {
+    // Load product details
+    loadProductDetail();
+    
+    // Set up scroll event for back to top button
+    window.addEventListener("scroll", () => {
+      const scrollY = window.scrollY;
+      const backToTopBtn = document.getElementById("backToTop");
+      if (backToTopBtn) {
+        backToTopBtn.style.display = scrollY > 300 ? "block" : "none";
+      }
+    });
+
+    // Set up back to top button
+    const backToTopBtn = document.getElementById("backToTop");
+    if (backToTopBtn) {
+      backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+    
+    // Set active navigation link
+    document.querySelectorAll('.nav-btn').forEach(link => {
+      if (link.href === window.location.href) {
+        link.classList.add('active');
+      }
+    });
+  });
+</script>
 </body>
-    </html>
+</html>
