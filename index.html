@@ -817,33 +817,20 @@ body {
 
  1// Search function that works across all pages
 function performSearch(query) {
-    const grid = document.getElementById("productGrid");
-    if (!grid) return;
+function performSearch() {
+  const query = searchInput.value.trim().toLowerCase();
+  filteredProducts = products.filter((item) => {
+    return (
+      item.title.toLowerCase().includes(query) ||
+      item.description.toLowerCase().includes(query) ||
+      item.category.toLowerCase().includes(query)
+    );
+  });
 
-    // Clear the grid to avoid duplication
-    grid.innerHTML = "";
-    currentIndex = 0;
-
-    if (query === "") {
-        // If no query, reset filteredProducts to the current category's products
-        const currentCategory = getCurrentCategory();
-        if (currentCategory && currentCategory !== 'all') {
-            filteredProducts = allProducts.filter(product => product.category === currentCategory);
-        } else {
-            filteredProducts = allProducts;
-        }
-    } else {
-        // If there's a query, search across all products
-        filteredProducts = allProducts.filter(item =>
-            item.title.toLowerCase().includes(query)
-        );
-    }
-    
-    if (filteredProducts.length === 0) {
-        grid.innerHTML = '<div class="error-message">No products match your search.</div>';
-    } else {
-        // Correctly render the first batch of results
-        renderNextBatch();
+  grid.innerHTML = ""; // Clear previous results
+  currentIndex = 0; // Reset batch index
+  renderNextBatch(); // Use centralized rendering logic
+  }
     
   // Event delegation for share buttons
   document.addEventListener('click', function(e) {
