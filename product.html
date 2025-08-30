@@ -342,7 +342,7 @@ body {
 
 @media (min-width: 768px) {
   .product-detail {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 420px) 1fr;
   }
 }
 
@@ -353,8 +353,11 @@ body {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
   background: #333;
   aspect-ratio: 3 / 5;
+  width: 100%;
+  max-width: 420px;
   opacity: 0;
   transform: translateY(20px);
+  margin: 0 auto;
 }
 
 .product-image-container.visible {
@@ -683,6 +686,8 @@ body {
   
   .product-image-container {
     aspect-ratio: 3 / 5;
+    max-width: 420px;
+    margin: 0 auto;
   }
   
   .product-actions {
