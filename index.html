@@ -502,6 +502,22 @@ body {
   padding: 20px;
   font-family: 'Inter', sans-serif;
 }
+
+/* Loading animation */
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 </style>
 </head>
 <body>
@@ -596,6 +612,10 @@ body {
   // Determine current page category
   function getCurrentCategory() {
       const path = window.location.pathname;
+      const urlParams = new URLSearchParams(window.location.search);
+      const categoryParam = urlParams.get('category');
+      
+      if (categoryParam) return categoryParam;
       if (path.includes('forhim.html')) return 'for-him';
       if (path.includes('forher.html')) return 'for-her';
       return 'links';
@@ -648,25 +668,32 @@ body {
       });
   }
 
-  // Your existing loadProducts function
-  async function loadProducts() {
+  // Load products from all categories for search functionality
+  async function loadAllProducts() {
       try {
           const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
-          const currentCategory = getCurrentCategory();
+          const categories = ['links', 'for-him', 'for-her'];
           
-          // Load data only from the relevant tab for this page
-          const url = `https://opensheet.elk.sh/${sheetID}/${currentCategory}`;
-          document.getElementById('loadingMessage').textContent = 'Loading products...';
+          document.getElementById('loadingMessage').innerHTML = '<span class="loading-spinner"></span> Loading products from all categories...';
           
-          const res = await fetch(url);
-          if (!res.ok) {
-              throw new Error(`HTTP error! status: ${res.status}`);
+          // Load data from all categories
+          const allData = [];
+          for (const category of categories) {
+              const url = `https://opensheet.elk.sh/${sheetID}/${category}`;
+              const res = await fetch(url);
+              if (!res.ok) {
+                  console.error(`Failed to load ${category} category`);
+                  continue;
+              }
+              
+              const data = await res.json();
+              // Add category info to each product
+              const categoryData = data.map(item => ({...item, category}));
+              allData.push(...categoryData);
           }
           
-          const data = await res.json();
-          
           // Process products
-          allProducts = data
+          allProducts = allData
               .filter(item => item.title && item.img && item.link)
               .sort((a, b) => {
                   if (a.shuffleID && b.shuffleID) {
@@ -680,8 +707,15 @@ body {
               return;
           }
           
+          // Filter by current category
+          const currentCategory = getCurrentCategory();
+          if (currentCategory && currentCategory !== 'all') {
+              filteredProducts = allProducts.filter(product => product.category === currentCategory);
+          } else {
+              filteredProducts = allProducts;
+          }
+          
           document.getElementById('loadingMessage').style.display = 'none';
-          filteredProducts = allProducts;
           renderNextBatch();
       } catch (err) {
           console.error("Failed to load products:", err);
@@ -783,6 +817,49 @@ body {
       threshold: 0.1
   });
 
+  // Search function that works across all pages
+  function performSearch(query) {
+      const grid = document.getElementById("productGrid");
+      if (!grid) return;
+
+      grid.innerHTML = "";
+      currentIndex = 0;
+
+      if (query === "") {
+          // If no query, show products from current category
+          const currentCategory = getCurrentCategory();
+          if (currentCategory && currentCategory !== 'all') {
+              filteredProducts = allProducts.filter(product => product.category === currentCategory);
+          } else {
+              filteredProducts = allProducts;
+          }
+      } else {
+          // If there's a query, search across all products
+          filteredProducts = allProducts.filter(item =>
+              item.title.toLowerCase().includes(query)
+          );
+      }
+      
+      if (filteredProducts.length === 0) {
+          grid.innerHTML = '<div class="error-message">No products match your search.</div>';
+      } else {
+          filteredProducts.slice(0, batchSize).forEach((item, i) => {
+              const card = document.createElement("article");
+              card.className = "card";
+              card.setAttribute("role", "article");
+              card.setAttribute("aria-label", item.title);
+              card.style.backgroundColor = colors[i % colors.length];
+              card.style.transitionDelay = `${i * 100}ms`;
+              card.innerHTML = generateCardHTML(item, i);
+
+              grid.appendChild(card);
+              observer.observe(card);
+          });
+
+          activateCarousels(".carousel");
+      }
+  }
+
   // Event delegation for share buttons
   document.addEventListener('click', function(e) {
       if (e.target.classList.contains('share-button')) {
@@ -798,46 +875,33 @@ body {
 
   // Initialize the page
   window.addEventListener("DOMContentLoaded", function() {
-      // Load products
-      loadProducts();
+      // Load products from all categories
+      loadAllProducts();
       
       // Set up search functionality
       const searchInput = document.getElementById("searchInput");
       if (searchInput) {
+          // Check if there's a search query in the URL
+          const urlParams = new URLSearchParams(window.location.search);
+          const searchQuery = urlParams.get('search');
+          if (searchQuery) {
+              searchInput.value = searchQuery;
+              // Perform search after products are loaded
+              setTimeout(() => performSearch(searchQuery), 1000);
+          }
+          
           searchInput.addEventListener("input", function() {
               const query = this.value.toLowerCase();
-              const grid = document.getElementById("productGrid");
-              if (!grid) return;
-
-              grid.innerHTML = "";
-              currentIndex = 0;
-
-              if (query === "") {
-                  filteredProducts = allProducts;
-              } else {
-                  filteredProducts = allProducts.filter(item =>
-                      item.title.toLowerCase().includes(query)
-                  );
-              }
+              performSearch(query);
               
-              if (filteredProducts.length === 0) {
-                  grid.innerHTML = '<div class="error-message">No products match your search.</div>';
+              // Update URL with search query
+              const url = new URL(window.location);
+              if (query) {
+                  url.searchParams.set('search', query);
               } else {
-                  filteredProducts.slice(0, batchSize).forEach((item, i) => {
-                      const card = document.createElement("article");
-                      card.className = "card";
-                      card.setAttribute("role", "article");
-                      card.setAttribute("aria-label", item.title);
-                      card.style.backgroundColor = colors[i % colors.length];
-                      card.style.transitionDelay = `${i * 100}ms`;
-                      card.innerHTML = generateCardHTML(item, i);
-
-                      grid.appendChild(card);
-                      observer.observe(card);
-                  });
-
-                  activateCarousels(".carousel");
+                  url.searchParams.delete('search');
               }
+              window.history.replaceState({}, '', url);
           });
       }
       
