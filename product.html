@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -49,6 +10,21 @@
 <link rel="canonical" href="https://shdkn.carrd.co">
 <meta name="robots" content="index, follow">
 <link rel="icon" href="shdkn_fav_p.png" type="image/png">
+
+<!-- Open Graph Meta Tags - These will be updated dynamically -->
+<meta property="og:title" id="og-title" content="ShoeDukaan | Product Details">
+<meta property="og:description" id="og-description" content="Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.">
+<meta property="og:image" id="og-image" content="https://via.placeholder.com/300x500?text=No+Image">
+<meta property="og:url" id="og-url" content="https://sharedukaan.github.io/shdknlinks/product.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ShoeDukaan">
+
+<!-- Twitter Card Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" id="twitter-title" content="ShoeDukaan | Product Details">
+<meta name="twitter:description" id="twitter-description" content="Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.">
+<meta name="twitter:image" id="twitter-image" content="https://via.placeholder.com/300x500?text=No+Image">
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -684,6 +660,10 @@ body {
   vertical-align: middle;
 }
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 @media (max-width: 768px) {
   .product-detail {
     grid-template-columns: 1fr;
@@ -854,6 +834,28 @@ body {
     };
   }
 
+  // Update meta tags for social sharing
+  function updateMetaTags(product) {
+    const imageArray = product.img ? product.img.split(',').map(url => url.trim()).filter(url => url) : [];
+    const firstImage = imageArray.length > 0 ? imageArray[0] : 'https://via.placeholder.com/300x500?text=No+Image';
+    const { source } = getUrlParams();
+    const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${product.permanentId}&source=${source || 'direct'}`;
+    
+    // Update Open Graph tags
+    document.getElementById('og-title').content = `${product.title || 'Product'} | ShoeDukaan`;
+    document.getElementById('og-description').content = product.description || 'Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.';
+    document.getElementById('og-image').content = firstImage;
+    document.getElementById('og-url').content = productPageUrl;
+    
+    // Update Twitter tags
+    document.getElementById('twitter-title').content = `${product.title || 'Product'} | ShoeDukaan`;
+    document.getElementById('twitter-description').content = product.description || 'Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.';
+    document.getElementById('twitter-image').content = firstImage;
+    
+    // Update canonical URL
+    document.querySelector('link[rel="canonical"]').href = productPageUrl;
+  }
+
   // Activate carousels
   function activateCarousels(selector = ".carousel") {
     document.querySelectorAll(selector).forEach((carousel, index) => {
@@ -922,6 +924,7 @@ body {
       }
       
       if (product) {
+        updateMetaTags(product); // Update meta tags for sharing
         displayProduct(product);
         loadSimilarProducts(product.category, permanentId);
       } else {
@@ -995,13 +998,11 @@ body {
       }
       
       const data = await res.json();
-      console.log(`Fetched similar products for ${category}:`, data); // Debug log
       const similarProducts = data
         .filter(item => item.permanentId !== excludeId && item.title && item.img && item.link)
         .sort(() => 0.5 - Math.random())
         .slice(0, 4);
       
-      console.log(`Filtered similar products:`, similarProducts); // Debug log
       displaySimilarProducts(similarProducts);
     } catch (err) {
       console.error("Failed to load similar products:", err);
@@ -1020,7 +1021,6 @@ body {
     
     const productsHTML = products.map((product, i) => {
       const imageArray = product.img ? product.img.split(',').map(url => url.trim()).filter(url => url) : [];
-      console.log(`Product ${product.title} images:`, imageArray); // Debug log
       const carouselHTML = imageArray.length > 0 ? 
         imageArray.map((url, i) => 
           `<img src="${url}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${product.title}" onerror="this.src='https://via.placeholder.com/300x500?text=No+Image';" />`
