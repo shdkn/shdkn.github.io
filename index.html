@@ -100,7 +100,7 @@ body {
 @media (min-width: 769px) {
   .tagline {
     white-space: normal;
-    max-width: 320px; /* or whatever width fits your layout */
+    max-width: 320px;
     line-height: 1.4;
   }
 }
@@ -116,7 +116,7 @@ body {
 .telegram-link:hover,
 .telegram-link:focus {
   transition: background-color 0.3s ease;
-  color: inherit; /* keep the text color unchanged */
+  color: inherit;
 }
 
 /* Search Bar */
@@ -175,10 +175,10 @@ body {
   .telegram-link:hover,
   .telegram-link:focus {
     transition: background-color 0.3s ease;
-    color: inherit; /* keep the text color unchanged */
+    color: inherit;
   }
 
-  .tagline   {
+  .tagline {
     display: block;
     margin-left: auto;
     margin-right: 0;
@@ -186,7 +186,7 @@ body {
   }
 
   .logo {
-    height: 100px; /* or whatever size you want */
+    height: 100px;
     margin-bottom: 8px;
   }
 }
@@ -197,14 +197,14 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 6px; /* Balanced editorial spacing */
+  padding: 6px;
   width: 100%;
-  max-width: 420px; /* Optional: locks visual width for consistency */
+  max-width: 420px;
   background: #fff;
-  border-radius: 12px; /* Soft premium edge */
+  border-radius: 12px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
   box-sizing: border-box;
-  aspect-ratio: 3 / 5; /* Taller vertical rhythm */
+  aspect-ratio: 3 / 5;
   overflow: hidden;
   opacity: 0;
   transform: translateY(20px);
@@ -214,9 +214,9 @@ body {
 .card .carousel {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 5; /* Matches .card ratio */
+  aspect-ratio: 3 / 5;
   overflow: hidden;
-  border-radius: 8px; /* Optional: soft inner crop */
+  border-radius: 8px;
 }
 
 .card .carousel img.active:hover {
@@ -244,7 +244,7 @@ body {
   margin-top: 15px;
   line-height: 1.1;
   text-align: center;
-  max-width: 90%;   /* Or try 320px for fixed width */
+  max-width: 90%;
   margin: 0 auto;
 }
 
@@ -269,8 +269,6 @@ body {
   letter-spacing: 0.3px;
 }
 
-
-
 /* Carousel */
 .carousel {
   position: relative;
@@ -280,7 +278,7 @@ body {
 .carousel img {
   position: absolute;
   top: 0;
-  left: 100%; /* Start off-screen to the right */
+  left: 100%;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -454,18 +452,18 @@ body {
 .buy-divider {
   width: 90%;
   height: 1px;
-  background-color: #BDB9B9; /* Harmonizes with footer and banner tones */
+  background-color: #BDB9B9;
   margin: 20px 0;
-  border: none; /* Remove redundant border-top */
-  opacity: 0.5; /* Softens the divider for editorial elegance */
+  border: none;
+  opacity: 0.5;
 }
 .spacer {
   height: 20px;
 }
 
-  .buy-button-wrapper {
-  display: flex;              /* Enables side-by-side layout */
-  gap: 10px;                  /* Adds space between buttons */
+.buy-button-wrapper {
+  display: flex;
+  gap: 10px;
   width: 100%;
   margin-left: -6px;
   box-sizing: border-box;
@@ -481,6 +479,13 @@ body {
   border-radius: 2px;
   transition: background-color 0.3s ease, opacity 0.3s ease;
   align-self: flex-start;
+  border: none;
+  cursor: pointer;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .buy-button:hover,
@@ -490,8 +495,14 @@ body {
   opacity: 0.85;
 }
 
-
-      }</style>
+/* Error message */
+.error-message {
+  color: #ff6b6b;
+  text-align: center;
+  padding: 20px;
+  font-family: 'Inter', sans-serif;
+}
+</style>
 </head>
 <body>
 <div class="wrapper grid-wrapper">
@@ -536,23 +547,16 @@ body {
       <li><a href="https://shoedukaan.blogspot.com" class="nav-btn">Blog >></a></li>
     </ul>
   </nav>
+  
   <!-- Search Bar -->
- <div class="buy-button-wrapper">
-    <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">
-        👉👉 Buy Now
-    </a>
-    <button class="share-button action-button-text" 
-            data-title="${cleanTitle}" 
-            data-image="${firstImage}" 
-            data-url="${item.link}" 
-            data-id="${item.permanentId}" 
-            aria-label="Share ${item.title}">
-        📤 Share
-    </button>
-</div>
+  <div class="search-bar layout-container">
+    <input type="text" id="searchInput" placeholder="Search for products..." aria-label="Search products">
+  </div>
 
   <!-- Product Grid -->
-  <main id="productGrid" class="grid layout-container" aria-label="Product catalog"></main>
+  <main id="productGrid" class="grid layout-container" aria-label="Product catalog">
+    <div class="error-message" id="loadingMessage">Loading products...</div>
+  </main>
 </div>
 
 <!-- Back to Top Button -->
@@ -572,8 +576,12 @@ body {
 </footer>
 
 <!-- JavaScript -->
-            
 <script>
+  // Utility function to escape quotes
+  function escapeQuotes(str) {
+    return String(str).replace(/"/g, '&quot;');
+  }
+
   // Your existing constants and variables
   const colors = [
       "#3A3647", "#1C262E", "#692B17",
@@ -648,7 +656,13 @@ body {
           
           // Load data only from the relevant tab for this page
           const url = `https://opensheet.elk.sh/${sheetID}/${currentCategory}`;
+          document.getElementById('loadingMessage').textContent = 'Loading products...';
+          
           const res = await fetch(url);
+          if (!res.ok) {
+              throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          
           const data = await res.json();
           
           // Process products
@@ -661,52 +675,59 @@ body {
                   return a.title.localeCompare(b.title);
               });
           
+          if (allProducts.length === 0) {
+              document.getElementById('loadingMessage').textContent = 'No products found.';
+              return;
+          }
+          
+          document.getElementById('loadingMessage').style.display = 'none';
           filteredProducts = allProducts;
           renderNextBatch();
       } catch (err) {
           console.error("Failed to load products:", err);
+          document.getElementById('loadingMessage').textContent = 'Error loading products. Please check your connection.';
       }
   }
 
   // Modified generateCardHTML function with data attributes
-function generateCardHTML(item, index) {
-    const imageArray = item.img.split(',');
-    const carouselHTML = imageArray.map((url, i) =>
-        `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
-    ).join('');
+  function generateCardHTML(item, index) {
+      const imageArray = item.img.split(',');
+      const carouselHTML = imageArray.map((url, i) =>
+          `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
+      ).join('');
 
-    // Clean the values for use in JavaScript
-    const cleanTitle = escapeQuotes(item.title);
-    const firstImage = escapeQuotes(imageArray[0].trim());
-    const buyUrl = escapeQuotes(item.link);
-    const permanentId = escapeQuotes(item.permanentId);
-    
-    return `
-        <div class="carousel" data-seed="${item.shuffleID || index}">
-            ${carouselHTML}
-        </div>
-        <div class="spacer"></div>
-        <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
-        <div class="buy-divider"></div>
-        <div class="buy-button-wrapper">
-            <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">
-                👉👉 Buy Now
-            </a>
-            <button class="share-button action-button-text" 
-                    data-title="${cleanTitle}" 
-                    data-image="${firstImage}" 
-                    data-url="${buyUrl}" 
-                    data-id="${permanentId}" 
-                    aria-label="Share ${item.title}">
-                📤 Share
-            </button>
-        </div>
-    `;
-}
+      // Clean the values for use in JavaScript
+      const cleanTitle = escapeQuotes(item.title);
+      const firstImage = escapeQuotes(imageArray[0].trim());
+      const buyUrl = escapeQuotes(item.link);
+      const permanentId = escapeQuotes(item.permanentId || index);
+      
+      return `
+          <div class="carousel" data-seed="${item.shuffleID || index}">
+              ${carouselHTML}
+          </div>
+          <div class="spacer"></div>
+          <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
+          <div class="buy-divider"></div>
+          <div class="buy-button-wrapper">
+              <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">
+                  👉👉 Buy Now
+              </a>
+              <button class="share-button action-button-text" 
+                      data-title="${cleanTitle}" 
+                      data-image="${firstImage}" 
+                      data-url="${buyUrl}" 
+                      data-id="${permanentId}" 
+                      aria-label="Share ${item.title}">
+                  📤 Share
+              </button>
+          </div>
+      `;
+  }
 
   // Your existing renderNextBatch function
   function renderNextBatch() {
-      const grid = document.querySelector("main.grid");
+      const grid = document.getElementById("productGrid");
       if (!grid || filteredProducts.length === 0) return;
 
       const nextItems = filteredProducts.slice(currentIndex, currentIndex + batchSize);
@@ -775,62 +796,82 @@ function generateCardHTML(item, index) {
       }
   });
 
-  // Your existing event listeners
-  window.addEventListener("DOMContentLoaded", loadProducts);
+  // Initialize the page
+  window.addEventListener("DOMContentLoaded", function() {
+      // Load products
+      loadProducts();
+      
+      // Set up search functionality
+      const searchInput = document.getElementById("searchInput");
+      if (searchInput) {
+          searchInput.addEventListener("input", function() {
+              const query = this.value.toLowerCase();
+              const grid = document.getElementById("productGrid");
+              if (!grid) return;
 
-  window.addEventListener("scroll", () => {
-      const scrollY = window.scrollY;
-      const viewportHeight = window.innerHeight;
-      const fullHeight = document.body.offsetHeight;
+              grid.innerHTML = "";
+              currentIndex = 0;
 
-      if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < filteredProducts.length) {
-          renderNextBatch();
+              if (query === "") {
+                  filteredProducts = allProducts;
+              } else {
+                  filteredProducts = allProducts.filter(item =>
+                      item.title.toLowerCase().includes(query)
+                  );
+              }
+              
+              if (filteredProducts.length === 0) {
+                  grid.innerHTML = '<div class="error-message">No products match your search.</div>';
+              } else {
+                  filteredProducts.slice(0, batchSize).forEach((item, i) => {
+                      const card = document.createElement("article");
+                      card.className = "card";
+                      card.setAttribute("role", "article");
+                      card.setAttribute("aria-label", item.title);
+                      card.style.backgroundColor = colors[i % colors.length];
+                      card.style.transitionDelay = `${i * 100}ms`;
+                      card.innerHTML = generateCardHTML(item, i);
+
+                      grid.appendChild(card);
+                      observer.observe(card);
+                  });
+
+                  activateCarousels(".carousel");
+              }
+          });
       }
+      
+      // Set up scroll event for infinite scrolling
+      window.addEventListener("scroll", () => {
+          const scrollY = window.scrollY;
+          const viewportHeight = window.innerHeight;
+          const fullHeight = document.body.offsetHeight;
 
-      document.getElementById("backToTop").style.display = scrollY > 300 ? "block" : "none";
-  });
+          if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < filteredProducts.length) {
+              renderNextBatch();
+          }
 
-  document.getElementById("backToTop").addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-
-  document.getElementById("searchInput").addEventListener("input", function() {
-      const query = this.value.toLowerCase();
-      const grid = document.querySelector("main.grid");
-      if (!grid) return;
-
-      grid.innerHTML = "";
-      currentIndex = 0;
-
-      if (query === "") {
-          filteredProducts = allProducts;
-      } else {
-          filteredProducts = allProducts.filter(item =>
-              item.title.toLowerCase().includes(query)
-          );
-      }
-
-      filteredProducts.slice(0, batchSize).forEach((item, i) => {
-          const card = document.createElement("article");
-          card.className = "card";
-          card.setAttribute("role", "article");
-          card.setAttribute("aria-label", item.title);
-          card.style.backgroundColor = colors[i % colors.length];
-          card.style.transitionDelay = `${i * 100}ms`;
-          card.innerHTML = generateCardHTML(item, i);
-
-          grid.appendChild(card);
-          observer.observe(card);
+          const backToTopBtn = document.getElementById("backToTop");
+          if (backToTopBtn) {
+              backToTopBtn.style.display = scrollY > 300 ? "block" : "none";
+          }
       });
 
-      activateCarousels(".carousel");
-  });
-
-  document.querySelectorAll('.nav-btn').forEach(link => {
-      if (link.href === window.location.href) {
-          link.classList.add('active');
+      // Set up back to top button
+      const backToTopBtn = document.getElementById("backToTop");
+      if (backToTopBtn) {
+          backToTopBtn.addEventListener("click", () => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+          });
       }
+      
+      // Set active navigation link
+      document.querySelectorAll('.nav-btn').forEach(link => {
+          if (link.href === window.location.href) {
+              link.classList.add('active');
+          }
+      });
   });
-</script> <!-- This was the missing closing tag -->
+</script>
 </body>
 </html>
