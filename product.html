@@ -286,35 +286,59 @@
 
     <script>
         // Get hash parameters instead of query parameters (for GitHub Pages compatibility)
-        function getHashParams() {
-            const hash = window.location.hash.substring(1);
-            const params = new URLSearchParams(hash);
-            const result = {
-                permanentId: params.get('permanentId'),
-                source: params.get('source')
-            };
-            
-            // Show debug info
-            const debugInfo = document.getElementById('debug-info');
-            const debugContent = document.getElementById('debug-content');
-            
-            if (debugInfo && debugContent) {
-                debugInfo.style.display = 'block';
-                debugContent.innerHTML = `
-                    <div>Hash: ${window.location.hash || 'None'}</div>
-                    <div>Permanent ID: ${result.permanentId || 'None'}</div>
-                    <div>Source: ${result.source || 'None'}</div>
-                    <div>Full URL: ${window.location.href}</div>
-                `;
-            }
-            
-            return result;
-        }
-        
-        const hashParams = getHashParams();
-        const permanentId = hashParams.permanentId;
-        const sourceParam = hashParams.source;
-        
+        // ===== MINIMAL FIX: REPLACE THE PARAMETER READING CODE =====
+// Get parameters from URL hash (new method for GitHub Pages)
+function getHashParams() {
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    return {
+        permanentId: params.get('permanentId'),
+        source: params.get('source')
+    };
+}
+
+// Get parameters from query string (old method - for backward compatibility)  
+function getQueryParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return {
+        permanentId: urlParams.get('permanentId'),
+        source: urlParams.get('source')
+    };
+}
+
+// Try hash parameters first, then fall back to query parameters
+let permanentId, sourceParam;
+const hashParams = getHashParams();
+const queryParams = getQueryParams();
+
+if (hashParams.permanentId) {
+    // Use hash parameters (new GitHub Pages format)
+    permanentId = hashParams.permanentId;
+    sourceParam = hashParams.source;
+    console.log('Using hash parameters:', permanentId, sourceParam);
+} else if (queryParams.permanentId) {
+    // Use query parameters (old format - redirect to hash for consistency)
+    permanentId = queryParams.permanentId;
+    sourceParam = queryParams.source;
+    console.log('Using query parameters, redirecting to hash format');
+    
+    // Redirect to hash version to avoid future 404 errors
+    const newHash = `permanentId=${permanentId}${sourceParam ? `&source=${sourceParam}` : ''}`;
+    if (window.history.replaceState) {
+        // Replace URL without reloading page
+        const newUrl = `${window.location.pathname}#${newHash}`;
+        window.history.replaceState(null, '', newUrl);
+    }
+} else {
+    // No parameters found
+    console.log('No product parameters found in URL');
+    permanentId = null;
+    sourceParam = null;
+}
+// ===== END OF MINIMAL FIX =====
+
+// YOUR EXISTING CODE CONTINUES HERE...
+// (loadProduct function, event listeners, etc.)
         // Configuration
         const SHEET_ID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
         
