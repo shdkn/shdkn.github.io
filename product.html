@@ -303,93 +303,69 @@ body {
   opacity: 0.85;
 }
 
-.product-detail {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
+/* LIST VIEW STYLES */
+.product-list-view {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-@media (min-width: 768px) {
-  .product-detail {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.product-image-container {
-  position: relative;
+.product-list-item {
+  display: flex;
+  align-items: center;
+  background: #fff;
   border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-  aspect-ratio: 3 / 5;
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.product-image {
-  width: 100%;
-  height: 100%;
+.product-list-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.product-list-image {
+  width: 80px;
+  height: 80px;
   object-fit: cover;
-  display: block;
-  border-radius: 12px;
+  border-radius: 8px;
+  margin-right: 15px;
 }
 
-.product-info {
-  padding: 0;
+.product-list-info {
+  flex: 1;
 }
 
-.product-title {
+.product-list-title {
   font-family: 'Inter', sans-serif;
   font-weight: 300;
   font-size: 0.95em;
-  color: #BABABA;
-  margin: 15px 0;
-  line-height: 1.1;
-  text-align: center;
+  color: #333;
+  margin: 0 0 5px 0;
+  line-height: 1.3;
 }
 
-.product-description {
+.product-list-price {
   font-family: 'Inter', sans-serif;
-  font-weight: 300;
+  font-weight: 500;
   font-size: 0.95em;
-  color: #BABABA;
-  line-height: 1.1;
-  text-align: center;
-  margin-bottom: 15px;
+  color: #ffcc00;
+  margin: 0 0 8px 0;
 }
 
-.product-price {
-  font-family: 'Inter', sans-serif;
-  font-weight: 300;
-  font-size: 0.95em;
-  color: #BABABA;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.buy-divider {
-  width: 90%;
-  height: 1px;
-  background-color: #BDB9B9;
-  margin: 20px auto;
-  border: none;
-  opacity: 0.5;
-}
-
-.product-actions {
+.product-list-actions {
   display: flex;
   gap: 10px;
-  width: 100%;
-  margin-left: -6px;
-  box-sizing: border-box;
 }
 
-.buy-button, .share-button {
-  margin-top: 5px;
-  padding: 8px 18px 8px 0;
+.product-list-buy, .product-list-share {
+  padding: 6px 12px;
   background-color: rgba(30, 30, 30, 0.85);
   color: #BABABA;
   text-decoration: none;
   border-radius: 2px;
   transition: background-color 0.3s ease, opacity 0.3s ease;
-  align-self: flex-start;
   border: none;
   cursor: pointer;
   font-family: 'Barlow', sans-serif;
@@ -397,11 +373,9 @@ body {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-  text-align: center;
-  flex: 1;
 }
 
-.buy-button:hover, .share-button:hover {
+.product-list-buy:hover, .product-list-share:hover {
   color: #005fa3;
   background-color: #3B3B3B;
   opacity: 0.85;
@@ -439,40 +413,6 @@ body {
   to { transform: rotate(360deg); }
 }
 
-.product-features {
-  margin: 15px 0;
-  padding: 0;
-  list-style: none;
-}
-
-.product-features li {
-  padding: 5px 0;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.95em;
-  color: #BABABA;
-  position: relative;
-  padding-left: 20px;
-  text-align: center;
-  line-height: 1.1;
-}
-
-.product-features li:before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  color: #ffcc00;
-}
-
-.product-meta {
-  margin-top: 20px;
-  padding-top: 15px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  font-family: 'Inter', sans-serif;
-  font-size: 0.95em;
-  color: #BABABA;
-  text-align: center;
-}
-
 .similar-products {
   margin-top: 40px;
 }
@@ -500,8 +440,38 @@ body {
   opacity: 0.5;
 }
 
+/* View Toggle Styles */
+.view-toggle {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.view-toggle-btn {
+  background: rgba(30, 30, 30, 0.85);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #BABABA;
+  font-family: 'Barlow', sans-serif;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.view-toggle-btn.active {
+  background: #ffcc00;
+  color: #000;
+}
+
+.view-toggle-btn:hover {
+  background: #3B3B3B;
+}
+
+/* Grid view (hidden by default) */
 .products-grid {
-  display: grid;
+  display: none;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 5px;
 }
@@ -637,6 +607,11 @@ body {
   <main class="layout-container">
     <a href="index.html" class="back-button">← Back to Home</a>
     
+    <div class="view-toggle">
+      <button class="view-toggle-btn active" id="listViewBtn">List View</button>
+      <button class="view-toggle-btn" id="gridViewBtn">Grid View</button>
+    </div>
+    
     <div class="product-container">
       <div id="productLoading" class="loading-message">
         <span class="loading-spinner"></span> Loading product details...
@@ -646,14 +621,18 @@ body {
         Product not found. Please check the URL or return to the homepage.
       </div>
       
-      <div id="productDetail" class="product-detail" style="display: none;">
-        <!-- Product content will be inserted here by JavaScript -->
+      <div id="productList" class="product-list-view" style="display: none;">
+        <!-- Product list will be inserted here by JavaScript -->
+      </div>
+      
+      <div id="productGrid" class="products-grid" style="display: none;">
+        <!-- Product grid will be inserted here by JavaScript -->
       </div>
     </div>
     
     <div class="similar-products">
       <h2 class="section-title">You Might Also Like</h2>
-      <div id="similarProducts" class="products-grid">
+      <div id="similarProducts" class="product-list-view">
         <!-- Similar products will be inserted here by JavaScript -->
       </div>
     </div>
@@ -745,50 +724,51 @@ body {
     }
   }
   
-  // Display product details
+  // Display product in list view
   function displayProduct(product) {
-    const productDetail = document.getElementById('productDetail');
+    const productList = document.getElementById('productList');
+    const productGrid = document.getElementById('productGrid');
     const productLoading = document.getElementById('productLoading');
     
-    // Hide loading, show product detail
+    // Hide loading, show product list
     productLoading.style.display = 'none';
-    productDetail.style.display = 'grid';
+    productList.style.display = 'flex';
     
-    // Create product HTML
+    // Create product HTML for list view
     const imageArray = product.img ? product.img.split(',') : [];
-    const firstImage = imageArray.length > 0 ? imageArray[0].trim() : 'https://via.placeholder.com/500x500?text=No+Image';
+    const firstImage = imageArray.length > 0 ? imageArray[0].trim() : 'https://via.placeholder.com/80x80?text=No+Image';
     
     const productHTML = `
-      <div class="product-image-container">
-        <img src="${firstImage}" alt="${product.title || 'Product Image'}" class="product-image">
-      </div>
-      <div class="product-info">
-        <h3 class="product-title">${product.title || 'Unknown Product'}</h3>
-        
-        ${product.description ? `<div class="product-description">${product.description}</div>` : ''}
-        
-        ${product.price ? `<div class="product-price">${product.price}</div>` : ''}
-        
-        ${product.features ? `
-          <ul class="product-features">
-            ${product.features.split(',').map(feature => `<li>${feature.trim()}</li>`).join('')}
-          </ul>
-        ` : ''}
-        
-        <div class="buy-divider"></div>
-        
-        <div class="product-actions">
-          <a href="${product.link || '#'}" target="_blank" class="buy-button">👉👉 Buy Now</a>
-          <button class="share-button" onclick="shareProduct()">📤 Share</button>
+      <div class="product-list-item">
+        <img src="${firstImage}" alt="${product.title || 'Product Image'}" class="product-list-image">
+        <div class="product-list-info">
+          <h3 class="product-list-title">${product.title || 'Unknown Product'}</h3>
+          ${product.price ? `<div class="product-list-price">${product.price}</div>` : ''}
+          ${product.description ? `<div class="product-list-description">${product.description}</div>` : ''}
         </div>
-        
-        <div class="product-meta">
-          ${product.category ? `<div><strong>Category:</strong> ${product.category}</div>` : ''}
+        <div class="product-list-actions">
+          <a href="${product.link || '#'}" target="_blank" class="product-list-buy">👉 Buy Now</a>
+          <button class="product-list-share" onclick="shareProduct()">📤 Share</button>
         </div>
       </div>
     `;
     
-    productDetail.innerHTML = productHTML;
+    productList.innerHTML = productHTML;
+    
+    // Also create grid view (hidden by default)
+    const gridHTML = `
+      <div class="product-card">
+        <img src="${firstImage}" alt="${product.title || 'Product Image'}" class="product-card-image">
+        <div class="spacer"></div>
+        <h3 class="product-card-title">${product.title || 'Unknown Product'}</h3>
+        ${product.price ? `<div class="product-card-price">${product.price}</div>` : ''}
+        <div class="product-card-actions">
+          <a href="${product.link || '#'}" target="_blank" class="product-card-link">👉👉 Buy Now</a>
+        </div>
+      </div>
+    `;
+    
+    productGrid.innerHTML = gridHTML;
     
     // Update page title
     document.title = `${product.title || 'Product'} | ShoeDukaan`;
@@ -819,28 +799,28 @@ body {
     }
   }
   
-  // Display similar products
+  // Display similar products in list view
   function displaySimilarProducts(products) {
     const similarProductsContainer = document.getElementById('similarProducts');
     
     if (products.length === 0) {
-      similarProductsContainer.innerHTML = '<p class="product-title">No similar products found.</p>';
+      similarProductsContainer.innerHTML = '<p class="product-list-title">No similar products found.</p>';
       return;
     }
     
     const productsHTML = products.map(product => {
       const imageArray = product.img ? product.img.split(',') : [];
-      const firstImage = imageArray.length > 0 ? imageArray[0].trim() : 'https://via.placeholder.com/300x200?text=No+Image';
+      const firstImage = imageArray.length > 0 ? imageArray[0].trim() : 'https://via.placeholder.com/80x80?text=No+Image';
       
       return `
-        <div class="product-card">
-          <img src="${firstImage}" alt="${product.title}" class="product-card-image">
-          <div class="spacer"></div>
-          <h3 class="product-card-title">${product.title}</h3>
-          ${product.price ? `<div class="product-card-price">${product.price}</div>` : ''}
-          <div class="buy-divider"></div>
-          <div class="product-card-actions">
-            <a href="product.html?permanentId=${product.permanentId}" class="product-card-link">View Details</a>
+        <div class="product-list-item">
+          <img src="${firstImage}" alt="${product.title}" class="product-list-image">
+          <div class="product-list-info">
+            <h3 class="product-list-title">${product.title}</h3>
+            ${product.price ? `<div class="product-list-price">${product.price}</div>` : ''}
+          </div>
+          <div class="product-list-actions">
+            <a href="product.html?permanentId=${product.permanentId}" class="product-list-buy">View Details</a>
           </div>
         </div>
       `;
@@ -861,7 +841,7 @@ body {
   // Share product function
   async function shareProduct() {
     const { permanentId, source } = getUrlParams();
-    const productTitle = document.querySelector('.product-title')?.textContent || 'Check out this product';
+    const productTitle = document.querySelector('.product-list-title')?.textContent || 'Check out this product';
     
     // Using the correct GitHub Pages URL structure
     const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${source || 'direct'}`;
@@ -895,10 +875,35 @@ body {
     });
   }
   
+  // Toggle between list and grid views
+  function setupViewToggle() {
+    const listViewBtn = document.getElementById('listViewBtn');
+    const gridViewBtn = document.getElementById('gridViewBtn');
+    const productList = document.getElementById('productList');
+    const productGrid = document.getElementById('productGrid');
+    
+    listViewBtn.addEventListener('click', () => {
+      listViewBtn.classList.add('active');
+      gridViewBtn.classList.remove('active');
+      productList.style.display = 'flex';
+      productGrid.style.display = 'none';
+    });
+    
+    gridViewBtn.addEventListener('click', () => {
+      gridViewBtn.classList.add('active');
+      listViewBtn.classList.remove('active');
+      productList.style.display = 'none';
+      productGrid.style.display = 'grid';
+    });
+  }
+  
   // Initialize the page
   window.addEventListener("DOMContentLoaded", function() {
     // Load product details
     loadProductDetail();
+    
+    // Set up view toggle
+    setupViewToggle();
     
     // Set up scroll event for back to top button
     window.addEventListener("scroll", () => {
