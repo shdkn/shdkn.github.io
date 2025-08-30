@@ -1,4 +1,43 @@
-<!DOCTYPE html>
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -36,7 +75,17 @@ body {
   font-family: 'Segoe UI', sans-serif;
   background: #1c1c1c;
   scroll-behavior: smooth;
-  color: #fff;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .layout-container {
@@ -86,7 +135,6 @@ body {
   margin-bottom: 4px;
 }
 
-/* Desktop override */
 @media (min-width: 769px) {
   .tagline {
     white-space: normal;
@@ -123,7 +171,6 @@ body {
   border-bottom: 1px solid #444;
 }
 
-/* Nav List */
 .nav-list {
   display: flex;
   justify-content: center;
@@ -134,13 +181,11 @@ body {
   padding: 0;
 }
 
-/* Nav Item */
 .nav-list li {
   display: flex;
   align-items: center;
 }
 
-/* Nav Button with Image + Text */
 .nav-btn {
   display: flex;
   flex-direction: column;
@@ -158,14 +203,12 @@ body {
   position: relative;
 }
 
-/* PNG Icon */
 .nav-btn img {
   width: 40px;
   height: 40px;
   transition: transform 0.3s ease;
 }
 
-/* Text Label (hidden by default) */
 .nav-text {
   position: absolute;
   bottom: 0;
@@ -178,7 +221,6 @@ body {
   width: 100%;
 }
 
-/* Hover Behavior */
 .nav-btn:hover img {
   transform: scale(0.7);
   transform-origin: top center;
@@ -188,7 +230,6 @@ body {
   opacity: 1;
 }
 
-/* Optional Separator */
 .nav-separator {
   color: #555;
   font-size: 14px;
@@ -245,6 +286,7 @@ body {
   font-size: 11px;
   line-height: 1.2;
 }
+
 .footer-tagline {
   font-weight: 500;
   margin-bottom: 4px;
@@ -262,16 +304,16 @@ body {
 
 /* Product Page Specific Styles */
 .product-container {
-  max-width: 1200px;
+  max-width: var(--max-width);
   margin: 30px auto;
-  padding: 0;
+  padding: 0 var(--side-padding);
   background: transparent;
 }
 
 .back-button {
   display: inline-flex;
   align-items: center;
-  padding: 8px 16px;
+  padding: 8px 18px 8px 0;
   background-color: rgba(30, 30, 30, 0.85);
   color: #BABABA;
   text-decoration: none;
@@ -291,7 +333,6 @@ body {
   opacity: 0.85;
 }
 
-/* Product Detail Styles */
 .product-detail {
   display: grid;
   grid-template-columns: 1fr;
@@ -311,19 +352,46 @@ body {
   overflow: hidden;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
   background: #333;
-  aspect-ratio: 3 / 4;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  aspect-ratio: 3 / 5;
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-.product-image {
+.product-image-container.visible {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.product-image-container .carousel {
+  position: relative;
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  display: block;
-  max-width: 100%;
-  max-height: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.product-image-container .carousel img {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+  transform: translateX(100%);
+  opacity: 0;
+  z-index: 0;
+}
+
+.product-image-container .carousel img.active {
+  transform: translateX(0%);
+  left: 0;
+  opacity: 1;
+  z-index: 1;
+}
+
+.product-image-container .carousel img.active:hover {
+  filter: brightness(1.08);
+  transition: filter 0.3s ease;
 }
 
 .product-info {
@@ -338,8 +406,8 @@ body {
   font-weight: 300;
   font-size: 0.95em;
   color: #BABABA;
-  margin: 0 0 15px 0;
-  line-height: 1.4;
+  margin: 15px 0;
+  line-height: 1.1;
   text-align: left;
 }
 
@@ -363,9 +431,9 @@ body {
 }
 
 .buy-divider {
-  width: 100%;
+  width: 90%;
   height: 1px;
-  background-color: #3A3A3A;
+  background-color: #BDB9B9;
   margin: 20px 0;
   border: none;
   opacity: 0.5;
@@ -375,6 +443,7 @@ body {
   display: flex;
   gap: 10px;
   width: 100%;
+  margin-left: -6px;
   box-sizing: border-box;
 }
 
@@ -394,46 +463,12 @@ body {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.3px;
-  text-align: center;
-  flex: 1;
 }
 
 .buy-button:hover, .share-button:hover {
   color: #005fa3;
   background-color: #3B3B3B;
   opacity: 0.85;
-}
-
-.loading-message {
-  text-align: center;
-  padding: 60px 20px;
-  font-family: 'Inter', sans-serif;
-  font-size: 18px;
-  color: #BABABA;
-}
-
-.error-message {
-  text-align: center;
-  padding: 60px 20px;
-  font-family: 'Inter', sans-serif;
-  font-size: 18px;
-  color: #ff6b6b;
-}
-
-.loading-spinner {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255,255,255,.3);
-  border-radius: 50%;
-  border-top-color: #fff;
-  animation: spin 1s ease-in-out infinite;
-  margin-right: 10px;
-  vertical-align: middle;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }
 
 .product-features {
@@ -496,7 +531,6 @@ body {
   opacity: 0.5;
 }
 
-/* Grid Styles to match index page */
 .products-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -512,7 +546,6 @@ body {
   }
 }
 
-/* Card Styles to match index page */
 .product-card {
   display: flex;
   flex-direction: column;
@@ -527,15 +560,30 @@ body {
   box-sizing: border-box;
   aspect-ratio: 3 / 5;
   overflow: hidden;
-  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-.product-card-image-container {
+.product-card.visible {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.product-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+}
+
+.product-card .carousel {
   position: relative;
   width: 100%;
   aspect-ratio: 3 / 5;
   overflow: hidden;
   border-radius: 8px;
+}
+
+.product-card .carousel img.active:hover {
+  filter: brightness(1.08);
+  transition: filter 0.3s ease;
 }
 
 .product-card-image {
@@ -544,11 +592,6 @@ body {
   object-fit: cover;
   display: block;
   border-radius: 8px;
-}
-
-.product-card-info {
-  padding: 0;
-  width: 100%;
 }
 
 .product-card-title {
@@ -567,19 +610,19 @@ body {
   font-family: 'Inter', sans-serif;
   font-weight: 300;
   font-size: 0.95em;
-  color: #BABABA;
+  color: #ffcc00;
   text-align: center;
-  margin: 10px 0;
+  margin: 8px 0;
 }
 
 .product-card-actions {
   padding: 0;
   width: 100%;
+  margin-top: 10px;
 }
 
 .product-card-link {
   display: block;
-  margin-top: 5px;
   padding: 8px 18px 8px 0;
   background-color: rgba(30, 30, 30, 0.85);
   color: #BABABA;
@@ -601,10 +644,37 @@ body {
 }
 
 .spacer {
-  height: 15px;
+  height: 20px;
 }
 
-/* Mobile Responsive Styles */
+.loading-message {
+  text-align: center;
+  padding: 60px 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  color: #BABABA;
+}
+
+.error-message {
+  text-align: center;
+  padding: 60px 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  color: #ff6b6b;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
 @media (max-width: 768px) {
   .product-detail {
     grid-template-columns: 1fr;
@@ -612,15 +682,57 @@ body {
   }
   
   .product-image-container {
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 3 / 5;
   }
   
   .product-actions {
-    flex-direction: column;
+    flex-direction: row;
+    margin-left: -6px;
   }
   
   .products-grid {
     grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .product-card {
+    aspect-ratio: 3 / 5;
+    padding: 6px;
+  }
+  
+  .top-banner {
+    padding: 12px 16px;
+  }
+  
+  .header-right {
+    align-items: flex-start;
+    text-align: right;
+    width: 100%;
+  }
+  
+  .telegram-link {
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+    text-align: right;
+  }
+  
+  .telegram-link:hover,
+  .telegram-link:focus {
+    transition: background-color 0.3s ease;
+    color: inherit;
+  }
+  
+  .tagline {
+    display: block;
+    margin-left: auto;
+    margin-right: 0;
+    text-align: right;
+  }
+  
+  .logo {
+    height: 100px;
+    margin-bottom: 8px;
   }
 }
 </style>
@@ -647,7 +759,6 @@ body {
           <span class="nav-text">Explore</span>
         </a>
       </li>
-
       <li><span class="nav-separator">|</span></li>
       <li>
         <a href="forhim.html" class="nav-btn">
@@ -655,7 +766,6 @@ body {
           <span class="nav-text">For Him</span>
         </a>
       </li>
-
       <li><span class="nav-separator">|</span></li>
       <li>
         <a href="forher.html" class="nav-btn">
@@ -663,7 +773,6 @@ body {
           <span class="nav-text">For Her</span>
         </a>
       </li>
-
       <li><span class="nav-separator">|</span></li>
       <li><a href="https://shoedukaan.blogspot.com" class="nav-btn">Blog >></a></li>
     </ul>
@@ -719,6 +828,12 @@ body {
     return String(str).replace(/"/g, '&quot;');
   }
 
+  // Colors for product cards
+  const colors = [
+    "#3A3647", "#1C262E", "#692B17",
+    "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255"
+  ];
+
   // Get URL parameters
   function getUrlParams() {
     const params = new URLSearchParams(window.location.search);
@@ -727,6 +842,40 @@ body {
       source: params.get('source')
     };
   }
+
+  // Activate carousels
+  function activateCarousels(selector = ".carousel") {
+    document.querySelectorAll(selector).forEach((carousel, index) => {
+      if (carousel.dataset.activated === "true") return;
+      carousel.dataset.activated = "true";
+
+      const images = carousel.querySelectorAll("img");
+      if (images.length <= 1) return;
+
+      let current = 0;
+
+      function shuffle() {
+        images.forEach((img, i) => img.classList.toggle("active", i === current));
+        current = (current + 1) % images.length;
+
+        const seed = Number(carousel.dataset.seed) || index;
+        const nextDelay = 2000 + (seed % 3000);
+        setTimeout(shuffle, nextDelay);
+      }
+
+      const initialDelay = Math.floor(Math.random() * 3000);
+      setTimeout(shuffle, initialDelay);
+    });
+  }
+
+  // Intersection Observer
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      entry.target.classList.toggle('visible', entry.isIntersecting);
+    });
+  }, {
+    threshold: 0.1
+  });
 
   // Load product details
   async function loadProductDetail() {
@@ -743,12 +892,8 @@ body {
       
       let product = null;
       
-      // Search for the product in all categories
       for (const category of categories) {
-        // Using the correct URL structure for GitHub Pages
         const url = `https://opensheet.elk.sh/${sheetID}/${category}`;
-        console.log(`Fetching from: ${url}`);
-        
         const res = await fetch(url);
         
         if (!res.ok) {
@@ -757,12 +902,9 @@ body {
         }
         
         const data = await res.json();
-        console.log(`Found ${data.length} products in ${category} category`);
-        
         const foundProduct = data.find(item => item.permanentId === permanentId);
         
         if (foundProduct) {
-          console.log("Product found:", foundProduct);
           product = { ...foundProduct, category };
           break;
         }
@@ -772,7 +914,6 @@ body {
         displayProduct(product);
         loadSimilarProducts(product.category, permanentId);
       } else {
-        console.error("Product not found in any category");
         showError();
       }
     } catch (err) {
@@ -786,38 +927,36 @@ body {
     const productDetail = document.getElementById('productDetail');
     const productLoading = document.getElementById('productLoading');
     
-    // Hide loading, show product detail
     productLoading.style.display = 'none';
     productDetail.style.display = 'grid';
     
-    // Create product HTML
     const imageArray = product.img ? product.img.split(',') : [];
-    const firstImage = imageArray.length > 0 ? imageArray[0].trim() : 'https://via.placeholder.com/500x500?text=No+Image';
+    const carouselHTML = imageArray.length > 0 ? 
+      imageArray.map((url, i) => 
+        `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${product.title || 'Product Image'}" />`
+      ).join('') : 
+      `<img src="https://via.placeholder.com/500x500?text=No+Image" class="active" loading="lazy" alt="No Image" />`;
     
     const productHTML = `
-      <div class="product-image-container">
-        <img src="${firstImage}" alt="${product.title || 'Product Image'}" class="product-image">
+      <div class="product-image-container" role="region" aria-label="Product images">
+        <div class="carousel" data-seed="${product.shuffleID || 0}">
+          ${carouselHTML}
+        </div>
       </div>
       <div class="product-info">
         <h3 class="product-title">${product.title || 'Unknown Product'}</h3>
-        
         ${product.description ? `<div class="product-description">${product.description}</div>` : ''}
-        
         ${product.price ? `<div class="product-price">${product.price}</div>` : ''}
-        
         ${product.features ? `
           <ul class="product-features">
             ${product.features.split(',').map(feature => `<li>${feature.trim()}</li>`).join('')}
           </ul>
         ` : ''}
-        
         <div class="buy-divider"></div>
-        
         <div class="product-actions">
-          <a href="${product.link || '#'}" target="_blank" class="buy-button">👉👉 Buy Now</a>
-          <button class="share-button" onclick="shareProduct()">📤 Share</button>
+          <a href="${product.link || '#'}" target="_blank" class="buy-button" aria-label="Buy ${product.title || 'product'}">👉👉 Buy Now</a>
+          <button class="share-button" data-title="${escapeQuotes(product.title || 'product')}" data-image="${imageArray[0] ? escapeQuotes(imageArray[0].trim()) : ''}" data-url="${escapeQuotes(product.link || '#')}" data-id="${escapeQuotes(product.permanentId || '0')}" aria-label="Share ${product.title || 'product'}">📤 Share</button>
         </div>
-        
         <div class="product-meta">
           ${product.category ? `<div><strong>Category:</strong> ${product.category}</div>` : ''}
         </div>
@@ -825,9 +964,11 @@ body {
     `;
     
     productDetail.innerHTML = productHTML;
-    
-    // Update page title
     document.title = `${product.title || 'Product'} | ShoeDukaan`;
+    
+    const imageContainer = productDetail.querySelector('.product-image-container');
+    observer.observe(imageContainer);
+    activateCarousels('.product-image-container .carousel');
   }
   
   // Load similar products
@@ -843,7 +984,6 @@ body {
       }
       
       const data = await res.json();
-      // Filter out the current product and get 4 random products
       const similarProducts = data
         .filter(item => item.permanentId !== excludeId && item.title && item.img && item.link)
         .sort(() => 0.5 - Math.random())
@@ -860,31 +1000,38 @@ body {
     const similarProductsContainer = document.getElementById('similarProducts');
     
     if (products.length === 0) {
-      similarProductsContainer.innerHTML = '<p class="product-title">No similar products found.</p>';
+      similarProductsContainer.innerHTML = '<div class="error-message">No similar products found.</div>';
       return;
     }
     
-    const productsHTML = products.map(product => {
+    const productsHTML = products.map((product, i) => {
       const imageArray = product.img ? product.img.split(',') : [];
-      const firstImage = imageArray.length > 0 ? imageArray[0].trim() : 'https://via.placeholder.com/300x200?text=No+Image';
+      const carouselHTML = imageArray.length > 0 ? 
+        imageArray.map((url, i) => 
+          `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${product.title}" />`
+        ).join('') : 
+        `<img src="https://via.placeholder.com/300x200?text=No+Image" class="active" loading="lazy" alt="No Image" />`;
       
       return `
-        <div class="product-card">
-          <div class="product-card-image-container">
-            <img src="${firstImage}" alt="${product.title}" class="product-card-image">
+        <article class="product-card" role="article" aria-label="${product.title}" style="background-color: ${colors[i % colors.length]}; transition-delay: ${i * 100}ms;">
+          <div class="carousel" data-seed="${product.shuffleID || i}">
+            ${carouselHTML}
           </div>
           <div class="spacer"></div>
           <h3 class="product-card-title">${product.title}</h3>
           ${product.price ? `<div class="product-card-price">${product.price}</div>` : ''}
           <div class="buy-divider"></div>
           <div class="product-card-actions">
-            <a href="product.html?permanentId=${product.permanentId}" class="product-card-link">View Details</a>
+            <a href="product.html?permanentId=${product.permanentId}&source=${product.category}" class="product-card-link" aria-label="View ${product.title} details">View Details</a>
           </div>
-        </div>
+        </article>
       `;
     }).join('');
     
     similarProductsContainer.innerHTML = productsHTML;
+    
+    similarProductsContainer.querySelectorAll('.product-card').forEach(card => observer.observe(card));
+    activateCarousels('.product-card .carousel');
   }
   
   // Show error message
@@ -897,16 +1044,13 @@ body {
   }
   
   // Share product function
-  async function shareProduct() {
-    const { permanentId, source } = getUrlParams();
-    const productTitle = document.querySelector('.product-title')?.textContent || 'Check out this product';
-    
-    // Using the correct GitHub Pages URL structure
+  async function shareProduct(title, image, buyUrl, permanentId) {
+    const { source } = getUrlParams();
     const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${source || 'direct'}`;
     
     const shareData = {
-      title: productTitle,
-      text: `Check out ${productTitle} on ShoeDukaan!`,
+      title: title,
+      text: `Check out ${title} on ShoeDukaan!`,
       url: productPageUrl
     };
     
@@ -915,11 +1059,11 @@ body {
         await navigator.share(shareData);
       } catch (error) {
         if (error.name !== 'AbortError') {
-          copyToClipboard(productPageUrl, productTitle);
+          copyToClipboard(productPageUrl, title);
         }
       }
     } else {
-      copyToClipboard(productPageUrl, productTitle);
+      copyToClipboard(productPageUrl, title);
     }
   }
   
@@ -933,12 +1077,22 @@ body {
     });
   }
   
+  // Event delegation for share buttons
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('share-button')) {
+      const title = e.target.dataset.title;
+      const image = e.target.dataset.image;
+      const buyUrl = e.target.dataset.url;
+      const permanentId = e.target.dataset.id;
+      
+      shareProduct(title, image, buyUrl, permanentId);
+    }
+  });
+  
   // Initialize the page
   window.addEventListener("DOMContentLoaded", function() {
-    // Load product details
     loadProductDetail();
     
-    // Set up scroll event for back to top button
     window.addEventListener("scroll", () => {
       const scrollY = window.scrollY;
       const backToTopBtn = document.getElementById("backToTop");
@@ -947,7 +1101,6 @@ body {
       }
     });
 
-    // Set up back to top button
     const backToTopBtn = document.getElementById("backToTop");
     if (backToTopBtn) {
       backToTopBtn.addEventListener("click", () => {
@@ -955,7 +1108,6 @@ body {
       });
     }
     
-    // Set active navigation link
     document.querySelectorAll('.nav-btn').forEach(link => {
       if (link.href === window.location.href) {
         link.classList.add('active');
