@@ -100,7 +100,7 @@ body {
 @media (min-width: 769px) {
   .tagline {
     white-space: normal;
-    max-width: 320px; /* or whatever width fits your layout */
+    max-width: 320px;
     line-height: 1.4;
   }
 }
@@ -116,7 +116,7 @@ body {
 .telegram-link:hover,
 .telegram-link:focus {
   transition: background-color 0.3s ease;
-  color: inherit; /* keep the text color unchanged */
+  color: inherit;
 }
 
 /* Search Bar */
@@ -175,10 +175,10 @@ body {
   .telegram-link:hover,
   .telegram-link:focus {
     transition: background-color 0.3s ease;
-    color: inherit; /* keep the text color unchanged */
+    color: inherit;
   }
 
-  .tagline   {
+  .tagline {
     display: block;
     margin-left: auto;
     margin-right: 0;
@@ -186,7 +186,7 @@ body {
   }
 
   .logo {
-    height: 100px; /* or whatever size you want */
+    height: 100px;
     margin-bottom: 8px;
   }
 }
@@ -197,14 +197,14 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 6px; /* Balanced editorial spacing */
+  padding: 6px;
   width: 100%;
-  max-width: 420px; /* Optional: locks visual width for consistency */
+  max-width: 420px;
   background: #fff;
-  border-radius: 12px; /* Soft premium edge */
+  border-radius: 12px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
   box-sizing: border-box;
-  aspect-ratio: 3 / 5; /* Taller vertical rhythm */
+  aspect-ratio: 3 / 5;
   overflow: hidden;
   opacity: 0;
   transform: translateY(20px);
@@ -214,9 +214,9 @@ body {
 .card .carousel {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 5; /* Matches .card ratio */
+  aspect-ratio: 3 / 5;
   overflow: hidden;
-  border-radius: 8px; /* Optional: soft inner crop */
+  border-radius: 8px;
 }
 
 .card .carousel img.active:hover {
@@ -244,7 +244,7 @@ body {
   margin-top: 15px;
   line-height: 1.1;
   text-align: center;
-  max-width: 90%;   /* Or try 320px for fixed width */
+  max-width: 90%;
   margin: 0 auto;
 }
 
@@ -269,33 +269,6 @@ body {
   letter-spacing: 0.3px;
 }
 
-.buy-button { 
-  margin-top:5px; 
-  padding: 8px 18px 8px 0; /* Top: 8px, Right: 18px, Bottom: 8px, Left: 0 */
-  background-color: rgba(30, 30, 30, 0.85); 
-  color: #BABABA; 
-  text-decoration: none; 
-  border-radius: 2px; 
-  transition: background-color 0.3s ease, opacity 0.3s ease; align-self: flex-start; 
-  align-self: flex-start;
-}
-
-.buy-button-wrapper {
-  width: 100%;
-  margin-left: -6px; /* Cancels out the card's 6px padding */
-  box-sizing: border-box;
-}
-
-.buy-button:hover {
-  color: #005fa3;
-}
-
-.buy-button:hover,
-.buy-button:focus {
-  background-color: #3B3B3B;
-  opacity: 0.85;
-}
-
 /* Carousel */
 .carousel {
   position: relative;
@@ -305,7 +278,7 @@ body {
 .carousel img {
   position: absolute;
   top: 0;
-  left: 100%; /* Start off-screen to the right */
+  left: 100%;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -479,13 +452,71 @@ body {
 .buy-divider {
   width: 90%;
   height: 1px;
-  background-color: #BDB9B9; /* Harmonizes with footer and banner tones */
+  background-color: #BDB9B9;
   margin: 20px 0;
-  border: none; /* Remove redundant border-top */
-  opacity: 0.5; /* Softens the divider for editorial elegance */
+  border: none;
+  opacity: 0.5;
 }
 .spacer {
   height: 20px;
+}
+
+.buy-button-wrapper {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-left: -6px;
+  box-sizing: border-box;
+}
+
+.buy-button,
+.share-button {
+  margin-top: 5px;
+  padding: 8px 18px 8px 0;
+  background-color: rgba(30, 30, 30, 0.85);
+  color: #BABABA;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+  align-self: flex-start;
+  border: none;
+  cursor: pointer;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.buy-button:hover,
+.share-button:hover {
+  color: #005fa3;
+  background-color: #3B3B3B;
+  opacity: 0.85;
+}
+
+/* Error message */
+.error-message {
+  color: #ff6b6b;
+  text-align: center;
+  padding: 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Loading animation */
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 </style>
 </head>
@@ -532,13 +563,16 @@ body {
       <li><a href="https://shoedukaan.blogspot.com" class="nav-btn">Blog >></a></li>
     </ul>
   </nav>
+  
   <!-- Search Bar -->
-  <section class="search-bar layout-container" aria-label="Product search">
-    <input type="text" id="searchInput" placeholder="Search products..." aria-label="Search products" />
-  </section>
+  <div class="search-bar layout-container">
+    <input type="text" id="searchInput" placeholder="Search for products..." aria-label="Search products">
+  </div>
 
   <!-- Product Grid -->
-  <main id="productGrid" class="grid layout-container" aria-label="Product catalog"></main>
+  <main id="productGrid" class="grid layout-container" aria-label="Product catalog">
+    <div class="error-message" id="loadingMessage">Loading products...</div>
+  </main>
 </div>
 
 <!-- Back to Top Button -->
@@ -556,285 +590,351 @@ body {
     </div>
   </div>
 </footer>
-
-<!-- JavaScript -->
+  <!-- JavaScript -->
 <script>
+  // Utility function to escape quotes
+  function escapeQuotes(str) {
+    return String(str).replace(/"/g, '&quot;');
+  }
+
+  // Your existing constants and variables
   const colors = [
-    "#3A3647", "#1C262E", "#692B17",
-    "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
+      "#3A3647", "#1C262E", "#692B17",
+      "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
   ];
 
   let allProducts = [];
   let filteredProducts = [];
-  let allProductsForSearch = []; // This will store combined data for search
   let currentIndex = 0;
   const batchSize = 12;
-  let isSearching = false;
-  let searchTimeout = null;
 
-  // Determine current page category and corresponding sheet tab
+  // Determine current page category
   function getCurrentCategory() {
-    const path = window.location.pathname;
-    if (path.includes('forhim.html')) return 'for-him';
-    if (path.includes('forher.html')) return 'for-her';
-    return 'links'; // index.html or other pages
+      const path = window.location.pathname;
+      if (path.includes('forhim.html')) return 'for-him';
+      if (path.includes('forher.html')) return 'for-her';
+      return 'links';
   }
 
-  // Improved function to remove duplicates
-  function removeDuplicates(products) {
-    const seen = new Set();
-    const uniqueProducts = [];
-    
-    for (const product of products) {
-      // Create a unique identifier using title and first image URL
-      const firstImage = product.img.split(',')[0].trim().toLowerCase();
-      const identifier = `${product.title.toLowerCase()}-${firstImage}`;
+  // Share product function - updated with correct GitHub Pages URL
+  async function shareProduct(title, image, buyUrl, permanentId) {
+      console.log('shareProduct called with:', title, permanentId);
       
-      if (!seen.has(identifier)) {
-        seen.add(identifier);
-        uniqueProducts.push(product);
-      }
-    }
-    
-    return uniqueProducts;
-  }
-
-  async function loadProducts() {
-    try {
-      const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+      // Get current category for the source parameter
       const currentCategory = getCurrentCategory();
       
-      // Load data only from the relevant tab for this page
-      const url = `https://opensheet.elk.sh/${sheetID}/${currentCategory}`;
-      const res = await fetch(url);
-      const data = await res.json();
+      // FIXED: Create the correct product page URL for GitHub Pages
+      const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${currentCategory}`;
       
-      // Process products
-      allProducts = data
-        .filter(item => item.title && item.img && item.link)
-        .sort((a, b) => {
-          if (a.shuffleID && b.shuffleID) {
-            return Number(a.shuffleID) - Number(b.shuffleID);
+      // Create share data
+      const shareData = {
+          title: title,
+          text: `Check out ${title} on ShoeDukaan!`,
+          url: productPageUrl
+      };
+      
+      console.log('Sharing product:', shareData);
+      
+      // Try to use native share dialog
+      if (navigator.share) {
+          try {
+              await navigator.share(shareData);
+              console.log('Product shared successfully:', title);
+          } catch (error) {
+              if (error.name !== 'AbortError') {
+                  console.error('Error sharing:', error);
+                  // Fallback to copy method
+                  copyToClipboard(productPageUrl, title);
+              }
           }
-          return a.title.localeCompare(b.title);
-        });
-      
-      filteredProducts = allProducts;
-
-      // Pre-load all products for search in the background
-      loadAllProductsForSearch();
-
-      renderNextBatch();
-    } catch (err) {
-      console.error("Failed to load products:", err);
-    }
-  }
-
-  // Function to load all products for global search
-  async function loadAllProductsForSearch() {
-    try {
-      const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
-      const tabs = ["links", "for-him", "for-her"];
-      const allData = [];
-      
-      for (const tab of tabs) {
-        const url = `https://opensheet.elk.sh/${sheetID}/${tab}`;
-        const res = await fetch(url);
-        const data = await res.json();
-        
-        // Add source information to each item
-        const dataWithSource = data.map(item => ({ ...item, __source: tab }));
-        allData.push(...dataWithSource);
+      } else {
+          // Fallback for browsers that don't support Web Share API
+          copyToClipboard(productPageUrl, title);
       }
-      
-      // Remove duplicates and store for search
-      allProductsForSearch = removeDuplicates(allData
-        .filter(item => item.title && item.img && item.link)
-        .sort((a, b) => {
-          if (a.shuffleID && b.shuffleID) {
-            return Number(a.shuffleID) - Number(b.shuffleID);
-          }
-          return a.title.localeCompare(b.title);
-        }));
-        
-      console.log(`Loaded ${allProductsForSearch.length} unique products for search`);
-    } catch (err) {
-      console.error("Failed to load all products for search:", err);
-    }
   }
 
+  // Fallback function to copy to clipboard
+  function copyToClipboard(text, productTitle) {
+      navigator.clipboard.writeText(text).then(() => {
+          alert(`Link for "${productTitle}" copied to clipboard!`);
+      }).catch(err => {
+          console.error('Could not copy text: ', err);
+          prompt('Copy this URL to share:', text);
+      });
+  }
+
+  // Load products from all categories for search functionality
+  async function loadAllProducts() {
+      try {
+          const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+          const categories = ['links', 'for-him', 'for-her'];
+          
+          document.getElementById('loadingMessage').innerHTML = '<span class="loading-spinner"></span> Loading products from all categories...';
+          
+          // Load data from all categories
+          const allData = [];
+          for (const category of categories) {
+              const url = `https://opensheet.elk.sh/${sheetID}/${category}`;
+              const res = await fetch(url);
+              if (!res.ok) {
+                  console.error(`Failed to load ${category} category`);
+                  continue;
+              }
+              
+              const data = await res.json();
+              // Add category info to each product
+              const categoryData = data.map(item => ({...item, category}));
+              allData.push(...categoryData);
+          }
+          
+          // Process products
+          allProducts = allData
+              .filter(item => item.title && item.img && item.link)
+              .sort((a, b) => {
+                  if (a.shuffleID && b.shuffleID) {
+                      return Number(a.shuffleID) - Number(b.shuffleID);
+                  }
+                  return a.title.localeCompare(b.title);
+              });
+          
+          if (allProducts.length === 0) {
+              document.getElementById('loadingMessage').textContent = 'No products found.';
+              return;
+          }
+          
+          // Filter by current category
+          const currentCategory = getCurrentCategory();
+          if (currentCategory && currentCategory !== 'all') {
+              filteredProducts = allProducts.filter(product => product.category === currentCategory);
+          } else {
+              filteredProducts = allProducts;
+          }
+          
+          document.getElementById('loadingMessage').style.display = 'none';
+          renderNextBatch();
+      } catch (err) {
+          console.error("Failed to load products:", err);
+          document.getElementById('loadingMessage').textContent = 'Error loading products. Please check your connection.';
+      }
+  }
+
+  // Modified generateCardHTML function with correct product URLs
   function generateCardHTML(item, index) {
-    const imageArray = item.img.split(',');
-    const carouselHTML = imageArray.map((url, i) =>
-      `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
-    ).join('');
+      const imageArray = item.img.split(',');
+      const carouselHTML = imageArray.map((url, i) =>
+          `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
+      ).join('');
 
-    return `
-      <div class="carousel" data-seed="${item.shuffleID || index}">
-        ${carouselHTML}
-      </div>
-      <div class="spacer"></div>
-      <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
-      <div class="buy-divider"></div>
-      <div class="buy-button-wrapper">
-        <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
-      </div>
-    `;
+      // Clean the values for use in JavaScript
+      const cleanTitle = escapeQuotes(item.title);
+      const firstImage = escapeQuotes(imageArray[0].trim());
+      const buyUrl = escapeQuotes(item.link);
+      const permanentId = escapeQuotes(item.permanentId || index);
+      
+      // FIXED: Use correct GitHub Pages URL for product links
+      const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${getCurrentCategory()}`;
+      
+      return `
+          <div class="carousel" data-seed="${item.shuffleID || index}">
+              ${carouselHTML}
+          </div>
+          <div class="spacer"></div>
+          <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
+          <div class="buy-divider"></div>
+          <div class="buy-button-wrapper">
+              <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">
+                  👉👉 Buy Now
+              </a>
+              <button class="share-button action-button-text" 
+                      data-title="${cleanTitle}" 
+                      data-image="${firstImage}" 
+                      data-url="${buyUrl}" 
+                      data-id="${permanentId}" 
+                      aria-label="Share ${item.title}">
+                  📤 Share
+              </button>
+          </div>
+      `;
   }
 
+  // Your existing renderNextBatch function
   function renderNextBatch() {
-    const grid = document.querySelector("main.grid");
-    if (!grid || filteredProducts.length === 0) return;
+      const grid = document.getElementById("productGrid");
+      if (!grid || filteredProducts.length === 0) return;
 
-    const nextItems = filteredProducts.slice(currentIndex, currentIndex + batchSize);
+      const nextItems = filteredProducts.slice(currentIndex, currentIndex + batchSize);
 
-    nextItems.forEach((item, i) => {
-      const card = document.createElement("article");
-      card.className = "card";
-      card.setAttribute("role", "article");
-      card.setAttribute("aria-label", item.title);
-      card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
-      card.style.transitionDelay = `${i * 100}ms`;
-      card.innerHTML = generateCardHTML(item, currentIndex + i);
+      nextItems.forEach((item, i) => {
+          const card = document.createElement("article");
+          card.className = "card";
+          card.setAttribute("role", "article");
+          card.setAttribute("aria-label", item.title);
+          card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
+          card.style.transitionDelay = `${i * 100}ms`;
+          card.innerHTML = generateCardHTML(item, i);
 
-      grid.appendChild(card);
-      observer.observe(card);
-    });
+          grid.appendChild(card);
+          observer.observe(card);
+      });
 
-    activateCarousels(".carousel");
-    currentIndex += batchSize;
+      activateCarousels(".carousel");
+      currentIndex += batchSize;
   }
 
+  // Your existing activateCarousels function
   function activateCarousels(selector = ".carousel") {
-    document.querySelectorAll(selector).forEach((carousel, index) => {
-      if (carousel.dataset.activated === "true") return;
-      carousel.dataset.activated = "true";
+      document.querySelectorAll(selector).forEach((carousel, index) => {
+          if (carousel.dataset.activated === "true") return;
+          carousel.dataset.activated = "true";
 
-      const images = carousel.querySelectorAll("img");
-      if (images.length <= 1) return;
+          const images = carousel.querySelectorAll("img");
+          if (images.length <= 1) return;
 
-      let current = 0;
+          let current = 0;
 
-      function shuffle() {
-        images.forEach((img, i) => img.classList.toggle("active", i === current));
-        current = (current + 1) % images.length;
+          function shuffle() {
+              images.forEach((img, i) => img.classList.toggle("active", i === current));
+              current = (current + 1) % images.length;
 
-        const seed = Number(carousel.dataset.seed) || index;
-        const nextDelay = 2000 + (seed % 3000); // 2–5s based on seed
-        setTimeout(shuffle, nextDelay);
-      }
+              const seed = Number(carousel.dataset.seed) || index;
+              const nextDelay = 2000 + (seed % 3000);
+              setTimeout(shuffle, nextDelay);
+          }
 
-      const initialDelay = Math.floor(Math.random() * 3000); // 0–3s stagger
-      setTimeout(shuffle, initialDelay);
-    });
+          const initialDelay = Math.floor(Math.random() * 3000);
+          setTimeout(shuffle, initialDelay);
+      });
   }
 
+  // Your existing Intersection Observer
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      entry.target.classList.toggle('visible', entry.isIntersecting);
-    });
+      entries.forEach(entry => {
+          entry.target.classList.toggle('visible', entry.isIntersecting);
+      });
   }, {
-    threshold: 0.1
+      threshold: 0.1
   });
 
-  window.addEventListener("DOMContentLoaded", loadProducts);
-
-  window.addEventListener("scroll", () => {
-    const scrollY = window.scrollY;
-    const viewportHeight = window.innerHeight;
-    const fullHeight = document.body.offsetHeight;
-
-    if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < filteredProducts.length && !isSearching) {
-      renderNextBatch();
-    }
-
-    document.getElementById("backToTop").style.display = scrollY > 300 ? "block" : "none";
-  });
-
-  document.getElementById("backToTop").addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-
-  document.getElementById("searchInput").addEventListener("input", function () {
-    // Clear any existing timeout
-    if (searchTimeout) {
-      clearTimeout(searchTimeout);
-    }
-    
-    // Set a new timeout to delay the search
-    searchTimeout = setTimeout(() => {
-      const query = this.value.toLowerCase().trim();
-      const grid = document.querySelector("main.grid");
+  // Search function that works across all pages
+  function performSearch(query) {
+      const grid = document.getElementById("productGrid");
       if (!grid) return;
 
       grid.innerHTML = "";
       currentIndex = 0;
 
       if (query === "") {
-        // If search is empty, show regular products for this page
-        isSearching = false;
-        filteredProducts = allProducts;
-        renderNextBatch();
+          // If no query, show products from current category
+          const currentCategory = getCurrentCategory();
+          if (currentCategory && currentCategory !== 'all') {
+              filteredProducts = allProducts.filter(product => product.category === currentCategory);
+          } else {
+              filteredProducts = allProducts;
+          }
       } else {
-        // Set searching flag
-        isSearching = true;
-        
-        // Search through all products from all tabs
-        // Make sure we have the data loaded
-        if (allProductsForSearch.length === 0) {
-          // Show loading message
-          grid.innerHTML = '<div style="color: white; text-align: center; padding: 20px;">Loading search results...</div>';
-          
-          // Load all products for search
-          loadAllProductsForSearch().then(() => {
-            // After loading, perform the search
-            filteredProducts = allProductsForSearch.filter(item =>
+          // If there's a query, search across all products
+          filteredProducts = allProducts.filter(item =>
               item.title.toLowerCase().includes(query)
-            );
-            
-            // Render results
-            renderSearchResults();
-          });
-        } else {
-          // We already have the search data
-          filteredProducts = allProductsForSearch.filter(item =>
-            item.title.toLowerCase().includes(query)
           );
-          
-          // Render results
-          renderSearchResults();
-        }
       }
-    }, 300); // 300ms delay before executing search
-  });
+      
+      if (filteredProducts.length === 0) {
+          grid.innerHTML = '<div class="error-message">No products match your search.</div>';
+      } else {
+          filteredProducts.slice(0, batchSize).forEach((item, i) => {
+              const card = document.createElement("article");
+              card.className = "card";
+              card.setAttribute("role", "article");
+              card.setAttribute("aria-label", item.title);
+              card.style.backgroundColor = colors[i % colors.length];
+              card.style.transitionDelay = `${i * 100}ms`;
+              card.innerHTML = generateCardHTML(item, i);
 
-  function renderSearchResults() {
-    const grid = document.querySelector("main.grid");
-    if (!grid) return;
+              grid.appendChild(card);
+              observer.observe(card);
+          });
 
-    // Render the first batch
-    filteredProducts.slice(0, batchSize).forEach((item, i) => {
-      const card = document.createElement("article");
-      card.className = "card";
-      card.setAttribute("role", "article");
-      card.setAttribute("aria-label", item.title);
-      card.style.backgroundColor = colors[i % colors.length];
-      card.style.transitionDelay = `${i * 100}ms`;
-      card.innerHTML = generateCardHTML(item, i);
-
-      grid.appendChild(card);
-      observer.observe(card);
-    });
-
-    activateCarousels(".carousel");
+          activateCarousels(".carousel");
+      }
   }
 
-  document.querySelectorAll('.nav-btn').forEach(link => {
-    if (link.href === window.location.href) {
-      link.classList.add('active');
-    }
+  // Event delegation for share buttons
+  document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('share-button')) {
+          const title = e.target.dataset.title;
+          const image = e.target.dataset.image;
+          const buyUrl = e.target.dataset.url;
+          const permanentId = e.target.dataset.id;
+          
+          console.log('Share button clicked:', title);
+          shareProduct(title, image, buyUrl, permanentId);
+      }
   });
-</script>
+
+  // Initialize the page
+  window.addEventListener("DOMContentLoaded", function() {
+      // Load products from all categories
+      loadAllProducts();
+      
+      // Set up search functionality
+      const searchInput = document.getElementById("searchInput");
+      if (searchInput) {
+          // Check if there's a search query in the URL
+          const urlParams = new URLSearchParams(window.location.search);
+          const searchQuery = urlParams.get('search');
+          if (searchQuery) {
+              searchInput.value = searchQuery;
+              // Perform search after products are loaded
+              setTimeout(() => performSearch(searchQuery), 1000);
+          }
+          
+          searchInput.addEventListener("input", function() {
+              const query = this.value.toLowerCase();
+              performSearch(query);
+              
+              // Update URL with search query
+              const url = new URL(window.location);
+              if (query) {
+                  url.searchParams.set('search', query);
+              } else {
+                  url.searchParams.delete('search');
+              }
+              window.history.replaceState({}, '', url);
+          });
+      }
+      
+      // Set up scroll event for infinite scrolling
+      window.addEventListener("scroll", () => {
+          const scrollY = window.scrollY;
+          const viewportHeight = window.innerHeight;
+          const fullHeight = document.body.offsetHeight;
+
+          if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < filteredProducts.length) {
+              renderNextBatch();
+          }
+
+          const backToTopBtn = document.getElementById("backToTop");
+          if (backToTopBtn) {
+              backToTopBtn.style.display = scrollY > 300 ? "block" : "none";
+          }
+      });
+
+      // Set up back to top button
+      const backToTopBtn = document.getElementById("backToTop");
+      if (backToTopBtn) {
+          backToTopBtn.addEventListener("click", () => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+      }
+      
+      // Set active navigation link
+      document.querySelectorAll('.nav-btn').forEach(link => {
+          if (link.href === window.location.href) {
+              link.classList.add('active');
+          }
+      });
+  });
 </script>
 </body>
 </html>
+
