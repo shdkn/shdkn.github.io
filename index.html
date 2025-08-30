@@ -558,212 +558,222 @@ body {
 </footer>
 
 <!-- JavaScript -->
+            
 <script>
+  // Your existing constants and variables
   const colors = [
-    "#3A3647", "#1C262E", "#692B17",
-    "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
+      "#3A3647", "#1C262E", "#692B17",
+      "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
   ];
 
   let allProducts = [];
   let filteredProducts = [];
-  let allProductsForSearch = []; // This will store combined data for search
   let currentIndex = 0;
   const batchSize = 12;
-  let isSearching = false;
-  let searchTimeout = null;
 
-  // Determine current page category and corresponding sheet tab
+  // Determine current page category
   function getCurrentCategory() {
-    const path = window.location.pathname;
-    if (path.includes('forhim.html')) return 'for-him';
-    if (path.includes('forher.html')) return 'for-her';
-    return 'links'; // index.html or other pages
+      const path = window.location.pathname;
+      if (path.includes('forhim.html')) return 'for-him';
+      if (path.includes('forher.html')) return 'for-her';
+      return 'links';
   }
 
-  // Improved function to remove duplicates
-  function removeDuplicates(products) {
-    const seen = new Set();
-    const uniqueProducts = [];
-    
-    for (const product of products) {
-      // Create a unique identifier using title and first image URL
-      const firstImage = product.img.split(',')[0].trim().toLowerCase();
-      const identifier = `${product.title.toLowerCase()}-${firstImage}`;
+  // Share product function
+  async function shareProduct(title, image, buyUrl, permanentId) {
+      console.log('shareProduct called with:', title, permanentId);
       
-      if (!seen.has(identifier)) {
-        seen.add(identifier);
-        uniqueProducts.push(product);
-      }
-    }
-    
-    return uniqueProducts;
-  }
-
-  async function loadProducts() {
-    try {
-      const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+      // Get current category for the source parameter
       const currentCategory = getCurrentCategory();
       
-      // Load data only from the relevant tab for this page
-      const url = `https://opensheet.elk.sh/${sheetID}/${currentCategory}`;
-      const res = await fetch(url);
-      const data = await res.json();
+      // Create the product page URL
+      const productPageUrl = `${window.location.origin}/product.html?permanentId=${permanentId}&source=${currentCategory}`;
       
-      // Process products
-      allProducts = data
-        .filter(item => item.title && item.img && item.link)
-        .sort((a, b) => {
-          if (a.shuffleID && b.shuffleID) {
-            return Number(a.shuffleID) - Number(b.shuffleID);
+      // Create share data
+      const shareData = {
+          title: title,
+          text: `Check out ${title} on ShoeDukaan!`,
+          url: productPageUrl
+      };
+      
+      console.log('Sharing product:', shareData);
+      
+      // Try to use native share dialog
+      if (navigator.share) {
+          try {
+              await navigator.share(shareData);
+              console.log('Product shared successfully:', title);
+          } catch (error) {
+              if (error.name !== 'AbortError') {
+                  console.error('Error sharing:', error);
+                  // Fallback to copy method
+                  copyToClipboard(productPageUrl, title);
+              }
           }
-          return a.title.localeCompare(b.title);
-        });
-      
-      filteredProducts = allProducts;
-
-      // Pre-load all products for search in the background
-      loadAllProductsForSearch();
-
-      renderNextBatch();
-    } catch (err) {
-      console.error("Failed to load products:", err);
-    }
-  }
-
-  // Function to load all products for global search
-  async function loadAllProductsForSearch() {
-    try {
-      const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
-      const tabs = ["links", "for-him", "for-her"];
-      const allData = [];
-      
-      for (const tab of tabs) {
-        const url = `https://opensheet.elk.sh/${sheetID}/${tab}`;
-        const res = await fetch(url);
-        const data = await res.json();
-        
-        // Add source information to each item
-        const dataWithSource = data.map(item => ({ ...item, __source: tab }));
-        allData.push(...dataWithSource);
+      } else {
+          // Fallback for browsers that don't support Web Share API
+          copyToClipboard(productPageUrl, title);
       }
-      
-      // Remove duplicates and store for search
-      allProductsForSearch = removeDuplicates(allData
-        .filter(item => item.title && item.img && item.link)
-        .sort((a, b) => {
-          if (a.shuffleID && b.shuffleID) {
-            return Number(a.shuffleID) - Number(b.shuffleID);
-          }
-          return a.title.localeCompare(b.title);
-        }));
-        
-      console.log(`Loaded ${allProductsForSearch.length} unique products for search`);
-    } catch (err) {
-      console.error("Failed to load all products for search:", err);
-    }
   }
 
+  // Fallback function to copy to clipboard
+  function copyToClipboard(text, productTitle) {
+      navigator.clipboard.writeText(text).then(() => {
+          alert(`Link for "${productTitle}" copied to clipboard!`);
+      }).catch(err => {
+          console.error('Could not copy text: ', err);
+          prompt('Copy this URL to share:', text);
+      });
+  }
+
+  // Your existing loadProducts function
+  async function loadProducts() {
+      try {
+          const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+          const currentCategory = getCurrentCategory();
+          
+          // Load data only from the relevant tab for this page
+          const url = `https://opensheet.elk.sh/${sheetID}/${currentCategory}`;
+          const res = await fetch(url);
+          const data = await res.json();
+          
+          // Process products
+          allProducts = data
+              .filter(item => item.title && item.img && item.link)
+              .sort((a, b) => {
+                  if (a.shuffleID && b.shuffleID) {
+                      return Number(a.shuffleID) - Number(b.shuffleID);
+                  }
+                  return a.title.localeCompare(b.title);
+              });
+          
+          filteredProducts = allProducts;
+          renderNextBatch();
+      } catch (err) {
+          console.error("Failed to load products:", err);
+      }
+  }
+
+  // Modified generateCardHTML function with data attributes
   function generateCardHTML(item, index) {
-    const imageArray = item.img.split(',');
-    const carouselHTML = imageArray.map((url, i) =>
-      `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
-    ).join('');
+      const imageArray = item.img.split(',');
+      const carouselHTML = imageArray.map((url, i) =>
+          `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
+      ).join('');
 
-    return `
-      <div class="carousel" data-seed="${item.shuffleID || index}">
-        ${carouselHTML}
-      </div>
-      <div class="spacer"></div>
-      <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
-      <div class="buy-divider"></div>
-      <div class="buy-button-wrapper">
-        <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Link</a>
-      </div>
-    `;
+      return `
+          <div class="carousel" data-seed="${item.shuffleID || index}">
+              ${carouselHTML}
+          </div>
+          <div class="spacer"></div>
+          <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
+          <div class="buy-divider"></div>
+          <div class="buy-button-wrapper">
+              <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Buy Now</a>
+              <button class="share-button action-button-text" 
+                      data-title="${item.title}" 
+                      data-image="${imageArray[0].trim()}" 
+                      data-url="${item.link}" 
+                      data-id="${item.permanentId}" 
+                      aria-label="Share ${item.title}">
+                  📤 Share
+              </button>
+          </div>
+      `;
   }
 
+  // Your existing renderNextBatch function
   function renderNextBatch() {
-    const grid = document.querySelector("main.grid");
-    if (!grid || filteredProducts.length === 0) return;
+      const grid = document.querySelector("main.grid");
+      if (!grid || filteredProducts.length === 0) return;
 
-    const nextItems = filteredProducts.slice(currentIndex, currentIndex + batchSize);
+      const nextItems = filteredProducts.slice(currentIndex, currentIndex + batchSize);
 
-    nextItems.forEach((item, i) => {
-      const card = document.createElement("article");
-      card.className = "card";
-      card.setAttribute("role", "article");
-      card.setAttribute("aria-label", item.title);
-      card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
-      card.style.transitionDelay = `${i * 100}ms`;
-      card.innerHTML = generateCardHTML(item, currentIndex + i);
+      nextItems.forEach((item, i) => {
+          const card = document.createElement("article");
+          card.className = "card";
+          card.setAttribute("role", "article");
+          card.setAttribute("aria-label", item.title);
+          card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
+          card.style.transitionDelay = `${i * 100}ms`;
+          card.innerHTML = generateCardHTML(item, i);
 
-      grid.appendChild(card);
-      observer.observe(card);
-    });
+          grid.appendChild(card);
+          observer.observe(card);
+      });
 
-    activateCarousels(".carousel");
-    currentIndex += batchSize;
+      activateCarousels(".carousel");
+      currentIndex += batchSize;
   }
 
+  // Your existing activateCarousels function
   function activateCarousels(selector = ".carousel") {
-    document.querySelectorAll(selector).forEach((carousel, index) => {
-      if (carousel.dataset.activated === "true") return;
-      carousel.dataset.activated = "true";
+      document.querySelectorAll(selector).forEach((carousel, index) => {
+          if (carousel.dataset.activated === "true") return;
+          carousel.dataset.activated = "true";
 
-      const images = carousel.querySelectorAll("img");
-      if (images.length <= 1) return;
+          const images = carousel.querySelectorAll("img");
+          if (images.length <= 1) return;
 
-      let current = 0;
+          let current = 0;
 
-      function shuffle() {
-        images.forEach((img, i) => img.classList.toggle("active", i === current));
-        current = (current + 1) % images.length;
+          function shuffle() {
+              images.forEach((img, i) => img.classList.toggle("active", i === current));
+              current = (current + 1) % images.length;
 
-        const seed = Number(carousel.dataset.seed) || index;
-        const nextDelay = 2000 + (seed % 3000); // 2–5s based on seed
-        setTimeout(shuffle, nextDelay);
-      }
+              const seed = Number(carousel.dataset.seed) || index;
+              const nextDelay = 2000 + (seed % 3000);
+              setTimeout(shuffle, nextDelay);
+          }
 
-      const initialDelay = Math.floor(Math.random() * 3000); // 0–3s stagger
-      setTimeout(shuffle, initialDelay);
-    });
+          const initialDelay = Math.floor(Math.random() * 3000);
+          setTimeout(shuffle, initialDelay);
+      });
   }
 
+  // Your existing Intersection Observer
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      entry.target.classList.toggle('visible', entry.isIntersecting);
-    });
+      entries.forEach(entry => {
+          entry.target.classList.toggle('visible', entry.isIntersecting);
+      });
   }, {
-    threshold: 0.1
+      threshold: 0.1
   });
 
+  // Event delegation for share buttons
+  document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('share-button')) {
+          const title = e.target.dataset.title;
+          const image = e.target.dataset.image;
+          const buyUrl = e.target.dataset.url;
+          const permanentId = e.target.dataset.id;
+          
+          console.log('Share button clicked:', title);
+          shareProduct(title, image, buyUrl, permanentId);
+      }
+  });
+
+  // Your existing event listeners
   window.addEventListener("DOMContentLoaded", loadProducts);
 
   window.addEventListener("scroll", () => {
-    const scrollY = window.scrollY;
-    const viewportHeight = window.innerHeight;
-    const fullHeight = document.body.offsetHeight;
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const fullHeight = document.body.offsetHeight;
 
-    if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < filteredProducts.length && !isSearching) {
-      renderNextBatch();
-    }
+      if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < filteredProducts.length) {
+          renderNextBatch();
+      }
 
-    document.getElementById("backToTop").style.display = scrollY > 300 ? "block" : "none";
+      document.getElementById("backToTop").style.display = scrollY > 300 ? "block" : "none";
   });
 
   document.getElementById("backToTop").addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
-  document.getElementById("searchInput").addEventListener("input", function () {
-    // Clear any existing timeout
-    if (searchTimeout) {
-      clearTimeout(searchTimeout);
-    }
-    
-    // Set a new timeout to delay the search
-    searchTimeout = setTimeout(() => {
-      const query = this.value.toLowerCase().trim();
+  document.getElementById("searchInput").addEventListener("input", function() {
+      const query = this.value.toLowerCase();
       const grid = document.querySelector("main.grid");
       if (!grid) return;
 
@@ -771,70 +781,34 @@ body {
       currentIndex = 0;
 
       if (query === "") {
-        // If search is empty, show regular products for this page
-        isSearching = false;
-        filteredProducts = allProducts;
-        renderNextBatch();
+          filteredProducts = allProducts;
       } else {
-        // Set searching flag
-        isSearching = true;
-        
-        // Search through all products from all tabs
-        // Make sure we have the data loaded
-        if (allProductsForSearch.length === 0) {
-          // Show loading message
-          grid.innerHTML = '<div style="color: white; text-align: center; padding: 20px;">Loading search results...</div>';
-          
-          // Load all products for search
-          loadAllProductsForSearch().then(() => {
-            // After loading, perform the search
-            filteredProducts = allProductsForSearch.filter(item =>
+          filteredProducts = allProducts.filter(item =>
               item.title.toLowerCase().includes(query)
-            );
-            
-            // Render results
-            renderSearchResults();
-          });
-        } else {
-          // We already have the search data
-          filteredProducts = allProductsForSearch.filter(item =>
-            item.title.toLowerCase().includes(query)
           );
-          
-          // Render results
-          renderSearchResults();
-        }
       }
-    }, 300); // 300ms delay before executing search
+
+      filteredProducts.slice(0, batchSize).forEach((item, i) => {
+          const card = document.createElement("article");
+          card.className = "card";
+          card.setAttribute("role", "article");
+          card.setAttribute("aria-label", item.title);
+          card.style.backgroundColor = colors[i % colors.length];
+          card.style.transitionDelay = `${i * 100}ms`;
+          card.innerHTML = generateCardHTML(item, i);
+
+          grid.appendChild(card);
+          observer.observe(card);
+      });
+
+      activateCarousels(".carousel");
   });
-
-  function renderSearchResults() {
-    const grid = document.querySelector("main.grid");
-    if (!grid) return;
-
-    // Render the first batch
-    filteredProducts.slice(0, batchSize).forEach((item, i) => {
-      const card = document.createElement("article");
-      card.className = "card";
-      card.setAttribute("role", "article");
-      card.setAttribute("aria-label", item.title);
-      card.style.backgroundColor = colors[i % colors.length];
-      card.style.transitionDelay = `${i * 100}ms`;
-      card.innerHTML = generateCardHTML(item, i);
-
-      grid.appendChild(card);
-      observer.observe(card);
-    });
-
-    activateCarousels(".carousel");
-  }
 
   document.querySelectorAll('.nav-btn').forEach(link => {
-    if (link.href === window.location.href) {
-      link.classList.add('active');
-    }
+      if (link.href === window.location.href) {
+          link.classList.add('active');
+      }
   });
-</script>
-</script>
+</script> <!-- This was the missing closing tag -->
 </body>
 </html>
