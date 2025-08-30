@@ -684,15 +684,24 @@ body {
       
       // Search for the product in all categories
       for (const category of categories) {
+        // FIXED: Using the correct URL structure for GitHub Pages
         const url = `https://opensheet.elk.sh/${sheetID}/${category}`;
+        console.log(`Fetching from: ${url}`);
+        
         const res = await fetch(url);
         
-        if (!res.ok) continue;
+        if (!res.ok) {
+          console.error(`Failed to fetch ${category} category: ${res.status}`);
+          continue;
+        }
         
         const data = await res.json();
+        console.log(`Found ${data.length} products in ${category} category`);
+        
         const foundProduct = data.find(item => item.permanentId === permanentId);
         
         if (foundProduct) {
+          console.log("Product found:", foundProduct);
           product = { ...foundProduct, category };
           break;
         }
@@ -702,6 +711,7 @@ body {
         displayProduct(product);
         loadSimilarProducts(product.category, permanentId);
       } else {
+        console.error("Product not found in any category");
         showError();
       }
     } catch (err) {
@@ -753,6 +763,9 @@ body {
     `;
     
     productDetail.innerHTML = productHTML;
+    
+    // Update page title
+    document.title = `${product.title || 'Product'} | ShoeDukaan`;
   }
   
   // Load similar products
@@ -762,7 +775,10 @@ body {
       const url = `https://opensheet.elk.sh/${sheetID}/${category}`;
       const res = await fetch(url);
       
-      if (!res.ok) return;
+      if (!res.ok) {
+        console.error(`Failed to fetch similar products: ${res.status}`);
+        return;
+      }
       
       const data = await res.json();
       // Filter out the current product and get 4 random products
@@ -798,7 +814,7 @@ body {
             ${product.price ? `<div class="product-card-price">${product.price}</div>` : ''}
           </div>
           <div class="product-card-actions">
-            <a href="/product.html?permanentId=${product.permanentId}" class="product-card-link">View Details</a>
+            <a href="product.html?permanentId=${product.permanentId}" class="product-card-link">View Details</a>
           </div>
         </div>
       `;
@@ -821,7 +837,8 @@ body {
     const { permanentId, source } = getUrlParams();
     const productTitle = document.querySelector('.product-title')?.textContent || 'Check out this product';
     
-    const productPageUrl = `${window.location.origin}${window.location.pathname}?permanentId=${permanentId}&source=${source || 'direct'}`;
+    // FIXED: Using the correct GitHub Pages URL structure
+    const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${source || 'direct'}`;
     
     const shareData = {
       title: productTitle,
