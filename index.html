@@ -269,15 +269,7 @@ body {
   letter-spacing: 0.3px;
 }
 
-.buy-button:hover {
-  color: #005fa3;
-}
 
-.buy-button:hover,
-.buy-button:focus {
-  background-color: #3B3B3B;
-  opacity: 0.85;
-}
 
 /* Carousel */
 .carousel {
@@ -470,47 +462,35 @@ body {
 .spacer {
   height: 20px;
 }
-  /* Share Button Styles */
-/* Buy Button Wrapper - Keep buttons in one line */
-.buy-button-wrapper {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-left: -6px;
-    box-sizing: border-box;
-    gap: 5px; /* Space between buttons */
-    flex-wrap: nowrap; /* Prevent wrapping to next line */
+
+  .buy-button-wrapper {
+  display: flex;              /* Enables side-by-side layout */
+  gap: 10px;                  /* Adds space between buttons */
+  width: 100%;
+  margin-left: -6px;
+  box-sizing: border-box;
 }
 
-/* Buy Now Button */
-.buy-button {
-    flex: 2; /* Takes more space */
-    margin-right: 0; /* Remove right margin since we use gap */
-    min-width: 120px;
-    text-align: center;
-    white-space: nowrap;
-}
-
-/* Share Button */
+.buy-button,
 .share-button {
-    flex: 1; /* Takes less space */
-    min-width: 80px;
-    margin-left: 0; /* Remove left margin since we use gap */
-    text-align: center;
-    white-space: nowrap;
+  margin-top: 5px;
+  padding: 8px 18px 8px 0;
+  background-color: rgba(30, 30, 30, 0.85);
+  color: #BABABA;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+  align-self: flex-start;
 }
 
-/* Mobile Responsiveness - Stack on small screens */
-@media (max-width: 480px) {
-    .buy-button-wrapper {
-        flex-direction: column; /* Stack vertically on mobile */
-        gap: 8px;
-    }
-    
-    .buy-button, .share-button {
-        width: 100%;
-        margin: 0;
-    }
+.buy-button:hover,
+.share-button:hover {
+  color: #005fa3;
+  background-color: #3B3B3B;
+  opacity: 0.85;
+}
+
+
       }</style>
 </head>
 <body>
@@ -557,9 +537,19 @@ body {
     </ul>
   </nav>
   <!-- Search Bar -->
-  <section class="search-bar layout-container" aria-label="Product search">
-    <input type="text" id="searchInput" placeholder="Search products..." aria-label="Search products" />
-  </section>
+ <div class="buy-button-wrapper">
+    <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">
+        👉👉 Buy Now
+    </a>
+    <button class="share-button action-button-text" 
+            data-title="${cleanTitle}" 
+            data-image="${firstImage}" 
+            data-url="${item.link}" 
+            data-id="${item.permanentId}" 
+            aria-label="Share ${item.title}">
+        📤 Share
+    </button>
+</div>
 
   <!-- Product Grid -->
   <main id="productGrid" class="grid layout-container" aria-label="Product catalog"></main>
@@ -679,32 +669,40 @@ body {
   }
 
   // Modified generateCardHTML function with data attributes
-  function generateCardHTML(item, index) {
-      const imageArray = item.img.split(',');
-      const carouselHTML = imageArray.map((url, i) =>
-          `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
-      ).join('');
+function generateCardHTML(item, index) {
+    const imageArray = item.img.split(',');
+    const carouselHTML = imageArray.map((url, i) =>
+        `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
+    ).join('');
 
-      return `
-          <div class="carousel" data-seed="${item.shuffleID || index}">
-              ${carouselHTML}
-          </div>
-          <div class="spacer"></div>
-          <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
-          <div class="buy-divider"></div>
-          <div class="buy-button-wrapper">
-              <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">👉👉 Buy Now</a>
-              <button class="share-button action-button-text" 
-                      data-title="${item.title}" 
-                      data-image="${imageArray[0].trim()}" 
-                      data-url="${item.link}" 
-                      data-id="${item.permanentId}" 
-                      aria-label="Share ${item.title}">
-                  📤 Share
-              </button>
-          </div>
-      `;
-  }
+    // Clean the values for use in JavaScript
+    const cleanTitle = escapeQuotes(item.title);
+    const firstImage = escapeQuotes(imageArray[0].trim());
+    const buyUrl = escapeQuotes(item.link);
+    const permanentId = escapeQuotes(item.permanentId);
+    
+    return `
+        <div class="carousel" data-seed="${item.shuffleID || index}">
+            ${carouselHTML}
+        </div>
+        <div class="spacer"></div>
+        <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
+        <div class="buy-divider"></div>
+        <div class="buy-button-wrapper">
+            <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">
+                👉👉 Buy Now
+            </a>
+            <button class="share-button action-button-text" 
+                    data-title="${cleanTitle}" 
+                    data-image="${firstImage}" 
+                    data-url="${buyUrl}" 
+                    data-id="${permanentId}" 
+                    aria-label="Share ${item.title}">
+                📤 Share
+            </button>
+        </div>
+    `;
+}
 
   // Your existing renderNextBatch function
   function renderNextBatch() {
