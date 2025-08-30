@@ -590,8 +590,7 @@ body {
     </div>
   </div>
 </footer>
-
-<!-- JavaScript -->
+  <!-- JavaScript -->
 <script>
   // Utility function to escape quotes
   function escapeQuotes(str) {
@@ -612,24 +611,20 @@ body {
   // Determine current page category
   function getCurrentCategory() {
       const path = window.location.pathname;
-      const urlParams = new URLSearchParams(window.location.search);
-      const categoryParam = urlParams.get('category');
-      
-      if (categoryParam) return categoryParam;
       if (path.includes('forhim.html')) return 'for-him';
       if (path.includes('forher.html')) return 'for-her';
       return 'links';
   }
 
-  // Share product function
+  // Share product function - updated with correct GitHub Pages URL
   async function shareProduct(title, image, buyUrl, permanentId) {
       console.log('shareProduct called with:', title, permanentId);
       
       // Get current category for the source parameter
       const currentCategory = getCurrentCategory();
       
-      // Create the product page URL
-      const productPageUrl = `${window.location.origin}/product.html?permanentId=${permanentId}&source=${currentCategory}`;
+      // FIXED: Create the correct product page URL for GitHub Pages
+      const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${currentCategory}`;
       
       // Create share data
       const shareData = {
@@ -723,7 +718,7 @@ body {
       }
   }
 
-  // Modified generateCardHTML function with data attributes
+  // Modified generateCardHTML function with correct product URLs
   function generateCardHTML(item, index) {
       const imageArray = item.img.split(',');
       const carouselHTML = imageArray.map((url, i) =>
@@ -735,6 +730,9 @@ body {
       const firstImage = escapeQuotes(imageArray[0].trim());
       const buyUrl = escapeQuotes(item.link);
       const permanentId = escapeQuotes(item.permanentId || index);
+      
+      // FIXED: Use correct GitHub Pages URL for product links
+      const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${getCurrentCategory()}`;
       
       return `
           <div class="carousel" data-seed="${item.shuffleID || index}">
@@ -939,3 +937,4 @@ body {
 </script>
 </body>
 </html>
+
