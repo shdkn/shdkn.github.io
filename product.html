@@ -53,8 +53,8 @@
 <meta property="og:title" content="ShoeDukaan | Premium Footwear Catalog">
 <meta property="og:description" content="Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.">
 <meta property="og:image" content="https://i.imgur.com/hp0QbkV.jpeg">
-<meta property="og:image:width" content="300">
-<meta property="og:image:height" content="300">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:url" content="https://sharedukaan.github.io/shdknlinks/product.html">
 <meta property="og:type" content="website">
 <!-- Twitter Card Meta Tags -->
@@ -858,7 +858,6 @@ body {
 
   // Function to update Open Graph and Twitter meta tags dynamically
   function updateSocialMetaTags(title, description, imageUrl, currentUrl) {
-    // Helper to set or update a meta tag
     function setMeta(property, content) {
       let meta = document.querySelector(`meta[property="${property}"]`) || 
                  document.querySelector(`meta[name="${property}"]`);
@@ -874,7 +873,7 @@ body {
       meta.setAttribute('content', content);
     }
 
-    console.log('Updating meta tags:', { title, description, imageUrl, currentUrl }); // Debug log
+    console.log('Updating meta tags:', { title, description, imageUrl, currentUrl });
     setMeta('og:title', title);
     setMeta('og:description', description);
     setMeta('og:image', imageUrl);
@@ -897,10 +896,11 @@ body {
         const contentType = response.headers.get('content-type');
         const contentLength = response.headers.get('content-length');
         const isImage = contentType && contentType.startsWith('image/');
-        const sizeOk = contentLength ? parseInt(contentLength) < 300000 : true; // <300KB
-        console.log(`Image validation for ${url}:`, { isImage, sizeOk }); // Debug log
+        const sizeOk = contentLength ? parseInt(contentLength) < 1000000 : true; // <1MB
+        console.log(`Image validation for ${url}:`, { isImage, sizeOk, contentType, contentLength });
         return isImage && sizeOk;
       }
+      console.warn(`Image fetch failed for ${url}: Status ${response.status}`);
       return false;
     } catch (err) {
       console.error(`Failed to validate image ${url}:`, err);
@@ -987,6 +987,7 @@ body {
         }
         
         const data = await res.json();
+        console.log(`Fetched data for ${category}:`, data);
         const foundProduct = data.find(item => item.permanentId === permanentId);
         
         if (foundProduct) {
@@ -996,9 +997,11 @@ body {
       }
       
       if (product) {
+        console.log('Product found:', product);
         displayProduct(product);
         loadSimilarProducts(product.category, permanentId);
       } else {
+        console.warn('No product found for permanentId:', permanentId);
         showError();
       }
     } catch (err) {
@@ -1016,12 +1019,14 @@ body {
     productDetail.style.display = 'grid';
     
     const imageArray = product.img ? product.img.split(',').map(url => url.trim()).filter(url => url) : [];
-    let firstImage = imageArray.length > 0 ? imageArray[0] : 'https://i.imgur.com/hp0QbkV.jpeg'; // Fallback to logo
+    console.log(`Product ${product.title} image array:`, imageArray);
+    
+    let firstImage = imageArray.length > 0 ? imageArray[0] : 'https://i.imgur.com/hp0QbkV.jpeg';
     
     // Validate first image
     const isValidImage = await validateImageUrl(firstImage);
     if (!isValidImage) {
-      console.warn(`Invalid image URL ${firstImage}, using fallback`);
+      console.warn(`Invalid image URL ${firstImage} for product ${product.title}, using fallback`);
       firstImage = 'https://i.imgur.com/hp0QbkV.jpeg'; // Fallback to logo
     }
     
@@ -1059,16 +1064,11 @@ body {
     
     productDetail.innerHTML = productHTML;
     
-    // Update page title
     document.title = `${product.title || 'Product'} | ShoeDukaan`;
     
-    // Generate description for OG tags
     const ogDescription = product.description || `${product.title}${product.price ? ` - ${product.price}` : ''}`;
-    
-    // Ensure absolute image URL
     const absoluteImageUrl = firstImage.startsWith('http') ? firstImage : `https://${firstImage}`;
     
-    // Update social meta tags
     updateSocialMetaTags(
       product.title || 'Product Details',
       ogDescription,
@@ -1160,7 +1160,7 @@ body {
   // Share product function
   async function shareProduct(title, image, buyUrl, permanentId) {
     const { source } = getUrlParams();
-    const timestamp = Date.now(); // Unique timestamp for cache busting
+    const timestamp = Date.now();
     const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${source || 'direct'}&t=${timestamp}`;
     
     const shareData = {
@@ -1169,7 +1169,7 @@ body {
       url: productPageUrl
     };
     
-    console.log('Sharing product with data:', shareData); // Debug log
+    console.log('Sharing product with data:', shareData);
     
     if (navigator.share) {
       try {
