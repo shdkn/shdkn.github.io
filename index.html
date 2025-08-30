@@ -607,6 +607,7 @@ body {
   let filteredProducts = [];
   let currentIndex = 0;
   const batchSize = 12;
+  let searchTimeout = null;
 
   // Determine current page category
   function getCurrentCategory() {
@@ -711,7 +712,16 @@ body {
           }
           
           document.getElementById('loadingMessage').style.display = 'none';
-          renderNextBatch();
+          
+          // Check for initial search query
+          const urlParams = new URLSearchParams(window.location.search);
+          const searchQuery = urlParams.get('search');
+          if (searchQuery) {
+              document.getElementById('searchInput').value = searchQuery;
+              performSearch(searchQuery);
+          } else {
+              renderNextBatch();
+          }
       } catch (err) {
           console.error("Failed to load products:", err);
           document.getElementById('loadingMessage').textContent = 'Error loading products. Please check your connection.';
@@ -815,23 +825,50 @@ body {
       threshold: 0.1
   });
 
- 1// Search function that works across all pages
-function performSearch(query) {
-function performSearch() {
-  const query = searchInput.value.trim().toLowerCase();
-  filteredProducts = products.filter((item) => {
-    return (
-      item.title.toLowerCase().includes(query) ||
-      item.description.toLowerCase().includes(query) ||
-      item.category.toLowerCase().includes(query)
-    );
-  });
+  // Search function that works across all pages
+  function performSearch(query) {
+      const grid = document.getElementById("productGrid");
+      if (!grid) return;
 
-  grid.innerHTML = ""; // Clear previous results
-  currentIndex = 0; // Reset batch index
-  renderNextBatch(); // Use centralized rendering logic
-    }
-    
+      // Clear the grid only once
+      grid.innerHTML = "";
+      currentIndex = 0;
+
+      if (query === "") {
+          // If no query, show products from current category
+          const currentCategory = getCurrentCategory();
+          if (currentCategory && currentCategory !== 'all') {
+              filteredProducts = allProducts.filter(product => product.category === currentCategory);
+          } else {
+              filteredProducts = allProducts;
+          }
+      } else {
+          // If there's a query, search across all products
+          filteredProducts = allProducts.filter(item =>
+              item.title.toLowerCase().includes(query)
+          );
+      }
+      
+      if (filteredProducts.length === 0) {
+          grid.innerHTML = '<div class="error-message">No products match your search.</div>';
+      } else {
+          filteredProducts.slice(0, batchSize).forEach((item, i) => {
+              const card = document.createElement("article");
+              card.className = "card";
+              card.setAttribute("role", "article");
+              card.setAttribute("aria-label", item.title);
+              card.style.backgroundColor = colors[i % colors.length];
+              card.style.transitionDelay = `${i * 100}ms`;
+              card.innerHTML = generateCardHTML(item, i);
+
+              grid.appendChild(card);
+              observer.observe(card);
+          });
+
+          activateCarousels(".carousel");
+      }
+  }
+
   // Event delegation for share buttons
   document.addEventListener('click', function(e) {
       if (e.target.classList.contains('share-button')) {
@@ -845,74 +882,42 @@ function performSearch() {
       }
   });
 
-  // Initialize the page
-window.addEventListener("DOMContentLoaded", function () {
-    // Load products from all categories
-    loadAllProducts();
-
-    // Set up search functionality
-    const searchInput = document.getElementById("searchInput");
-    if (searchInput) {
-        // Check if there's a search query in the URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const searchQuery = urlParams.get("search");
-        if (searchQuery) {
-            searchInput.value = searchQuery;
-            // Perform search after products are loaded
-            setTimeout(() => {
-                performSearch(searchQuery);
-            }, 1000);
-        }
-
-        searchInput.addEventListener("input", function () {
-            const query = this.value.toLowerCase();
-            performSearch(query);
-
-            // Update URL with search query
-            const url = new URL(window.location);
-            if (query) {
-                url.searchParams.set("search", query);
-            } else {
-                url.searchParams.delete("search");
-            }
-            window.history.replaceState({}, "", url);
-        });
-    }
-
-    // Set up scroll event for infinite scrolling
-    window.addEventListener("scroll", () => {
-        const scrollY = window.scrollY;
-        const viewportHeight = window.innerHeight;
-        const fullHeight = document.body.offsetHeight;
-
-        if (
-            scrollY + viewportHeight >= fullHeight - 100 &&
-            currentIndex < filteredProducts.length
-        ) {
-            renderNextBatch();
-        }
-
-        const backToTopBtn = document.getElementById("backToTop");
-        if (backToTopBtn) {
-            backToTopBtn.style.display = scrollY > 300 ? "block" : "none";
-        }
-    });
-});
-
-// Updated performSearch function to prevent double rendering
-function performSearch(query) {
-    filteredProducts = products.filter((item) => {
-        return (
-            item.title.toLowerCase().includes(query) ||
-            item.description.toLowerCase().includes(query) ||
-            item.category.toLowerCase().includes(query)
-        );
-    });
-
-    grid.innerHTML = ""; // Clear previous results
-    currentIndex = 0; // Reset batch index
-    renderNextBatch(); // Use centralized rendering logic
+  // Debounce function to limit how often a function can be called
+  function debounce(func, wait) {
+      return function executedFunction(...args) {
+          const later = () => {
+              clearTimeout(searchTimeout);
+              func(...args);
+          };
+          clearTimeout(searchTimeout);
+          searchTimeout = setTimeout(later, wait);
+      };
   }
+
+  // Initialize the page
+  window.addEventListener("DOMContentLoaded", function() {
+      // Load products from all categories
+      loadAllProducts();
+      
+      // Set up search functionality with debouncing
+      const searchInput = document.getElementById("searchInput");
+      if (searchInput) {
+          const debouncedSearch = debounce(function() {
+              const query = this.value.toLowerCase();
+              performSearch(query);
+              
+              // Update URL with search query
+              const url = new URL(window.location);
+              if (query) {
+                  url.searchParams.set('search', query);
+              } else {
+                  url.searchParams.delete('search');
+              }
+              window.history.replaceState({}, '', url);
+          }, 300);
+          
+          searchInput.addEventListener("input", debouncedSearch);
+      }
       
       // Set up scroll event for infinite scrolling
       window.addEventListener("scroll", () => {
