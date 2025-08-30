@@ -1,4 +1,43 @@
-<!DOCTYPE html>
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -10,21 +49,19 @@
 <link rel="canonical" href="https://shdkn.carrd.co">
 <meta name="robots" content="index, follow">
 <link rel="icon" href="shdkn_fav_p.png" type="image/png">
-
-<!-- Open Graph Meta Tags - These will be updated dynamically -->
-<meta property="og:title" id="og-title" content="ShoeDukaan | Product Details">
-<meta property="og:description" id="og-description" content="Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.">
-<meta property="og:image" id="og-image" content="https://via.placeholder.com/300x500?text=No+Image">
-<meta property="og:url" id="og-url" content="https://sharedukaan.github.io/shdknlinks/product.html">
+<!-- Open Graph Meta Tags (Site-wide defaults) -->
+<meta property="og:title" content="ShoeDukaan | Premium Footwear Catalog">
+<meta property="og:description" content="Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.">
+<meta property="og:image" content="https://i.imgur.com/hp0QbkV.jpeg">
+<meta property="og:image:width" content="300">
+<meta property="og:image:height" content="300">
+<meta property="og:url" content="https://sharedukaan.github.io/shdknlinks/product.html">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="ShoeDukaan">
-
 <!-- Twitter Card Meta Tags -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" id="twitter-title" content="ShoeDukaan | Product Details">
-<meta name="twitter:description" id="twitter-description" content="Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.">
-<meta name="twitter:image" id="twitter-image" content="https://via.placeholder.com/300x500?text=No+Image">
-
+<meta name="twitter:title" content="ShoeDukaan | Premium Footwear Catalog">
+<meta name="twitter:description" content="Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.">
+<meta name="twitter:image" content="https://i.imgur.com/hp0QbkV.jpeg">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -819,6 +856,58 @@ body {
     return String(str).replace(/"/g, '&quot;');
   }
 
+  // Function to update Open Graph and Twitter meta tags dynamically
+  function updateSocialMetaTags(title, description, imageUrl, currentUrl) {
+    // Helper to set or update a meta tag
+    function setMeta(property, content) {
+      let meta = document.querySelector(`meta[property="${property}"]`) || 
+                 document.querySelector(`meta[name="${property}"]`);
+      if (!meta) {
+        meta = document.createElement('meta');
+        if (property.startsWith('og:')) {
+          meta.setAttribute('property', property);
+        } else {
+          meta.setAttribute('name', property);
+        }
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', content);
+    }
+
+    console.log('Updating meta tags:', { title, description, imageUrl, currentUrl }); // Debug log
+    setMeta('og:title', title);
+    setMeta('og:description', description);
+    setMeta('og:image', imageUrl);
+    setMeta('og:image:width', '1200');
+    setMeta('og:image:height', '630');
+    setMeta('og:url', currentUrl);
+    setMeta('og:type', 'product');
+    setMeta('twitter:card', 'summary_large_image');
+    setMeta('twitter:title', title);
+    setMeta('twitter:description', description);
+    setMeta('twitter:image', imageUrl);
+  }
+
+  // Function to validate image URL
+  async function validateImageUrl(url) {
+    if (!url || url.includes('placeholder.com')) return false;
+    try {
+      const response = await fetch(url, { method: 'HEAD' });
+      if (response.ok) {
+        const contentType = response.headers.get('content-type');
+        const contentLength = response.headers.get('content-length');
+        const isImage = contentType && contentType.startsWith('image/');
+        const sizeOk = contentLength ? parseInt(contentLength) < 300000 : true; // <300KB
+        console.log(`Image validation for ${url}:`, { isImage, sizeOk }); // Debug log
+        return isImage && sizeOk;
+      }
+      return false;
+    } catch (err) {
+      console.error(`Failed to validate image ${url}:`, err);
+      return false;
+    }
+  }
+
   // Colors for product cards
   const colors = [
     "#3A3647", "#1C262E", "#692B17",
@@ -834,26 +923,9 @@ body {
     };
   }
 
-  // Update meta tags for social sharing
-  function updateMetaTags(product) {
-    const imageArray = product.img ? product.img.split(',').map(url => url.trim()).filter(url => url) : [];
-    const firstImage = imageArray.length > 0 ? imageArray[0] : 'https://via.placeholder.com/300x500?text=No+Image';
-    const { source } = getUrlParams();
-    const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${product.permanentId}&source=${source || 'direct'}`;
-    
-    // Update Open Graph tags
-    document.getElementById('og-title').content = `${product.title || 'Product'} | ShoeDukaan`;
-    document.getElementById('og-description').content = product.description || 'Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.';
-    document.getElementById('og-image').content = firstImage;
-    document.getElementById('og-url').content = productPageUrl;
-    
-    // Update Twitter tags
-    document.getElementById('twitter-title').content = `${product.title || 'Product'} | ShoeDukaan`;
-    document.getElementById('twitter-description').content = product.description || 'Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.';
-    document.getElementById('twitter-image').content = firstImage;
-    
-    // Update canonical URL
-    document.querySelector('link[rel="canonical"]').href = productPageUrl;
+  // Get current page URL
+  function getCurrentUrl() {
+    return window.location.origin + window.location.pathname + window.location.search;
   }
 
   // Activate carousels
@@ -924,7 +996,6 @@ body {
       }
       
       if (product) {
-        updateMetaTags(product); // Update meta tags for sharing
         displayProduct(product);
         loadSimilarProducts(product.category, permanentId);
       } else {
@@ -937,7 +1008,7 @@ body {
   }
   
   // Display product details
-  function displayProduct(product) {
+  async function displayProduct(product) {
     const productDetail = document.getElementById('productDetail');
     const productLoading = document.getElementById('productLoading');
     
@@ -945,6 +1016,15 @@ body {
     productDetail.style.display = 'grid';
     
     const imageArray = product.img ? product.img.split(',').map(url => url.trim()).filter(url => url) : [];
+    let firstImage = imageArray.length > 0 ? imageArray[0] : 'https://i.imgur.com/hp0QbkV.jpeg'; // Fallback to logo
+    
+    // Validate first image
+    const isValidImage = await validateImageUrl(firstImage);
+    if (!isValidImage) {
+      console.warn(`Invalid image URL ${firstImage}, using fallback`);
+      firstImage = 'https://i.imgur.com/hp0QbkV.jpeg'; // Fallback to logo
+    }
+    
     const carouselHTML = imageArray.length > 0 ? 
       imageArray.map((url, i) => 
         `<img src="${url}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${product.title || 'Product Image'}" onerror="this.src='https://via.placeholder.com/300x500?text=No+Image';" />`
@@ -969,7 +1049,7 @@ body {
         <div class="buy-divider"></div>
         <div class="product-actions">
           <a href="${product.link || '#'}" target="_blank" class="buy-button" aria-label="Buy ${product.title || 'product'}">👉👉 Buy Now</a>
-          <button class="share-button" data-title="${escapeQuotes(product.title || 'product')}" data-image="${imageArray[0] || ''}" data-url="${escapeQuotes(product.link || '#')}" data-id="${escapeQuotes(product.permanentId || '0')}" aria-label="Share ${product.title || 'product'}">📤 Share</button>
+          <button class="share-button" data-title="${escapeQuotes(product.title || 'product')}" data-image="${firstImage}" data-url="${escapeQuotes(product.link || '#')}" data-id="${escapeQuotes(product.permanentId || '0')}" aria-label="Share ${product.title || 'product'}">📤 Share</button>
         </div>
         <div class="product-meta">
           ${product.category ? `<div><strong>Category:</strong> ${product.category}</div>` : ''}
@@ -978,7 +1058,23 @@ body {
     `;
     
     productDetail.innerHTML = productHTML;
+    
+    // Update page title
     document.title = `${product.title || 'Product'} | ShoeDukaan`;
+    
+    // Generate description for OG tags
+    const ogDescription = product.description || `${product.title}${product.price ? ` - ${product.price}` : ''}`;
+    
+    // Ensure absolute image URL
+    const absoluteImageUrl = firstImage.startsWith('http') ? firstImage : `https://${firstImage}`;
+    
+    // Update social meta tags
+    updateSocialMetaTags(
+      product.title || 'Product Details',
+      ogDescription,
+      absoluteImageUrl,
+      getCurrentUrl()
+    );
     
     const imageContainer = productDetail.querySelector('.product-image-container');
     observer.observe(imageContainer);
@@ -998,11 +1094,13 @@ body {
       }
       
       const data = await res.json();
+      console.log(`Fetched similar products for ${category}:`, data);
       const similarProducts = data
         .filter(item => item.permanentId !== excludeId && item.title && item.img && item.link)
         .sort(() => 0.5 - Math.random())
         .slice(0, 4);
       
+      console.log(`Filtered similar products:`, similarProducts);
       displaySimilarProducts(similarProducts);
     } catch (err) {
       console.error("Failed to load similar products:", err);
@@ -1021,6 +1119,7 @@ body {
     
     const productsHTML = products.map((product, i) => {
       const imageArray = product.img ? product.img.split(',').map(url => url.trim()).filter(url => url) : [];
+      console.log(`Product ${product.title} images:`, imageArray);
       const carouselHTML = imageArray.length > 0 ? 
         imageArray.map((url, i) => 
           `<img src="${url}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${product.title}" onerror="this.src='https://via.placeholder.com/300x500?text=No+Image';" />`
@@ -1061,13 +1160,16 @@ body {
   // Share product function
   async function shareProduct(title, image, buyUrl, permanentId) {
     const { source } = getUrlParams();
-    const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${source || 'direct'}`;
+    const timestamp = Date.now(); // Unique timestamp for cache busting
+    const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${source || 'direct'}&t=${timestamp}`;
     
     const shareData = {
       title: title,
       text: `Check out ${title} on ShoeDukaan!`,
       url: productPageUrl
     };
+    
+    console.log('Sharing product with data:', shareData); // Debug log
     
     if (navigator.share) {
       try {
