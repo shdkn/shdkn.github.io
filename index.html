@@ -125,6 +125,7 @@ body {
   text-align: center;
   width: 100%;
   background-color: #1c1c1c;
+  position: relative;
 }
 
 #searchInput {
@@ -136,6 +137,14 @@ body {
   border: 1px solid #ccc;
   background-color: #fff;
   color: #000;
+}
+
+.search-results-info {
+  color: #BABABA;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  margin-top: 8px;
+  display: none;
 }
 
 /* Grid */
@@ -284,6 +293,10 @@ body {
   width: 100%;
   margin-left: -6px; /* Cancels out the card's 6px padding */
   box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 6px;
 }
 
 .buy-button:hover {
@@ -292,6 +305,28 @@ body {
 
 .buy-button:hover,
 .buy-button:focus {
+  background-color: #3B3B3B;
+  opacity: 0.85;
+}
+
+.share-button {
+  margin-top:5px; 
+  padding: 8px 12px; 
+  background-color: rgba(30, 30, 30, 0.85); 
+  color: #BABABA; 
+  text-decoration: none; 
+  border-radius: 2px; 
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.share-button:hover {
   background-color: #3B3B3B;
   opacity: 0.85;
 }
@@ -487,6 +522,15 @@ body {
 .spacer {
   height: 20px;
 }
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #BABABA;
+  font-family: 'Inter', sans-serif;
+  padding: 40px 0;
+  font-size: 16px;
+}
 </style>
 </head>
 <body>
@@ -535,6 +579,7 @@ body {
   <!-- Search Bar -->
   <section class="search-bar layout-container" aria-label="Product search">
     <input type="text" id="searchInput" placeholder="Search products..." aria-label="Search products" />
+    <div class="search-results-info" id="searchResultsInfo"></div>
   </section>
 
   <!-- Product Grid -->
@@ -719,115 +764,32 @@ body {
       currentIndex += batchSize;
   }
 
-  // Your existing activateCarousels function
-  function activateCarousels(selector = ".carousel") {
-      document.querySelectorAll(selector).forEach((carousel, index) => {
-          if (carousel.dataset.activated === "true") return;
-          carousel.dataset.activated = "true";
-
-          const images = carousel.querySelectorAll("img");
-          if (images.length <= 1) return;
-
-          let current = 0;
-
-          function shuffle() {
-              images.forEach((img, i) => img.classList.toggle("active", i === current));
-              current = (current + 1) % images.length;
-
-              const seed = Number(carousel.dataset.seed) || index;
-              const nextDelay = 2000 + (seed % 3000);
-              setTimeout(shuffle, nextDelay);
-          }
-
-          const initialDelay = Math.floor(Math.random() * 3000);
-          setTimeout(shuffle, initialDelay);
-      });
-  }
-
-  // Your existing Intersection Observer
-  const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-          entry.target.classList.toggle('visible', entry.isIntersecting);
-      });
-  }, {
-      threshold: 0.1
-  });
-
-  // Event delegation for share buttons
-  document.addEventListener('click', function(e) {
-      if (e.target.classList.contains('share-button')) {
-          const title = e.target.dataset.title;
-          const image = e.target.dataset.image;
-          const buyUrl = e.target.dataset.url;
-          const permanentId = e.target.dataset.id;
-          
-          console.log('Share button clicked:', title);
-          shareProduct(title, image, buyUrl, permanentId);
-      }
-  });
-
-  // Updated event listener to load all products
-  window.addEventListener("DOMContentLoaded", loadAllProducts);
-
-  window.addEventListener("scroll", () => {
-      const scrollY = window.scrollY;
-      const viewportHeight = window.innerHeight;
-      const fullHeight = document.body.offsetHeight;
-
-      if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < filteredProducts.length) {
-          renderNextBatch();
-      }
-
-      document.getElementById("backToTop").style.display = scrollY > 300 ? "block" : "none";
-  });
-
-  document.getElementById("backToTop").addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-
-  // Updated search functionality
-  document.getElementById("searchInput").addEventListener("input", function() {
-      const query = this.value.toLowerCase();
+  // Function to render all filtered products at once (for search)
+  function renderAllFilteredProducts() {
       const grid = document.querySelector("main.grid");
       if (!grid) return;
-
+      
       grid.innerHTML = "";
-      currentIndex = 0;
-
-      if (query === "") {
-          // If no search query, show all products from current category
-          const currentCategory = getCurrentCategory();
-          filteredProducts = allProducts.filter(product => product.category === currentCategory);
-      } else {
-          // Search across all products but filter by current category
-          const currentCategory = getCurrentCategory();
-          filteredProducts = allProducts.filter(item =>
-              item.title.toLowerCase().includes(query) && 
-              item.category === currentCategory
-          );
+      
+      if (filteredProducts.length === 0) {
+          grid.innerHTML = '<div class="no-results">No products found matching your search.</div>';
+          return;
       }
-
-      filteredProducts.slice(0, batchSize).forEach((item, i) => {
+      
+      filteredProducts.forEach((item, i) => {
           const card = document.createElement("article");
-          card.className = "card";
+          card.className = "card visible";
           card.setAttribute("role", "article");
           card.setAttribute("aria-label", item.title);
           card.style.backgroundColor = colors[i % colors.length];
-          card.style.transitionDelay = `${i * 100}ms`;
           card.innerHTML = generateCardHTML(item, i);
-
           grid.appendChild(card);
-          observer.observe(card);
       });
 
       activateCarousels(".carousel");
-  });
+  }
 
-  document.querySelectorAll('.nav-btn').forEach(link => {
-      if (link.href === window.location.href) {
-          link.classList.add('active');
-      }
-  });
-</script>                      
-</body>
-</html>
+  // Your existing activateCarousels function
+  function activateCarousels(selector = ".carousel") {
+      document.querySelectorAll(selector).forEach((carousel, index) => {
+          if (carousel.dataset.activated === "tr
