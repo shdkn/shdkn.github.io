@@ -250,13 +250,15 @@ body {
 
 /* Specific styles for mobile (and narrow screens) */
 @media (max-width: 767px) {
-.card .title-text {
-    /* More reliable two-line truncation for mobile */
-    max-height: 2.4em; /* Height for exactly two lines (1.2em line-height * 2) */
-    white-space: normal;
+@media (max-width: 767px) {
+  .card .title-text {
     overflow: hidden;
-    text-overflow: ellipsis;
-  }  
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limits the text to exactly 2 lines */
+    -webkit-box-orient: vertical;
+    white-space: normal; /* This allows the text to wrap */
+  }
+}
   
 /* Carousel inside Card */
 .card .carousel {
