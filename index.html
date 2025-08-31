@@ -591,78 +591,135 @@ body {
   </div>
 </footer>
   <!-- JavaScript -->
-      <script>
-const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
-const categories = ["links", "for-him", "for-her"];
-let allProducts = [];
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const tabs = ["index", "menss", "womens"];
+  const tabData = {};
+  const overlay = document.getElementById("overlay");
+  const overlayContent = document.getElementById("overlay-content");
+  const searchInput = document.getElementById("search-input");
+  const searchResults = document.getElementById("search-results");
+  const gridContainer = document.getElementById("grid-container");
+  const overlayClose = document.getElementById("overlay-close");
+  let currentTab = "index";
+  let allDataLoaded = false;
 
-async function fetchAllProducts() {
-  try {
-    const fetched = await Promise.all(
-      categories.map(async (category) => {
-        const res = await fetch(`https://opensheet.elk.sh/${sheetID}/${category}`);
-        const data = await res.json();
-        return data.map(item => ({
-          ...item,
-          category,
-        }));
-      })
-    );
-
-    const merged = fetched.flat();
-    const seen = new Set();
-    allProducts = merged.filter(item => {
-      const key = item.title?.trim().toLowerCase(); // or use item.link
-      if (!key || seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-
-    console.log("Products loaded:", allProducts.length);
-  } catch (error) {
-    console.error("Error fetching products:", error);
-  }
-}
-
-function searchProducts(query) {
-  const q = query.trim().toLowerCase();
-  return allProducts.filter(item =>
-    item.title?.toLowerCase().includes(q) ||
-    item.category?.toLowerCase().includes(q)
-  );
-}
-
-function renderSearchResults(results) {
-  const container = document.getElementById("search-results");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  results.forEach(item => {
-    const el = document.createElement("div");
-    el.className = "product-card";
-    el.innerHTML = `
-      <img src="${item.img}" alt="${item.title}" />
-      <h3>${item.title}</h3>
-      <a href="${item.link}" target="_blank">View</a>
-      <span class="category-tag">${item.category}</span>
-    `;
-    container.appendChild(el);
+  // 🆕 Load all tab data once for global search
+  Promise.all(
+    tabs.map(tab =>
+      fetch(`https://docs.google.com/spreadsheets/d/${tab}-data.json`)
+        .then(res => res.json())
+        .then(data => {
+          tabData[tab] = data;
+        })
+    )
+  ).then(() => {
+    allDataLoaded = true;
+    renderGrid(tabData[currentTab]);
   });
-}
 
-// Hook up search input
-document.addEventListener("DOMContentLoaded", async () => {
-  await fetchAllProducts();
-
-  const input = document.getElementById("search-input");
-  if (input) {
-    input.addEventListener("input", (e) => {
-      const results = searchProducts(e.target.value);
-      renderSearchResults(results);
+  // 🧭 Tab switching logic
+  document.querySelectorAll(".tab").forEach(tabEl => {
+    tabEl.addEventListener("click", () => {
+      currentTab = tabEl.dataset.tab;
+      renderGrid(tabData[currentTab]);
+      searchResults.innerHTML = "";
+      searchInput.value = "";
     });
+  });
+
+  // 🆕 Global search logic across all tabs
+  searchInput.addEventListener("input", function () {
+    const query = this.value.toLowerCase();
+    searchResults.innerHTML = "";
+
+    if (!query || !allDataLoaded) return;
+
+    const seen = new Set();
+    tabs.forEach(tab => {
+      tabData[tab].forEach(item => {
+        const title = item.title.toLowerCase();
+        if (title.includes(query) && !seen.has(item.title)) {
+          seen.add(item.title);
+          const result = document.createElement("div");
+          result.className = "search-result";
+          result.textContent = item.title;
+          result.addEventListener("click", () => showOverlay(item));
+          searchResults.appendChild(result);
+        }
+      });
+    });
+  });
+
+  // 🧱 Grid rendering logic
+  function renderGrid(data) {
+    gridContainer.innerHTML = "";
+    data.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "grid-card";
+      card.textContent = item.title;
+      card.addEventListener("click", () => showOverlay(item));
+      gridContainer.appendChild(card);
+    });
+  }
+
+  // 🎯 Overlay injection logic
+  function showOverlay(item) {
+    overlayContent.innerHTML = `
+      <h2>${item.title}</h2>
+      <p>${item.description}</p>
+      <img src="${item.image}" alt="${item.title}" />
+    `;
+    overlay.style.display = "block";
+  }
+
+  overlayClose.addEventListener("click", () => {
+    overlay.style.display = "none";
+  });
+
+  // 🔄 Infinite scroll batching (preserved)
+  let batchSize = 20;
+  let batchIndex = 0;
+
+  function loadBatch(data) {
+    const batch = data.slice(batchIndex, batchIndex + batchSize);
+    batch.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "grid-card";
+      card.textContent = item.title;
+      card.addEventListener("click", () => showOverlay(item));
+      gridContainer.appendChild(card);
+    });
+    batchIndex += batchSize;
+  }
+
+  window.addEventListener("scroll", () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      if (tabData[currentTab] && batchIndex < tabData[currentTab].length) {
+        loadBatch(tabData[currentTab]);
+      }
+    }
+  });
+
+  // 🧩 DOM readiness and modular injection (preserved)
+  function injectHTML(selector, html) {
+    const container = document.querySelector(selector);
+    if (container) {
+      container.innerHTML = html;
+    }
+  }
+
+  // 🛠️ Search batching and duplicate prevention (preserved)
+  function batchSearchResults(results, size = 10) {
+    const batches = [];
+    for (let i = 0; i < results.length; i += size) {
+      batches.push(results.slice(i, i + size));
+    }
+    return batches;
   }
 });
-                                </script>               
+</script>
+
+                                               
 </body>
 </html>
