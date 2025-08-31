@@ -209,13 +209,37 @@ body {
   opacity: 0;
   transform: translateY(20px);
 }
+/* Universal styles for titles within product cards */
 .card .title-text {
-  /* These three lines lock the text to a single line */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  /* Add this line to show a pointer on hover */
-  cursor: help;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 0.95em;
+  color: #fff;
+  margin: 15px 0;
+  line-height: 1.2;
+  text-align: center;
+  max-width: 100%;
+}
+
+/* Specific styles for desktop (and wide screens) */
+@media (min-width: 768px) {
+  .card .title-text {
+    white-space: nowrap;          /* Forces text to stay on a single line */
+    overflow: hidden;             /* Hides overflowing text */
+    text-overflow: ellipsis;      /* Adds a "..." to indicate truncated text */
+    cursor: help;                 /* Changes cursor to show it's a tooltip */
+  }
+}
+
+/* Specific styles for mobile (and narrow screens) */
+@media (max-width: 767px) {
+  .card .title-text {
+    /* Allows text to wrap, but limits to 2 lines */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
 }
   
   
