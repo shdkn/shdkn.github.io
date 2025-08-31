@@ -591,135 +591,341 @@ body {
   </div>
 </footer>
   <!-- JavaScript -->
+
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const tabs = ["index", "menss", "womens"];
-  const tabData = {};
-  const overlay = document.getElementById("overlay");
-  const overlayContent = document.getElementById("overlay-content");
-  const searchInput = document.getElementById("search-input");
-  const searchResults = document.getElementById("search-results");
-  const gridContainer = document.getElementById("grid-container");
-  const overlayClose = document.getElementById("overlay-close");
-  let currentTab = "index";
-  let allDataLoaded = false;
-
-  // 🆕 Load all tab data once for global search
-  Promise.all(
-    tabs.map(tab =>
-      fetch(`https://docs.google.com/spreadsheets/d/${tab}-data.json`)
-        .then(res => res.json())
-        .then(data => {
-          tabData[tab] = data;
-        })
-    )
-  ).then(() => {
-    allDataLoaded = true;
-    renderGrid(tabData[currentTab]);
-  });
-
-  // 🧭 Tab switching logic
-  document.querySelectorAll(".tab").forEach(tabEl => {
-    tabEl.addEventListener("click", () => {
-      currentTab = tabEl.dataset.tab;
-      renderGrid(tabData[currentTab]);
-      searchResults.innerHTML = "";
-      searchInput.value = "";
-    });
-  });
-
-  // 🆕 Global search logic across all tabs
-  searchInput.addEventListener("input", function () {
-    const query = this.value.toLowerCase();
-    searchResults.innerHTML = "";
-
-    if (!query || !allDataLoaded) return;
-
-    const seen = new Set();
-    tabs.forEach(tab => {
-      tabData[tab].forEach(item => {
-        const title = item.title.toLowerCase();
-        if (title.includes(query) && !seen.has(item.title)) {
-          seen.add(item.title);
-          const result = document.createElement("div");
-          result.className = "search-result";
-          result.textContent = item.title;
-          result.addEventListener("click", () => showOverlay(item));
-          searchResults.appendChild(result);
-        }
-      });
-    });
-  });
-
-  // 🧱 Grid rendering logic
-  function renderGrid(data) {
-    gridContainer.innerHTML = "";
-    data.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "grid-card";
-      card.textContent = item.title;
-      card.addEventListener("click", () => showOverlay(item));
-      gridContainer.appendChild(card);
-    });
+  // Utility function to escape quotes
+  function escapeQuotes(str) {
+    return String(str).replace(/"/g, '&quot;');
   }
 
-  // 🎯 Overlay injection logic
-  function showOverlay(item) {
-    overlayContent.innerHTML = `
-      <h2>${item.title}</h2>
-      <p>${item.description}</p>
-      <img src="${item.image}" alt="${item.title}" />
-    `;
-    overlay.style.display = "block";
+  // Your existing constants and variables
+  const colors = [
+      "#3A3647", "#1C262E", "#692B17",
+      "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
+  ];
+
+  let allProducts = [];
+  let filteredProducts = [];
+  let currentIndex = 0;
+  const batchSize = 12;
+
+  // Determine current page category
+  function getCurrentCategory() {
+      const path = window.location.pathname;
+      if (path.includes('forhim.html')) return 'for-him';
+      if (path.includes('forher.html')) return 'for-her';
+      return 'links';
   }
 
-  overlayClose.addEventListener("click", () => {
-    overlay.style.display = "none";
-  });
-
-  // 🔄 Infinite scroll batching (preserved)
-  let batchSize = 20;
-  let batchIndex = 0;
-
-  function loadBatch(data) {
-    const batch = data.slice(batchIndex, batchIndex + batchSize);
-    batch.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "grid-card";
-      card.textContent = item.title;
-      card.addEventListener("click", () => showOverlay(item));
-      gridContainer.appendChild(card);
-    });
-    batchIndex += batchSize;
-  }
-
-  window.addEventListener("scroll", () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-      if (tabData[currentTab] && batchIndex < tabData[currentTab].length) {
-        loadBatch(tabData[currentTab]);
+  // Share product function - updated with correct GitHub Pages URL
+  async function shareProduct(title, image, buyUrl, permanentId) {
+      console.log('shareProduct called with:', title, permanentId);
+      
+      // Get current category for the source parameter
+      const currentCategory = getCurrentCategory();
+      // FIXED: Create the correct product page URL for GitHub Pages
+      const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${currentCategory}`;
+      // Create share data
+      const shareData = {
+          title: title,
+          text: `Check out ${title} on ShoeDukaan!`,
+          url: productPageUrl
+      };
+      console.log('Sharing product:', shareData);
+      
+      // Try to use native share dialog
+      if (navigator.share) {
+          try {
+              await navigator.share(shareData);
+              console.log('Product shared successfully:', title);
+          } catch (error) {
+              if (error.name !== 'AbortError') {
+                  console.error('Error sharing:', error);
+                  // Fallback to copy method
+                  copyToClipboard(productPageUrl, title);
+              }
+          }
+      } else {
+          // Fallback for browsers that don't support Web Share API
+          copyToClipboard(productPageUrl, title);
       }
-    }
+  }
+
+  // Fallback function to copy to clipboard
+  function copyToClipboard(text, productTitle) {
+      navigator.clipboard.writeText(text).then(() => {
+          alert(`Link for "${productTitle}" copied to clipboard!`);
+      }).catch(err => {
+          console.error('Could not copy text: ', err);
+          prompt('Copy this URL to share:', text);
+      });
+  }
+
+  // Load products from all categories for search functionality
+  async function loadAllProducts() {
+      try {
+          const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+          const categories = ['links', 'for-him', 'for-her'];
+          
+          document.getElementById('loadingMessage').innerHTML = '<span class="loading-spinner"></span> Loading products from all categories...';
+          // Load data from all categories
+          const allData = [];
+          for (const category of categories) {
+              const url = `https://opensheet.elk.sh/${sheetID}/${category}`;
+              const res = await fetch(url);
+              if (!res.ok) {
+                  console.error(`Failed to load ${category} category`);
+                  continue;
+              }
+              
+              const data = await res.json();
+              // Add category info to each product
+              const categoryData = data.map(item => ({...item, category}));
+              allData.push(...categoryData);
+          }
+          
+          // Process products
+          allProducts = allData
+              .filter(item => item.title && item.img && item.link)
+              .sort((a, b) => {
+                  if (a.shuffleID && b.shuffleID) {
+                      return Number(a.shuffleID) - Number(b.shuffleID);
+                  }
+                  return a.title.localeCompare(b.title);
+              });
+          if (allProducts.length === 0) {
+              document.getElementById('loadingMessage').textContent = 'No products found.';
+              return;
+          }
+          
+          // Filter by current category
+          const currentCategory = getCurrentCategory();
+          if (currentCategory && currentCategory !== 'all') {
+              filteredProducts = allProducts.filter(product => product.category === currentCategory);
+          } else {
+              filteredProducts = allProducts;
+          }
+          
+          document.getElementById('loadingMessage').style.display = 'none';
+          renderNextBatch();
+      } catch (err) {
+          console.error("Failed to load products:", err);
+          document.getElementById('loadingMessage').textContent = 'Error loading products. Please check your connection.';
+      }
+  }
+
+  // Modified generateCardHTML function with correct product URLs
+  function generateCardHTML(item, index) {
+      const imageArray = item.img.split(',');
+      const carouselHTML = imageArray.map((url, i) =>
+          `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
+      ).join('');
+      // Clean the values for use in JavaScript
+      const cleanTitle = escapeQuotes(item.title);
+      const firstImage = escapeQuotes(imageArray[0].trim());
+      const buyUrl = escapeQuotes(item.link);
+      const permanentId = escapeQuotes(item.permanentId || index);
+      // FIXED: Use correct GitHub Pages URL for product links
+      const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${getCurrentCategory()}`;
+      return `
+          <div class="carousel" data-seed="${item.shuffleID || index}">
+              ${carouselHTML}
+          </div>
+          <div class="spacer"></div>
+          <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
+          <div class="buy-divider"></div>
+          <div class="buy-button-wrapper">
+              <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">
+                  👉👉 Buy Now
+              </a>
+              <button class="share-button action-button-text" 
+                      data-title="${cleanTitle}" 
+                      data-image="${firstImage}" 
+                      data-url="${buyUrl}" 
+                      data-id="${permanentId}" 
+                      aria-label="Share ${item.title}">
+                  📤 Share
+              </button>
+          </div>
+      `;
+  }
+
+  // Your existing renderNextBatch function
+  function renderNextBatch() {
+      const grid = document.getElementById("productGrid");
+      if (!grid || filteredProducts.length === 0) return;
+
+      const nextItems = filteredProducts.slice(currentIndex, currentIndex + batchSize);
+      nextItems.forEach((item, i) => {
+          const card = document.createElement("article");
+          card.className = "card";
+          card.setAttribute("role", "article");
+          card.setAttribute("aria-label", item.title);
+          card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
+          card.style.transitionDelay = `${i * 100}ms`;
+          card.innerHTML = generateCardHTML(item, i);
+
+          grid.appendChild(card);
+          observer.observe(card);
+      });
+      activateCarousels(".carousel");
+      currentIndex += batchSize;
+  }
+
+  // Your existing activateCarousels function
+  function activateCarousels(selector = ".carousel") {
+      document.querySelectorAll(selector).forEach((carousel, index) => {
+          if (carousel.dataset.activated === "true") return;
+          carousel.dataset.activated = "true";
+
+          const images = carousel.querySelectorAll("img");
+          if (images.length <= 1) return;
+
+          let current = 0;
+
+          function shuffle() {
+              images.forEach((img, i) => img.classList.toggle("active", i === current));
+              current = (current + 1) % images.length;
+
+              const seed = Number(carousel.dataset.seed) || index;
+              const nextDelay = 2000 + (seed % 3000);
+              setTimeout(shuffle, nextDelay);
+          }
+
+          const initialDelay = Math.floor(Math.random() * 3000);
+          setTimeout(shuffle, initialDelay);
+      });
+  }
+
+  // Your existing Intersection Observer
+  const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+          entry.target.classList.toggle('visible', entry.isIntersecting);
+      });
+  }, {
+      threshold: 0.1
   });
 
-  // 🧩 DOM readiness and modular injection (preserved)
-  function injectHTML(selector, html) {
-    const container = document.querySelector(selector);
-    if (container) {
-      container.innerHTML = html;
-    }
+  // Search function that works across all pages
+  function performSearch(query) {
+      const grid = document.getElementById("productGrid");
+      if (!grid) return;
+
+      // Clear the grid and reset index only once per search query
+      grid.innerHTML = "";
+      currentIndex = 0;
+
+      if (query === "") {
+          // If no query, show products from current category
+          const currentCategory = getCurrentCategory();
+          if (currentCategory && currentCategory !== 'all') {
+              filteredProducts = allProducts.filter(product => product.category === currentCategory);
+          } else {
+              filteredProducts = allProducts;
+          }
+      } else {
+          // If there's a query, search across all products
+          filteredProducts = allProducts.filter(item =>
+              item.title.toLowerCase().includes(query)
+          );
+      }
+      
+      if (filteredProducts.length === 0) {
+          grid.innerHTML = '<div class="error-message">No products match your search.</div>';
+      } else {
+          // Render the first batch of results
+          renderNextBatch();
+      }
   }
 
-  // 🛠️ Search batching and duplicate prevention (preserved)
-  function batchSearchResults(results, size = 10) {
-    const batches = [];
-    for (let i = 0; i < results.length; i += size) {
-      batches.push(results.slice(i, i + size));
-    }
-    return batches;
+  // Debounce function to limit how often a function can run
+  function debounce(func, delay) {
+      let timeout;
+      return function(...args) {
+          const context = this;
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(context, args), delay);
+      };
   }
-});
+
+  // Event delegation for share buttons
+  document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('share-button')) {
+          const title = e.target.dataset.title;
+          const image = e.target.dataset.image;
+          const buyUrl = e.target.dataset.url;
+          const permanentId = e.target.dataset.id;
+          
+          console.log('Share button clicked:', title);
+          shareProduct(title, image, buyUrl, permanentId);
+      }
+  });
+
+  // Initialize the page
+  window.addEventListener("DOMContentLoaded", function() {
+      loadAllProducts().then(() => {
+          // Set up search functionality after products are loaded
+          const searchInput = document.getElementById("searchInput");
+          if (searchInput) {
+              const urlParams = new URLSearchParams(window.location.search);
+              const searchQuery = urlParams.get('search');
+              
+              if (searchQuery) {
+                  searchInput.value = searchQuery;
+                  performSearch(searchQuery.toLowerCase());
+              }
+
+              // Debounce the input event listener
+              const debouncedSearch = debounce((query) => {
+                  performSearch(query);
+                  // Update URL with search query
+                  const url = new URL(window.location);
+                  if (query) {
+                      url.searchParams.set('search', query);
+                  } else {
+                      url.searchParams.delete('search');
+                  }
+                  window.history.replaceState({}, '', url);
+              }, 300); // 300ms delay
+
+              searchInput.addEventListener("input", function() {
+                  debouncedSearch(this.value.toLowerCase());
+              });
+          }
+      });
+      
+      // Set up scroll event for infinite scrolling
+      window.addEventListener("scroll", () => {
+          const scrollY = window.scrollY;
+          const viewportHeight = window.innerHeight;
+          const fullHeight = document.body.offsetHeight;
+
+          if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < filteredProducts.length) {
+              renderNextBatch();
+          }
+
+          const backToTopBtn = document.getElementById("backToTop");
+          if (backToTopBtn) {
+              backToTopBtn.style.display = scrollY > 300 ? "block" : "none";
+          }
+      });
+
+      // Set up back to top button
+      const backToTopBtn = document.getElementById("backToTop");
+      if (backToTopBtn) {
+          backToTopBtn.addEventListener("click", () => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+      }
+      
+      // Set active navigation link
+      document.querySelectorAll('.nav-btn').forEach(link => {
+          if (link.href === window.location.href) {
+              link.classList.add('active');
+          }
+      });
+  });
 </script>
-
-                                               
+                                              
 </body>
 </html>
