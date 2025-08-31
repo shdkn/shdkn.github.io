@@ -591,6 +591,7 @@ body {
   </div>
 </footer>
   <!-- JavaScript -->
+
 <script>
   // Utility function to escape quotes
   function escapeQuotes(str) {
@@ -622,17 +623,14 @@ body {
       
       // Get current category for the source parameter
       const currentCategory = getCurrentCategory();
-      
       // FIXED: Create the correct product page URL for GitHub Pages
       const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${currentCategory}`;
-      
       // Create share data
       const shareData = {
           title: title,
           text: `Check out ${title} on ShoeDukaan!`,
           url: productPageUrl
       };
-      
       console.log('Sharing product:', shareData);
       
       // Try to use native share dialog
@@ -670,7 +668,6 @@ body {
           const categories = ['links', 'for-him', 'for-her'];
           
           document.getElementById('loadingMessage').innerHTML = '<span class="loading-spinner"></span> Loading products from all categories...';
-          
           // Load data from all categories
           const allData = [];
           for (const category of categories) {
@@ -696,7 +693,6 @@ body {
                   }
                   return a.title.localeCompare(b.title);
               });
-          
           if (allProducts.length === 0) {
               document.getElementById('loadingMessage').textContent = 'No products found.';
               return;
@@ -724,16 +720,13 @@ body {
       const carouselHTML = imageArray.map((url, i) =>
           `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
       ).join('');
-
       // Clean the values for use in JavaScript
       const cleanTitle = escapeQuotes(item.title);
       const firstImage = escapeQuotes(imageArray[0].trim());
       const buyUrl = escapeQuotes(item.link);
       const permanentId = escapeQuotes(item.permanentId || index);
-      
       // FIXED: Use correct GitHub Pages URL for product links
       const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${getCurrentCategory()}`;
-      
       return `
           <div class="carousel" data-seed="${item.shuffleID || index}">
               ${carouselHTML}
@@ -763,7 +756,6 @@ body {
       if (!grid || filteredProducts.length === 0) return;
 
       const nextItems = filteredProducts.slice(currentIndex, currentIndex + batchSize);
-
       nextItems.forEach((item, i) => {
           const card = document.createElement("article");
           card.className = "card";
@@ -776,7 +768,6 @@ body {
           grid.appendChild(card);
           observer.observe(card);
       });
-
       activateCarousels(".carousel");
       currentIndex += batchSize;
   }
@@ -820,6 +811,7 @@ body {
       const grid = document.getElementById("productGrid");
       if (!grid) return;
 
+      // Clear the grid and reset index only once per search query
       grid.innerHTML = "";
       currentIndex = 0;
 
@@ -841,21 +833,19 @@ body {
       if (filteredProducts.length === 0) {
           grid.innerHTML = '<div class="error-message">No products match your search.</div>';
       } else {
-          filteredProducts.slice(0, batchSize).forEach((item, i) => {
-              const card = document.createElement("article");
-              card.className = "card";
-              card.setAttribute("role", "article");
-              card.setAttribute("aria-label", item.title);
-              card.style.backgroundColor = colors[i % colors.length];
-              card.style.transitionDelay = `${i * 100}ms`;
-              card.innerHTML = generateCardHTML(item, i);
-
-              grid.appendChild(card);
-              observer.observe(card);
-          });
-
-          activateCarousels(".carousel");
+          // Render the first batch of results
+          renderNextBatch();
       }
+  }
+
+  // Debounce function to limit how often a function can run
+  function debounce(func, delay) {
+      let timeout;
+      return function(...args) {
+          const context = this;
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(context, args), delay);
+      };
   }
 
   // Event delegation for share buttons
@@ -873,35 +863,36 @@ body {
 
   // Initialize the page
   window.addEventListener("DOMContentLoaded", function() {
-      // Load products from all categories
-      loadAllProducts();
-      
-      // Set up search functionality
-      const searchInput = document.getElementById("searchInput");
-      if (searchInput) {
-          // Check if there's a search query in the URL
-          const urlParams = new URLSearchParams(window.location.search);
-          const searchQuery = urlParams.get('search');
-          if (searchQuery) {
-              searchInput.value = searchQuery;
-              // Perform search after products are loaded
-              setTimeout(() => performSearch(searchQuery), 1000);
-          }
-          
-          searchInput.addEventListener("input", function() {
-              const query = this.value.toLowerCase();
-              performSearch(query);
+      loadAllProducts().then(() => {
+          // Set up search functionality after products are loaded
+          const searchInput = document.getElementById("searchInput");
+          if (searchInput) {
+              const urlParams = new URLSearchParams(window.location.search);
+              const searchQuery = urlParams.get('search');
               
-              // Update URL with search query
-              const url = new URL(window.location);
-              if (query) {
-                  url.searchParams.set('search', query);
-              } else {
-                  url.searchParams.delete('search');
+              if (searchQuery) {
+                  searchInput.value = searchQuery;
+                  performSearch(searchQuery.toLowerCase());
               }
-              window.history.replaceState({}, '', url);
-          });
-      }
+
+              // Debounce the input event listener
+              const debouncedSearch = debounce((query) => {
+                  performSearch(query);
+                  // Update URL with search query
+                  const url = new URL(window.location);
+                  if (query) {
+                      url.searchParams.set('search', query);
+                  } else {
+                      url.searchParams.delete('search');
+                  }
+                  window.history.replaceState({}, '', url);
+              }, 300); // 300ms delay
+
+              searchInput.addEventListener("input", function() {
+                  debouncedSearch(this.value.toLowerCase());
+              });
+          }
+      });
       
       // Set up scroll event for infinite scrolling
       window.addEventListener("scroll", () => {
@@ -935,6 +926,6 @@ body {
       });
   });
 </script>
+                                              
 </body>
 </html>
-
