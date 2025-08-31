@@ -162,17 +162,10 @@ body {
 }
 
 @media (max-width: 768px) {
+  /* Other mobile-specific styles you have... */
   .top-banner {
     padding: 12px 16px;
   }
-
-  .card .title-text {
-        white-space: normal; /* Allows text to wrap */
-        display: -webkit-box;
-        -webkit-line-clamp: 2; /* Limits text to exactly 2 lines */
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
 
   .header-right {
     align-items: flex-start;
@@ -203,6 +196,15 @@ body {
   .logo {
     height: 100px;
     margin-bottom: 8px;
+  }
+
+  /* This new rule fixes the title wrapping issue */
+  .card .title-text {
+    white-space: normal; /* Allows text to wrap to a new line */
+    display: -webkit-box; /* Required for line clamping */
+    -webkit-line-clamp: 2; /* **The key property to limit to 2 lines** */
+    -webkit-box-orient: vertical; /* Required for line clamping */
+    overflow: hidden; /* Hides any text that goes beyond the 2 lines */
   }
 }
 
