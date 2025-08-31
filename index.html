@@ -113,6 +113,13 @@ body {
   font-weight: 500;
 }
 
+  .card .title-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: help;
+    }
+
 .telegram-link:hover,
 .telegram-link:focus {
   transition: background-color 0.3s ease;
@@ -158,6 +165,14 @@ body {
   .top-banner {
     padding: 12px 16px;
   }
+
+  .card .title-text {
+        white-space: normal; /* Allows text to wrap */
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* Limits text to exactly 2 lines */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
 
   .header-right {
     align-items: flex-start;
