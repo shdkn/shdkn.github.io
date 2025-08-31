@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE a html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -165,7 +165,6 @@
                     return;
                 }
 
-                // Fetch data from the specified category
                 const url = `https://opensheet.elk.sh/${sheetID}/${source}`;
                 const res = await fetch(url);
                 if (!res.ok) {
@@ -181,7 +180,6 @@
                     return;
                 }
 
-                // Update OG meta tags and page content
                 updateMetaTags(product);
                 renderProductCard(product);
 
@@ -196,7 +194,6 @@
 
             const head = document.head || document.getElementsByTagName('head')[0];
             
-            // Function to create or update a meta tag
             const updateMeta = (property, content) => {
                 let tag = document.querySelector(`meta[property="${property}"]`);
                 if (!tag) {
@@ -216,7 +213,6 @@
             updateMeta('og:url', window.location.href);
             updateMeta('og:type', 'product');
 
-            // Set the canonical URL
             let canonicalLink = document.querySelector('link[rel="canonical"]');
             if (canonicalLink) {
                 canonicalLink.setAttribute('href', window.location.href);
@@ -236,10 +232,11 @@
                     </div>
                 </div>
             `;
+            // Hide the loading message once content is loaded
+            document.getElementById('loadingMessage').style.display = 'none';
         }
 
         document.addEventListener('DOMContentLoaded', loadProductDetails);
     </script>
 </body>
-        </html>
-        
+</html>
