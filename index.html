@@ -12,10 +12,10 @@
 <link rel="icon" href="shdkn_fav_p.png" type="image/png">
 <script type="application/ld+json">
 {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "ShareDukaan",
-  "url": "https://shdkn.carrd.co"
+"@context": "https://schema.org",
+"@type": "WebSite",
+"name": "ShareDukaan",
+"url": "https://shdkn.carrd.co"
 }
 </script>
 <!-- Fonts -->
@@ -25,603 +25,554 @@
 
 <style>
 :root {
-  --max-width: 1440px;
-  --side-padding: 18px;
+--max-width: 1440px;
+--side-padding: 18px;
 }
 
 body {
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: #1c1c1c;
-  scroll-behavior: smooth;
+overflow-x: hidden;
+margin: 0;
+padding: 0;
+font-family: 'Segoe UI', sans-serif;
+background: #1c1c1c;
+scroll-behavior: smooth;
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+from {
+opacity: 0;
+transform: translateY(20px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
 }
 
 .layout-container {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 var(--side-padding);
-  box-sizing: border-box;
+max-width: var(--max-width);
+margin: 0 auto;
+padding: 0 var(--side-padding);
+box-sizing: border-box;
 }
 
 .wrapper.grid-wrapper {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 var(--side-padding);
+max-width: var(--max-width);
+margin: 0 auto;
+padding: 0 var(--side-padding);
 }
 
 /* Header */
 .top-banner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  background-color: #333;
-  color: #fff;
-  padding: 12px var(--side-padding);
-  position: relative;
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: wrap;
+background-color: #333;
+color: #fff;
+padding: 12px var(--side-padding);
+position: relative;
 }
 
 .logo {
-  width: 75px;
-  height: auto;
-  aspect-ratio: 1 / 1;
-  object-fit: contain;
+width: 75px;
+height: auto;
+aspect-ratio: 1 / 1;
+object-fit: contain;
 }
 
 .header-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  text-align: center;
-  flex: 1;
+display: flex;
+flex-direction: column;
+align-items: flex-end;
+text-align: center;
+flex: 1;
 }
 
 .tagline {
-  font-family: 'Assistant', sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  margin-bottom: 4px;
+font-family: 'Assistant', sans-serif;
+font-size: 12px;
+font-weight: 400;
+margin-bottom: 4px;
 }
 
 /* Desktop override */
 @media (min-width: 769px) {
-  .tagline {
-    white-space: normal;
-    max-width: 320px;
-    line-height: 1.4;
-  }
+.tagline {
+white-space: normal;
+max-width: 320px;
+line-height: 1.4;
+}
 }
 
 .telegram-link {
-  font-family: 'Assistant', sans-serif;
-  font-size: 13px;
-  color: #ffcc00;
-  text-decoration: none;
-  font-weight: 500;
+font-family: 'Assistant', sans-serif;
+font-size: 13px;
+color: #ffcc00;
+text-decoration: none;
+font-weight: 500;
 }
-
-  .card .title-text {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        cursor: help;
-    }
 
 .telegram-link:hover,
 .telegram-link:focus {
-  transition: background-color 0.3s ease;
-  color: inherit;
+transition: background-color 0.3s ease;
+color: inherit;
 }
 
 /* Search Bar */
 .search-bar {
-  padding: 8px 0;
-  text-align: center;
-  width: 100%;
-  background-color: #1c1c1c;
+padding: 8px 0;
+text-align: center;
+width: 100%;
+background-color: #1c1c1c;
 }
 
 #searchInput {
-  width: 90%;
-  max-width: 400px;
-  padding: 10px 14px;
-  font-size: 12px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  color: #000;
+width: 90%;
+max-width: 400px;
+padding: 10px 14px;
+font-size: 12px;
+border-radius: 4px;
+border: 1px solid #ccc;
+background-color: #fff;
+color: #000;
 }
 
 /* Grid */
 .grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 5px;
-  padding: 8px 0;
-  width: 100%;
-  background-color: #1c1c1c;
+display: grid;
+grid-template-columns: 1fr;
+gap: 5px;
+padding: 8px 0;
+width: 100%;
+background-color: #1c1c1c;
 }
 
 @media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
+.grid {
+grid-template-columns: repeat(4, 1fr);
+}
 }
 
 @media (max-width: 768px) {
-  /* Other mobile-specific styles you have... */
-  .top-banner {
-    padding: 12px 16px;
-  }
+.top-banner {
+padding: 12px 16px;
+}
 
-  .header-right {
-    align-items: flex-start;
-    text-align: right;
-    width: 100%;
-  }
+.header-right {
+align-items: flex-start;
+text-align: right;
+width: 100%;
+}
 
-  .telegram-link {
-    display: block;
-    margin-left: auto;
-    margin-right: 0;
-    text-align: right;
-  }
+.telegram-link {
+display: block;
+margin-left: auto;
+margin-right: 0;
+text-align: right;
+}
 
-  .telegram-link:hover,
-  .telegram-link:focus {
-    transition: background-color 0.3s ease;
-    color: inherit;
-  }
+.telegram-link:hover,
+.telegram-link:focus {
+transition: background-color 0.3s ease;
+color: inherit;
+}
 
-  .tagline {
-    display: block;
-    margin-left: auto;
-    margin-right: 0;
-    text-align: right;
-  }
+.tagline {
+display: block;
+margin-left: auto;
+margin-right: 0;
+text-align: right;
+}
 
-  .logo {
-    height: 100px;
-    margin-bottom: 8px;
-  }
-
-  /* This new rule fixes the title wrapping issue */
-  .card .title-text {
-    white-space: normal; /* Allows text to wrap to a new line */
-    display: -webkit-box; /* Required for line clamping */
-    -webkit-line-clamp: 2; /* **The key property to limit to 2 lines** */
-    -webkit-box-orient: vertical; /* Required for line clamping */
-    overflow: hidden; /* Hides any text that goes beyond the 2 lines */
-  }
+.logo {
+height: 100px;
+margin-bottom: 8px;
+}
 }
 
 /* Card */
 .card {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 6px;
-  width: 100%;
-  max-width: 420px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-  box-sizing: border-box;
-  aspect-ratio: 3 / 5;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(20px);
-}
-/* Universal styles for titles within product cards */
-.card .title-text {
-  font-family: 'Inter', sans-serif;
-  font-weight: 300;
-  font-size: 0.95em;
-  color: #fff;
-  margin: 15px 0;
-  line-height: 1.2;
-  text-align: center;
-  max-width: 100%;
+display: flex;
+flex-direction: column;
+justify-content: flex-start;
+align-items: center;
+padding: 6px;
+width: 100%;
+max-width: 420px;
+background: #fff;
+border-radius: 12px;
+box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+box-sizing: border-box;
+aspect-ratio: 3 / 5;
+overflow: hidden;
+opacity: 0;
+transform: translateY(20px);
 }
 
-/* Specific styles for desktop (and wide screens) */
-@media (min-width: 768px) {
-  .card .title-text {
-    white-space: nowrap;          /* Forces text to stay on a single line */
-    overflow: hidden;             /* Hides overflowing text */
-    text-overflow: ellipsis;      /* Adds a "..." to indicate truncated text */
-    cursor: help;                 /* Changes cursor to show it's a tooltip */
-  }
-}
-
-/* Specific styles for mobile (and narrow screens) */
-@media (max-width: 767px) {
-  .card .title-text {
-    /* More reliable two-line truncation for mobile */
-    max-height: 2.2em; /* Height for exactly two lines (1.1em line-height * 2) */
-    white-space: normal;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
 /* Carousel inside Card */
 .card .carousel {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 3 / 5;
-  overflow: hidden;
-  border-radius: 8px;
+position: relative;
+width: 100%;
+aspect-ratio: 3 / 5;
+overflow: hidden;
+border-radius: 8px;
 }
 
 .card .carousel img.active:hover {
-  filter: brightness(1.08);
-  transition: filter 0.3s ease;
+filter: brightness(1.08);
+transition: filter 0.3s ease;
 }
 
 .product-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: 8px;
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+border-radius: 8px;
 }
 
 .card.visible {
-  animation: fadeInUp 0.6s ease forwards;
+animation: fadeInUp 0.6s ease forwards;
 }
 
 .title-text {
-  font-family: 'Inter', sans-serif;
-  font-weight: 300;
-  font-size: 0.95em;
-  color: #BABABA; /* Use the color from your original code */
-  margin: 15px 0;
-  line-height: 1.1;
-  text-align: center;
-  max-width: 90%;
-  margin: 0 auto;
-  }
-  
+font-family: 'Inter', sans-serif;
+font-weight: 300;
+font-size: 0.95em;
+color: #BABABA;
+margin-top: 15px;
+line-height: 1.1;
+text-align: center;
+max-width: 90%;
+margin: 0 auto;
+}
 
 .card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+transform: scale(1.03);
+box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
 }
 
 .card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 1px;
-  display: block;
+width: 100%;
+height: 100%;
+object-fit: cover;
+border-radius: 1px;
+display: block;
 }
 
 .action-button-text {
-  font-family: 'Barlow', sans-serif;
-  font-weight: 500;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
+font-family: 'Barlow', sans-serif;
+font-weight: 500;
+font-size: 11px;
+text-transform: uppercase;
+letter-spacing: 0.3px;
 }
 
 /* Carousel */
 .carousel {
-  position: relative;
-  overflow: hidden;
+position: relative;
+overflow: hidden;
 }
 
 .carousel img {
-  position: absolute;
-  top: 0;
-  left: 100%;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s ease, opacity 0.6s ease;
-  transform: translateX(100%);
-  opacity: 0;
-  z-index: 0;
+position: absolute;
+top: 0;
+left: 100%;
+width: 100%;
+height: 100%;
+object-fit: cover;
+transition: transform 0.6s ease, opacity 0.6s ease;
+transform: translateX(100%);
+opacity: 0;
+z-index: 0;
 }
 
 .carousel img.active {
-  transform: translateX(0%);
-  left: 0;
-  opacity: 1;
-  z-index: 1;
+transform: translateX(0%);
+left: 0;
+opacity: 1;
+z-index: 1;
 }
 
 .carousel img.active:hover {
-  transform: scale(1.03);
-  transition: transform 0.3s ease;
+transform: scale(1.03);
+transition: transform 0.3s ease;
 }
 
 /* Navigation Bar */
 .nav-bar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 0;
-  background-color: rgba(30, 30, 30, 0.85);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  border-top: 1px solid #444;
-  border-bottom: 1px solid #444;
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 6px;
+padding: 6px 0;
+background-color: rgba(30, 30, 30, 0.85);
+backdrop-filter: blur(8px);
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+border-top: 1px solid #444;
+border-bottom: 1px solid #444;
 }
 
 /* Nav List */
 .nav-list {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 8px;
+list-style: none;
+margin: 0;
+padding: 0;
 }
 
 /* Nav Item */
 .nav-list li {
-  display: flex;
-  align-items: center;
+display: flex;
+align-items: center;
 }
 
 /* Nav Button with Image + Text */
 .nav-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  width: 40px;
-  height: 40px;
-  text-decoration: none;
-  font-family: 'Assistant', sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  color: #BABABA;
-  text-transform: uppercase;
-  overflow: hidden;
-  position: relative;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: flex-start;
+width: 40px;
+height: 40px;
+text-decoration: none;
+font-family: 'Assistant', sans-serif;
+font-size: 12px;
+font-weight: 400;
+color: #BABABA;
+text-transform: uppercase;
+overflow: hidden;
+position: relative;
 }
 
 /* PNG Icon */
 .nav-btn img {
-  width: 40px;
-  height: 40px;
-  transition: transform 0.3s ease;
+width: 40px;
+height: 40px;
+transition: transform 0.3s ease;
 }
 
 /* Text Label (hidden by default) */
 .nav-text {
-  position: absolute;
-  bottom: 0;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  font-size: 10px;
-  color: #fff;
-  text-align: center;
-  width: 100%;
+position: absolute;
+bottom: 0;
+opacity: 0;
+transition: opacity 0.3s ease;
+pointer-events: none;
+font-size: 10px;
+color: #fff;
+text-align: center;
+width: 100%;
 }
 
 /* Hover Behavior */
 .nav-btn:hover img {
-  transform: scale(0.7);
-  transform-origin: top center;
+transform: scale(0.7);
+transform-origin: top center;
 }
 
 .nav-btn:hover .nav-text {
-  opacity: 1;
+opacity: 1;
 }
 
 /* Optional Separator */
 .nav-separator {
-  color: #555;
-  font-size: 14px;
-  user-select: none;
+color: #555;
+font-size: 14px;
+user-select: none;
 }
 
 .nav-btn.active img {
-  transform: scale(0.7);
-  transform-origin: top center;
+transform: scale(0.7);
+transform-origin: top center;
 }
 
 .nav-btn.active .nav-text {
-  opacity: 1;
-  color: #fff;
+opacity: 1;
+color: #fff;
 }
 
 /* Back to Top */
 #backToTop {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 100;
-  background-color: #ffcc00;
-  color: #000;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 18px;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  display: none;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+position: fixed;
+bottom: 24px;
+right: 24px;
+z-index: 100;
+background-color: #ffcc00;
+color: #000;
+border: none;
+border-radius: 20px;
+padding: 10px 18px;
+cursor: pointer;
+box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+display: none;
+transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 #backToTop:hover {
-  background-color: #ffd633;
-  transform: scale(1.05);
+background-color: #ffd633;
+transform: scale(1.05);
 }
 
 /* Footer */
 .footer-banner {
-  width: 100%;
-  background-color: #333;
-  color: #BDB9B9;
-  padding: 4px 0;
-  border-top: 1px solid #3A3A3A;
-  opacity: 0.85;
+width: 100%;
+background-color: #333;
+color: #BDB9B9;
+padding: 4px 0;
+border-top: 1px solid #3A3A3A;
+opacity: 0.85;
 }
 
 .footer-content {
-  text-align: center;
-  font-family: 'Inter', sans-serif;
-  font-weight: 300;
-  font-size: 11px;
-  line-height: 1.2;
+text-align: center;
+font-family: 'Inter', sans-serif;
+font-weight: 300;
+font-size: 11px;
+line-height: 1.2;
 }
 .footer-tagline {
-  font-weight: 500;
-  margin-bottom: 4px;
+font-weight: 500;
+margin-bottom: 4px;
 }
 
 .footer-branding {
-  font-size: 12px;
-  margin-bottom: 4px;
+font-size: 12px;
+margin-bottom: 4px;
 }
 
 .footer-disclaimer {
-  font-size: 12px;
-  opacity: 0.85;
+font-size: 12px;
+opacity: 0.85;
 }
 .buy-divider {
-  width: 90%;
-  height: 1px;
-  background-color: #BDB9B9;
-  margin: 20px 0;
-  border: none;
-  opacity: 0.5;
+width: 90%;
+height: 1px;
+background-color: #BDB9B9;
+margin: 20px 0;
+border: none;
+opacity: 0.5;
 }
 .spacer {
-  height: 20px;
+height: 20px;
 }
 
 .buy-button-wrapper {
-  display: flex;
-  gap: 10px;
-  width: 100%;
-  margin-left: -6px;
-  box-sizing: border-box;
+display: flex;
+gap: 10px;
+width: 100%;
+margin-left: -6px;
+box-sizing: border-box;
 }
 
 .buy-button,
 .share-button {
-  margin-top: 5px;
-  padding: 8px 18px 8px 0;
-  background-color: rgba(30, 30, 30, 0.85);
-  color: #BABABA;
-  text-decoration: none;
-  border-radius: 2px;
-  transition: background-color 0.3s ease, opacity 0.3s ease;
-  align-self: flex-start;
-  border: none;
-  cursor: pointer;
-  font-family: 'Barlow', sans-serif;
-  font-weight: 500;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
+margin-top: 5px;
+padding: 8px 18px 8px 0;
+background-color: rgba(30, 30, 30, 0.85);
+color: #BABABA;
+text-decoration: none;
+border-radius: 2px;
+transition: background-color 0.3s ease, opacity 0.3s ease;
+align-self: flex-start;
+border: none;
+cursor: pointer;
+font-family: 'Barlow', sans-serif;
+font-weight: 500;
+font-size: 11px;
+text-transform: uppercase;
+letter-spacing: 0.3px;
 }
 
 .buy-button:hover,
 .share-button:hover {
-  color: #005fa3;
-  background-color: #3B3B3B;
-  opacity: 0.85;
+color: #005fa3;
+background-color: #3B3B3B;
+opacity: 0.85;
 }
 
 /* Error message */
 .error-message {
-  color: #ff6b6b;
-  text-align: center;
-  padding: 20px;
-  font-family: 'Inter', sans-serif;
+color: #ff6b6b;
+text-align: center;
+padding: 20px;
+font-family: 'Inter', sans-serif;
 }
 
 /* Loading animation */
 .loading-spinner {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255,255,255,.3);
-  border-radius: 50%;
-  border-top-color: #fff;
-  animation: spin 1s ease-in-out infinite;
-  margin-right: 10px;
+display: inline-block;
+width: 20px;
+height: 20px;
+border: 3px solid rgba(255,255,255,.3);
+border-radius: 50%;
+border-top-color: #fff;
+animation: spin 1s ease-in-out infinite;
+margin-right: 10px;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+to { transform: rotate(360deg); }
 }
 </style>
 </head>
 <body>
 <div class="wrapper grid-wrapper">
-  <!-- Header -->
-  <header class="top-banner layout-container">
-    <div class="header-left">
-      <img src="https://i.imgur.com/hp0QbkV.jpeg" alt="ShareDukaan Logo" class="logo">
-    </div>
-    <div class="header-right">
-      <p class="tagline">Discover The Best Shoes & Accessories – All in One Place | Shop Smart!!</p>
-      <a href="https://t.me/sharedukaan" class="telegram-link">For daily updates 👉 Telegram</a>
-    </div>
-  </header>
+<!-- Header -->
+<header class="top-banner layout-container">
+<div class="header-left">
+<img src="https://i.imgur.com/hp0QbkV.jpeg" alt="ShareDukaan Logo" class="logo">
+</div>
+<div class="header-right">
+<p class="tagline">Discover The Best Shoes & Accessories – All in One Place | Shop Smart!!</p>
+<a href="https://t.me/sharedukaan" class="telegram-link">For daily updates 👉 Telegram</a>
+</div>
+</header>
 
-  <!-- Navigation -->
-  <nav class="nav-bar layout-container" role="navigation" aria-label="Main site navigation">
-    <ul class="nav-list">
-      <li>
-        <a href="index.html" class="nav-btn">
-          <img src="assets/Home_P.png" alt="Explore" width="40" height="40" />
-          <span class="nav-text">Explore</span>
-        </a>
-      </li>
+<!-- Navigation -->
+<nav class="nav-bar layout-container" role="navigation" aria-label="Main site navigation">
+<ul class="nav-list">
+<li>
+<a href="index.html" class="nav-btn">
+<img src="assets/Home_P.png" alt="Explore" width="40" height="40" />
+<span class="nav-text">Explore</span>
+</a>
+</li>
 
-      <li><span class="nav-separator">|</span></li>
-      <li>
-        <a href="forhim.html" class="nav-btn">
-          <img src="assets/Men_P.png" alt="For Him" width="40" height="40" />
-          <span class="nav-text">For Him</span>
-        </a>
-      </li>
+<li><span class="nav-separator">|</span></li>
+<li>
+<a href="forhim.html" class="nav-btn">
+<img src="assets/Men_P.png" alt="For Him" width="40" height="40" />
+<span class="nav-text">For Him</span>
+</a>
+</li>
 
-      <li><span class="nav-separator">|</span></li>
-      <li>
-        <a href="forher.html" class="nav-btn">
-          <img src="assets/Women_P.png" alt="For Her" width="40" height="40" />
-          <span class="nav-text">For Her</span>
-        </a>
-      </li>
+<li><span class="nav-separator">|</span></li>
+<li>
+<a href="forher.html" class="nav-btn">
+<img src="assets/Women_P.png" alt="For Her" width="40" height="40" />
+<span class="nav-text">For Her</span>
+</a>
+</li>
 
-      <li><span class="nav-separator">|</span></li>
-      <li><a href="https://shoedukaan.blogspot.com" class="nav-btn">Blog >></a></li>
-    </ul>
-  </nav>
-  
-  <!-- Search Bar -->
-  <div class="search-bar layout-container">
-    <input type="text" id="searchInput" placeholder="Search for products..." aria-label="Search products">
-  </div>
+<li><span class="nav-separator">|</span></li>
+<li><a href="https://shoedukaan.blogspot.com" class="nav-btn">Blog >></a></li>
+</ul>
+</nav>
 
-  <!-- Product Grid -->
-  <main id="productGrid" class="grid layout-container" aria-label="Product catalog">
-    <div class="error-message" id="loadingMessage">Loading products...</div>
-  </main>
+<!-- Search Bar -->
+<div class="search-bar layout-container">
+<input type="text" id="searchInput" placeholder="Search for products..." aria-label="Search products">
+</div>
+
+<!-- Product Grid -->
+<main id="productGrid" class="grid layout-container" aria-label="Product catalog">
+<div class="error-message" id="loadingMessage">Loading products...</div>
+</main>
 </div>
 
 <!-- Back to Top Button -->
@@ -629,24 +580,58 @@ body {
 
 <!-- Footer -->
 <footer class="footer-banner">
-  <div class="layout-container">
-    <div class="footer-content">
-      <p class="footer-tagline">Inspired by Google Keep's brilliant simplicity</p>
-      <p class="footer-branding">© 2025 ShareDukaan. All rights reserved.</p>
-      <p class="footer-disclaimer">
-        Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We may earn a small commission when you purchase through affiliate links, at no extra cost to you. Product prices and availability are subject to change. The actual product may differ slightly from the images shown above.
-      </p>
-    </div>
-  </div>
+<div class="layout-container">
+<div class="footer-content">
+<p class="footer-tagline">Inspired by Google Keep's brilliant simplicity</p>
+<p class="footer-branding">© 2025 ShareDukaan. All rights reserved.</p>
+<p class="footer-disclaimer">
+Disclaimer: ShareDukaan is a participant in the Amazon Associates Program. We may earn a small commission when you purchase through affiliate links, at no extra cost to you. Product prices and availability are subject to change. The actual product may differ slightly from the images shown above.
+</p>
+</div>
+</div>
 </footer>
-  <!-- JavaScript -->
+<!-- JavaScript -->
 
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const tabs = ["index", "menss", "womens"];
+  const tabData = {};
+  const overlay = document.getElementById("overlay");
+  const overlayContent = document.getElementById("overlay-content");
+  const searchInput = document.getElementById("search-input");
+  const searchResults = document.getElementById("search-results");
+  const gridContainer = document.getElementById("grid-container");
+  const overlayClose = document.getElementById("overlay-close");
+  let currentTab = "index";
+  let allDataLoaded = false;
+
+  // 🆕 Load all tab data once for global search
+  Promise.all(
+    tabs.map(tab =>
+      fetch(`https://docs.google.com/spreadsheets/d/${tab}-data.json`)
+        .then(res => res.json())
+        .then(data => {
+          tabData[tab] = data;
+        })
+    )
+  ).then(() => {
+    allDataLoaded = true;
+    renderGrid(tabData[currentTab]);
+  });
   // Utility function to escape quotes
   function escapeQuotes(str) {
     return String(str).replace(/"/g, '&quot;');
   }
 
+  // 🧭 Tab switching logic
+  document.querySelectorAll(".tab").forEach(tabEl => {
+    tabEl.addEventListener("click", () => {
+      currentTab = tabEl.dataset.tab;
+      renderGrid(tabData[currentTab]);
+      searchResults.innerHTML = "";
+      searchInput.value = "";
+    });
+  });
   // Your existing constants and variables
   const colors = [
       "#3A3647", "#1C262E", "#692B17",
@@ -666,6 +651,25 @@ body {
       return 'links';
   }
 
+  // 🆕 Global search logic across all tabs
+  searchInput.addEventListener("input", function () {
+    const query = this.value.toLowerCase();
+    searchResults.innerHTML = "";
+
+    if (!query || !allDataLoaded) return;
+
+    const seen = new Set();
+    tabs.forEach(tab => {
+      tabData[tab].forEach(item => {
+        const title = item.title.toLowerCase();
+        if (title.includes(query) && !seen.has(item.title)) {
+          seen.add(item.title);
+          const result = document.createElement("div");
+          result.className = "search-result";
+          result.textContent = item.title;
+          result.addEventListener("click", () => showOverlay(item));
+          searchResults.appendChild(result);
+        }
   // Share product function - updated with correct GitHub Pages URL
   async function shareProduct(title, image, buyUrl, permanentId) {
       console.log('shareProduct called with:', title, permanentId);
@@ -707,9 +711,21 @@ body {
       }).catch(err => {
           console.error('Could not copy text: ', err);
           prompt('Copy this URL to share:', text);
-      });
+});
+    });
+  });
   }
 
+  // 🧱 Grid rendering logic
+  function renderGrid(data) {
+    gridContainer.innerHTML = "";
+    data.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "grid-card";
+      card.textContent = item.title;
+      card.addEventListener("click", () => showOverlay(item));
+      gridContainer.appendChild(card);
+    });
   // Load products from all categories for search functionality
   async function loadAllProducts() {
       try {
@@ -761,44 +777,55 @@ body {
           console.error("Failed to load products:", err);
           document.getElementById('loadingMessage').textContent = 'Error loading products. Please check your connection.';
       }
-  }
+}
 
+  // 🎯 Overlay injection logic
+  function showOverlay(item) {
+    overlayContent.innerHTML = `
+      <h2>${item.title}</h2>
+      <p>${item.description}</p>
+      <img src="${item.image}" alt="${item.title}" />
+    `;
+    overlay.style.display = "block";
   // Modified generateCardHTML function with correct product URLs
   function generateCardHTML(item, index) {
-    const imageArray = item.img.split(',');
-    const carouselHTML = imageArray.map((url, i) =>
-        `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
-    ).join('');
-    // Clean the values for use in JavaScript
-    const cleanTitle = escapeQuotes(item.title);
-    const firstImage = escapeQuotes(imageArray[0].trim());
-    const buyUrl = escapeQuotes(item.link);
-    const permanentId = escapeQuotes(item.permanentId || index);
-    const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${getCurrentCategory()}`;
-    return `
-        <div class="carousel" data-seed="${item.shuffleID || index}">
-            ${carouselHTML}
-        </div>
-        <div class="spacer"></div>
-        <h3 class="title-text" title="${cleanTitle}">${item.title}</h3>
-        <div class="buy-divider"></div>
-        <div class="buy-button-wrapper">
-            <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">
-                👉👉 Buy Now
-            </a>
-            <button class="share-button action-button-text" 
-                    data-title="${cleanTitle}" 
-                    data-image="${firstImage}" 
-                    data-url="${buyUrl}" 
-                    data-id="${permanentId}" 
-                    aria-label="Share ${item.title}">
-                📤 Share
-            </button>
-        </div>
-    `;
-  }
-  
+      const imageArray = item.img.split(',');
+      const carouselHTML = imageArray.map((url, i) =>
+          `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
+      ).join('');
+      // Clean the values for use in JavaScript
+      const cleanTitle = escapeQuotes(item.title);
+      const firstImage = escapeQuotes(imageArray[0].trim());
+      const buyUrl = escapeQuotes(item.link);
+      const permanentId = escapeQuotes(item.permanentId || index);
+      // FIXED: Use correct GitHub Pages URL for product links
+      const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${getCurrentCategory()}`;
+      return `
+          <div class="carousel" data-seed="${item.shuffleID || index}">
+              ${carouselHTML}
+          </div>
+          <div class="spacer"></div>
+          <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
+          <div class="buy-divider"></div>
+          <div class="buy-button-wrapper">
+              <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">
+                  👉👉 Buy Now
+              </a>
+              <button class="share-button action-button-text" 
+                      data-title="${cleanTitle}" 
+                      data-image="${firstImage}" 
+                      data-url="${buyUrl}" 
+                      data-id="${permanentId}" 
+                      aria-label="Share ${item.title}">
+                  📤 Share
+              </button>
+          </div>
+      `;
+}
 
+  overlayClose.addEventListener("click", () => {
+    overlay.style.display = "none";
+  });
   // Your existing renderNextBatch function
   function renderNextBatch() {
       const grid = document.getElementById("productGrid");
@@ -836,6 +863,20 @@ body {
               images.forEach((img, i) => img.classList.toggle("active", i === current));
               current = (current + 1) % images.length;
 
+  // 🔄 Infinite scroll batching (preserved)
+  let batchSize = 20;
+  let batchIndex = 0;
+
+  function loadBatch(data) {
+    const batch = data.slice(batchIndex, batchIndex + batchSize);
+    batch.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "grid-card";
+      card.textContent = item.title;
+      card.addEventListener("click", () => showOverlay(item));
+      gridContainer.appendChild(card);
+    });
+    batchIndex += batchSize;
               const seed = Number(carousel.dataset.seed) || index;
               const nextDelay = 2000 + (seed % 3000);
               setTimeout(shuffle, nextDelay);
@@ -844,8 +885,14 @@ body {
           const initialDelay = Math.floor(Math.random() * 3000);
           setTimeout(shuffle, initialDelay);
       });
-  }
+}
 
+  window.addEventListener("scroll", () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      if (tabData[currentTab] && batchIndex < tabData[currentTab].length) {
+        loadBatch(tabData[currentTab]);
+      }
+    }
   // Your existing Intersection Observer
   const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -853,8 +900,14 @@ body {
       });
   }, {
       threshold: 0.1
-  });
+});
 
+  // 🧩 DOM readiness and modular injection (preserved)
+  function injectHTML(selector, html) {
+    const container = document.querySelector(selector);
+    if (container) {
+      container.innerHTML = html;
+    }
   // Search function that works across all pages
   function performSearch(query) {
       const grid = document.getElementById("productGrid");
@@ -885,8 +938,15 @@ body {
           // Render the first batch of results
           renderNextBatch();
       }
-  }
+}
 
+  // 🛠️ Search batching and duplicate prevention (preserved)
+  function batchSearchResults(results, size = 10) {
+    const batches = [];
+    for (let i = 0; i < results.length; i += size) {
+      batches.push(results.slice(i, i + size));
+    }
+    return batches;
   // Debounce function to limit how often a function can run
   function debounce(func, delay) {
       let timeout;
@@ -895,8 +955,11 @@ body {
           clearTimeout(timeout);
           timeout = setTimeout(() => func.apply(context, args), delay);
       };
-  }
+}
+});
+</script>
 
+                                               
   // Event delegation for share buttons
   document.addEventListener('click', function(e) {
       if (e.target.classList.contains('share-button')) {
