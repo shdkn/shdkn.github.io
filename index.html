@@ -602,7 +602,7 @@ body {
     let filteredProducts = [];
     let currentIndex = 0;
     let isFetching = false;
-
+    
     // Your original color codes from the uploaded file
     const colors = [
         "#3A3647", "#1C262E", "#692B17",
@@ -625,10 +625,10 @@ body {
     async function fetchAllSheets() {
         if (isFetching) return;
         isFetching = true;
-
+        
         const sheetNames = ["links", "for-him", "for-her"];
         let allData = [];
-
+        
         for (const sheetName of sheetNames) {
             try {
                 const res = await fetch(`https://opensheet.elk.sh/${sheetID}/${sheetName}`);
@@ -650,33 +650,33 @@ body {
         if (!allProducts || allProducts.length === 0) {
             return [];
         }
-
+        
         const lowerCaseQuery = query.toLowerCase();
-
+        
         if (lowerCaseQuery === 'men' || lowerCaseQuery.includes('male')) {
             return allProducts.filter(product =>
                 product.source === 'for-him' || (product.source === 'links' && product.permanentId && product.permanentId.toLowerCase().endsWith('m'))
             );
         }
-
+        
         if (lowerCaseQuery === 'women' || lowerCaseQuery.includes('female')) {
             return allProducts.filter(product =>
                 product.source === 'for-her' || (product.source === 'links' && product.permanentId && product.permanentId.toLowerCase().endsWith('w'))
             );
         }
-
+        
         return allProducts.filter(product =>
             (product.title && product.title.toLowerCase().includes(lowerCaseQuery)) ||
             (product.price && product.price.toLowerCase().includes(lowerCaseQuery)) ||
             (product.description && product.description.toLowerCase().includes(lowerCaseQuery))
         );
     }
-
+    
     // Renders the next batch of products with colors
     function renderNextBatch() {
         const grid = document.getElementById("productGrid");
         if (!grid) return;
-
+        
         const batch = filteredProducts.slice(currentIndex, currentIndex + batchSize);
         batch.forEach((item, i) => {
             const card = document.createElement("article");
@@ -688,48 +688,48 @@ body {
             const colorIndex = (currentIndex + i) % colors.length;
             card.style.backgroundColor = colors[colorIndex];
             
-            card.innerHTML = generateCardHTML(item, i);
+            card.innerHTML = generateCardHTML(item);
             grid.appendChild(card);
             setTimeout(() => card.classList.add('visible'), 50);
         });
-        activateCarousels(".carousel");
         currentIndex += batchSize;
+        activateCarousels(".carousel");
     }
 
     // Generates the HTML for a single product card
-    function generateCardHTML(item, index) {
-        const imageArray = item.img.split(',');
-        const carouselHTML = imageArray.map((url, i) =>
+    function generateCardHTML(item) {
+        const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${item.permanentId}&source=${getCurrentSheetName()}`;
+        const carouselHTML = item.img.split(',').map((url, i) =>
             `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
         ).join('');
-        // Clean the values for use in JavaScript
-        const cleanTitle = escapeQuotes(item.title);
-        const firstImage = escapeQuotes(imageArray[0].trim());
-        const buyUrl = escapeQuotes(item.link);
-        const permanentId = escapeQuotes(item.permanentId || index);
-        // FIXED: Use correct GitHub Pages URL for product links
-        const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${getCurrentSheetName()}`;
+        
         return `
-            <div class="carousel" data-seed="${item.shuffleID || index}">
+            <div class="carousel">
                 ${carouselHTML}
             </div>
-            <div class="spacer"></div>
-            <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
-            <div class="buy-divider"></div>
+            <div class="card-content">
+                <h3 class="title-text" title="${item.title}">${item.title}</h3>
+                <p class="price-text">${item.price}</p>
+            </div>
             <div class="buy-button-wrapper">
                 <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">
                     👉👉 Buy Now
                 </a>
-                <button class="share-button action-button-text" 
-                        data-title="${cleanTitle}" 
-                        data-image="${firstImage}" 
-                        data-url="${buyUrl}" 
-                        data-id="${permanentId}" 
-                        aria-label="Share ${item.title}">
+                <button class="share-button action-button-text"
+                    data-title="${escapeQuotes(item.title)}"
+                    data-image="${escapeQuotes(item.img)}"
+                    data-url="${escapeQuotes(item.link)}"
+                    data-id="${escapeQuotes(item.permanentId)}"
+                    aria-label="Share ${item.title}">
                     📤 Share
                 </button>
             </div>
         `;
+    }
+
+    // Utility function to escape quotes for data attributes
+    function escapeQuotes(str) {
+      return String(str).replace(/"/g, '&quot;');
     }
     
     // Other helper functions (show/hide loading, handle events)
@@ -737,7 +737,6 @@ body {
       const loadingMessage = document.getElementById('loadingMessage');
       if (loadingMessage) {
         loadingMessage.style.display = 'block';
-        loadingMessage.innerHTML = '<span class="loading-spinner"></span> Loading products...';
       }
       const errorMessage = document.getElementById('errorMessage');
       if (errorMessage) {
@@ -762,6 +761,25 @@ body {
         errorMessage.textContent = message;
         errorMessage.style.display = 'block';
       }
+    }
+    
+    function activateCarousels(selector = ".carousel") {
+        document.querySelectorAll(selector).forEach((carousel, index) => {
+            if (carousel.dataset.activated === "true") return;
+            carousel.dataset.activated = "true";
+            const images = carousel.querySelectorAll("img");
+            if (images.length <= 1) return;
+            let current = 0;
+            function shuffle() {
+                images.forEach((img, i) => img.classList.toggle("active", i === current));
+                current = (current + 1) % images.length;
+                const seed = Number(carousel.dataset.seed) || index;
+                const nextDelay = 2000 + (seed % 3000);
+                setTimeout(shuffle, nextDelay);
+            }
+            const initialDelay = Math.floor(Math.random() * 3000);
+            setTimeout(shuffle, initialDelay);
+        });
     }
 
     // Main function to load products and handle initial filter
@@ -791,77 +809,8 @@ body {
             showError("No products found.");
         }
     }
-    
-    // Utility function to escape quotes for data attributes
-    function escapeQuotes(str) {
-      return String(str).replace(/"/g, '&quot;');
-    }
-    
-    // Event delegation for share buttons
-    document.addEventListener('click', function(e) {
-      if (e.target.classList.contains('share-button')) {
-          const title = e.target.dataset.title;
-          const image = e.target.dataset.image;
-          const buyUrl = e.target.dataset.url;
-          const permanentId = e.target.dataset.id;
-          
-          shareProduct(title, image, buyUrl, permanentId);
-      }
-    });
-    
-    // Your existing activateCarousels function
-    function activateCarousels(selector = ".carousel") {
-        document.querySelectorAll(selector).forEach((carousel, index) => {
-            if (carousel.dataset.activated === "true") return;
-            carousel.dataset.activated = "true";
-            const images = carousel.querySelectorAll("img");
-            if (images.length <= 1) return;
-            let current = 0;
-            function shuffle() {
-                images.forEach((img, i) => img.classList.toggle("active", i === current));
-                current = (current + 1) % images.length;
-                const seed = Number(carousel.dataset.seed) || index;
-                const nextDelay = 2000 + (seed % 3000);
-                setTimeout(shuffle, nextDelay);
-            }
-            const initialDelay = Math.floor(Math.random() * 3000);
-            setTimeout(shuffle, initialDelay);
-        });
-    }
-    
-    // Share product function - updated with correct GitHub Pages URL
-    async function shareProduct(title, image, buyUrl, permanentId) {
-        const currentCategory = getCurrentSheetName();
-        const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${currentCategory}`;
-        const shareData = {
-            title: title,
-            text: `Check out ${title} on ShoeDukaan!`,
-            url: productPageUrl
-        };
-        if (navigator.share) {
-            try {
-                await navigator.share(shareData);
-            } catch (error) {
-                if (error.name !== 'AbortError') {
-                    copyToClipboard(productPageUrl, title);
-                }
-            }
-        } else {
-            copyToClipboard(productPageUrl, title);
-        }
-    }
-    
-    // Fallback function to copy to clipboard
-    function copyToClipboard(text, productTitle) {
-      navigator.clipboard.writeText(text).then(() => {
-          alert(`Link for "${productTitle}" copied to clipboard!`);
-      }).catch(err => {
-          console.error('Could not copy text: ', err);
-          prompt('Copy this URL to share:', text);
-      });
-    }
 
-    // Initialize the page
+    // Event listeners and initial page load
     document.addEventListener("DOMContentLoaded", function() {
         loadInitialProducts();
         
@@ -872,10 +821,15 @@ body {
                 if (grid) {
                     grid.innerHTML = ''; // Clear existing results
                 }
+
                 const query = e.target.value.trim();
+                
+                // Reset filteredProducts and currentIndex for a new search
                 filteredProducts = filterProducts(query);
                 currentIndex = 0;
+                
                 renderNextBatch();
+
                 const url = new URL(window.location);
                 if (query) {
                     url.searchParams.set('search', query);
@@ -919,7 +873,7 @@ body {
             }
         });
     });
-  </script>
+</script>
   
 </body>
 </html>
