@@ -593,338 +593,353 @@ body {
   <!-- JavaScript -->
 
 <script>
-  // Utility function to escape quotes
-  function escapeQuotes(str) {
+// Utility function to escape quotes
+function escapeQuotes(str) {
     return String(str).replace(/"/g, '&quot;');
-  }
+}
 
-  // Your existing constants and variables
-  const colors = [
-      "#3A3647", "#1C262E", "#692B17",
-      "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
-  ];
+// Your existing constants and variables
+const colors = [
+    "#3A3647", "#1C262E", "#692B17",
+    "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
+];
 
-  let allProducts = [];
-  let filteredProducts = [];
-  let currentIndex = 0;
-  const batchSize = 12;
+let allProducts = [];
+let filteredProducts = [];
+let currentIndex = 0;
+const batchSize = 12;
 
-  // Determine current page category
-  function getCurrentCategory() {
-      const path = window.location.pathname;
-      if (path.includes('forhim.html')) return 'for-him';
-      if (path.includes('forher.html')) return 'for-her';
-      return 'links';
-  }
+// Determine current page category
+function getCurrentCategory() {
+    const path = window.location.pathname;
+    if (path.includes('forhim.html')) return 'for-him';
+    if (path.includes('forher.html')) return 'for-her';
+    return 'links';
+}
 
-  // Share product function - updated with correct GitHub Pages URL
-  async function shareProduct(title, image, buyUrl, permanentId) {
-      console.log('shareProduct called with:', title, permanentId);
-      
-      // Get current category for the source parameter
-      const currentCategory = getCurrentCategory();
-      // FIXED: Create the correct product page URL for GitHub Pages
-      const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${currentCategory}`;
-      // Create share data
-      const shareData = {
-          title: title,
-          text: `Check out ${title} on ShoeDukaan!`,
-          url: productPageUrl
-      };
-      console.log('Sharing product:', shareData);
-      
-      // Try to use native share dialog
-      if (navigator.share) {
-          try {
-              await navigator.share(shareData);
-              console.log('Product shared successfully:', title);
-          } catch (error) {
-              if (error.name !== 'AbortError') {
-                  console.error('Error sharing:', error);
-                  // Fallback to copy method
-                  copyToClipboard(productPageUrl, title);
-              }
-          }
-      } else {
-          // Fallback for browsers that don't support Web Share API
-          copyToClipboard(productPageUrl, title);
-      }
-  }
+// Share product function - updated with correct GitHub Pages URL
+async function shareProduct(title, image, buyUrl, permanentId) {
+    console.log('shareProduct called with:', title, permanentId);
+    
+    // Get current category for the source parameter
+    const currentCategory = getCurrentCategory();
+    // FIXED: Create the correct product page URL for GitHub Pages
+    const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${currentCategory}`;
+    // Create share data
+    const shareData = {
+        title: title,
+        text: `Check out ${title} on ShoeDukaan!`,
+        url: productPageUrl
+    };
+    console.log('Sharing product:', shareData);
+    
+    // Try to use native share dialog
+    if (navigator.share) {
+        try {
+            await navigator.share(shareData);
+            console.log('Product shared successfully:', title);
+        } catch (error) {
+            if (error.name !== 'AbortError') {
+                console.error('Error sharing:', error);
+                // Fallback to copy method
+                copyToClipboard(productPageUrl, title);
+            }
+        }
+    } else {
+        // Fallback for browsers that don't support Web Share API
+        copyToClipboard(productPageUrl, title);
+    }
+}
 
-  // Fallback function to copy to clipboard
-  function copyToClipboard(text, productTitle) {
-      navigator.clipboard.writeText(text).then(() => {
-          alert(`Link for "${productTitle}" copied to clipboard!`);
-      }).catch(err => {
-          console.error('Could not copy text: ', err);
-          prompt('Copy this URL to share:', text);
-      });
-  }
+// Fallback function to copy to clipboard
+function copyToClipboard(text, productTitle) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert(`Link for "${productTitle}" copied to clipboard!`);
+    }).catch(err => {
+        console.error('Could not copy text: ', err);
+        prompt('Copy this URL to share:', text);
+    });
+}
 
-  // Load products from all categories for search functionality
-  async function loadAllProducts() {
-      try {
-          const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
-          const categories = ['links', 'for-him', 'for-her'];
-          
-          document.getElementById('loadingMessage').innerHTML = '<span class="loading-spinner"></span> Loading products from all categories...';
-          // Load data from all categories
-          const allData = [];
-          for (const category of categories) {
-              const url = `https://opensheet.elk.sh/${sheetID}/${category}`;
-              const res = await fetch(url);
-              if (!res.ok) {
-                  console.error(`Failed to load ${category} category`);
-                  continue;
-              }
-              
-              const data = await res.json();
-              // Add category info to each product
-              const categoryData = data.map(item => ({...item, category}));
-              allData.push(...categoryData);
-          }
-          
-          // Process products
-          allProducts = allData
-              .filter(item => item.title && item.img && item.link)
-              .sort((a, b) => {
-                  if (a.shuffleID && b.shuffleID) {
-                      return Number(a.shuffleID) - Number(b.shuffleID);
-                  }
-                  return a.title.localeCompare(b.title);
-              });
-          if (allProducts.length === 0) {
-              document.getElementById('loadingMessage').textContent = 'No products found.';
-              return;
-          }
-          
-          // Filter by current category
-          const currentCategory = getCurrentCategory();
-          if (currentCategory && currentCategory !== 'all') {
-              filteredProducts = allProducts.filter(product => product.category === currentCategory);
-          } else {
-              filteredProducts = allProducts;
-          }
-          
-          document.getElementById('loadingMessage').style.display = 'none';
-          renderNextBatch();
-      } catch (err) {
-          console.error("Failed to load products:", err);
-          document.getElementById('loadingMessage').textContent = 'Error loading products. Please check your connection.';
-      }
-  }
+// Load products from all categories for search functionality
+async function loadAllProducts() {
+    try {
+        const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+        const categories = ['links', 'for-him', 'for-her'];
+        
+        document.getElementById('loadingMessage').innerHTML = '<span class="loading-spinner"></span> Loading products from all categories...';
+        // Load data from all categories
+        const allData = [];
+        for (const category of categories) {
+            const url = `https://opensheet.elk.sh/${sheetID}/${category}`;
+            const res = await fetch(url);
+            if (!res.ok) {
+                console.error(`Failed to load ${category} category`);
+                continue;
+            }
+            
+            const data = await res.json();
+            // Add category info to each product
+            const categoryData = data.map(item => ({...item, category}));
+            allData.push(...categoryData);
+        }
+        
+        // Process products
+        allProducts = allData
+            .filter(item => item.title && item.img && item.link)
+            .sort((a, b) => {
+                if (a.shuffleID && b.shuffleID) {
+                    return Number(a.shuffleID) - Number(b.shuffleID);
+                }
+                return a.title.localeCompare(b.title);
+            });
+        if (allProducts.length === 0) {
+            document.getElementById('loadingMessage').textContent = 'No products found.';
+            return;
+        }
+        
+        // Filter by current category
+        const currentCategory = getCurrentCategory();
+        if (currentCategory && currentCategory !== 'all') {
+            filteredProducts = allProducts.filter(product => product.category === currentCategory);
+        } else {
+            filteredProducts = allProducts;
+        }
+        
+        document.getElementById('loadingMessage').style.display = 'none';
+        renderNextBatch();
+    } catch (err) {
+        console.error("Failed to load products:", err);
+        document.getElementById('loadingMessage').textContent = 'Error loading products. Please check your connection.';
+    }
+}
 
-  // Modified generateCardHTML function with correct product URLs
-  function generateCardHTML(item, index) {
-      const imageArray = item.img.split(',');
-      const carouselHTML = imageArray.map((url, i) =>
-          `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
-      ).join('');
-      // Clean the values for use in JavaScript
-      const cleanTitle = escapeQuotes(item.title);
-      const firstImage = escapeQuotes(imageArray[0].trim());
-      const buyUrl = escapeQuotes(item.link);
-      const permanentId = escapeQuotes(item.permanentId || index);
-      // FIXED: Use correct GitHub Pages URL for product links
-      const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${getCurrentCategory()}`;
-      return `
-          <div class="carousel" data-seed="${item.shuffleID || index}">
-              ${carouselHTML}
-          </div>
-          <div class="spacer"></div>
-          <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
-          <div class="buy-divider"></div>
-          <div class="buy-button-wrapper">
-              <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">
-                  👉👉 Buy Now
-              </a>
-              <button class="share-button action-button-text" 
-                      data-title="${cleanTitle}" 
-                      data-image="${firstImage}" 
-                      data-url="${buyUrl}" 
-                      data-id="${permanentId}" 
-                      aria-label="Share ${item.title}">
-                  📤 Share
-              </button>
-          </div>
-      `;
-  }
+// Modified generateCardHTML function with correct product URLs
+function generateCardHTML(item, index) {
+    const imageArray = item.img.split(',');
+    const carouselHTML = imageArray.map((url, i) =>
+        `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
+    ).join('');
+    // Clean the values for use in JavaScript
+    const cleanTitle = escapeQuotes(item.title);
+    const firstImage = escapeQuotes(imageArray[0].trim());
+    const buyUrl = escapeQuotes(item.link);
+    const permanentId = escapeQuotes(item.permanentId || index);
+    // FIXED: Use correct GitHub Pages URL for product links
+    const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${getCurrentCategory()}`;
+    return `
+        <div class="carousel" data-seed="${item.shuffleID || index}">
+            ${carouselHTML}
+        </div>
+        <div class="spacer"></div>
+        <h3 class="title-text">${item.title.replace(/\n/g, '<br>')}</h3>
+        <div class="buy-divider"></div>
+        <div class="buy-button-wrapper">
+            <a class="buy-button action-button-text" href="${item.link}" target="_blank" aria-label="Buy ${item.title}">
+                👉👉 Buy Now
+            </a>
+            <button class="share-button action-button-text" 
+                    data-title="${cleanTitle}" 
+                    data-image="${firstImage}" 
+                    data-url="${buyUrl}" 
+                    data-id="${permanentId}" 
+                    aria-label="Share ${item.title}">
+                📤 Share
+            </button>
+        </div>
+    `;
+}
 
-  // Your existing renderNextBatch function
-  function renderNextBatch() {
-      const grid = document.getElementById("productGrid");
-      if (!grid || filteredProducts.length === 0) return;
+// Your existing renderNextBatch function
+function renderNextBatch() {
+    const grid = document.getElementById("productGrid");
+    if (!grid || filteredProducts.length === 0) return;
 
-      const nextItems = filteredProducts.slice(currentIndex, currentIndex + batchSize);
-      nextItems.forEach((item, i) => {
-          const card = document.createElement("article");
-          card.className = "card";
-          card.setAttribute("role", "article");
-          card.setAttribute("aria-label", item.title);
-          card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
-          card.style.transitionDelay = `${i * 100}ms`;
-          card.innerHTML = generateCardHTML(item, i);
+    const nextItems = filteredProducts.slice(currentIndex, currentIndex + batchSize);
+    nextItems.forEach((item, i) => {
+        const card = document.createElement("article");
+        card.className = "card";
+        card.setAttribute("role", "article");
+        card.setAttribute("aria-label", item.title);
+        card.style.backgroundColor = colors[(currentIndex + i) % colors.length];
+        card.style.transitionDelay = `${i * 100}ms`;
+        card.innerHTML = generateCardHTML(item, i);
 
-          grid.appendChild(card);
-          observer.observe(card);
-      });
-      activateCarousels(".carousel");
-      currentIndex += batchSize;
-  }
+        grid.appendChild(card);
+        observer.observe(card);
+    });
+    activateCarousels(".carousel");
+    currentIndex += batchSize;
+}
 
-  // Your existing activateCarousels function
-  function activateCarousels(selector = ".carousel") {
-      document.querySelectorAll(selector).forEach((carousel, index) => {
-          if (carousel.dataset.activated === "true") return;
-          carousel.dataset.activated = "true";
+// Your existing activateCarousels function
+function activateCarousels(selector = ".carousel") {
+    document.querySelectorAll(selector).forEach((carousel, index) => {
+        if (carousel.dataset.activated === "true") return;
+        carousel.dataset.activated = "true";
 
-          const images = carousel.querySelectorAll("img");
-          if (images.length <= 1) return;
+        const images = carousel.querySelectorAll("img");
+        if (images.length <= 1) return;
 
-          let current = 0;
+        let current = 0;
 
-          function shuffle() {
-              images.forEach((img, i) => img.classList.toggle("active", i === current));
-              current = (current + 1) % images.length;
+        function shuffle() {
+            images.forEach((img, i) => img.classList.toggle("active", i === current));
+            current = (current + 1) % images.length;
 
-              const seed = Number(carousel.dataset.seed) || index;
-              const nextDelay = 2000 + (seed % 3000);
-              setTimeout(shuffle, nextDelay);
-          }
+            const seed = Number(carousel.dataset.seed) || index;
+            const nextDelay = 2000 + (seed % 3000);
+            setTimeout(shuffle, nextDelay);
+        }
 
-          const initialDelay = Math.floor(Math.random() * 3000);
-          setTimeout(shuffle, initialDelay);
-      });
-  }
+        const initialDelay = Math.floor(Math.random() * 3000);
+        setTimeout(shuffle, initialDelay);
+    });
+}
 
-  // Your existing Intersection Observer
-  const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-          entry.target.classList.toggle('visible', entry.isIntersecting);
-      });
-  }, {
-      threshold: 0.1
-  });
+// Your existing Intersection Observer
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        entry.target.classList.toggle('visible', entry.isIntersecting);
+    });
+}, {
+    threshold: 0.1
+});
 
-  // Search function that works across all pages
-  function performSearch(query) {
-      const grid = document.getElementById("productGrid");
-      if (!grid) return;
+// Search function that works across all pages
+function performSearch(query) {
+    const grid = document.getElementById("productGrid");
+    if (!grid) return;
 
-      // Clear the grid and reset index only once per search query
-      grid.innerHTML = "";
-      currentIndex = 0;
+    // Clear the grid and reset index only once per search query
+    grid.innerHTML = "";
+    currentIndex = 0;
 
-      if (query === "") {
-          // If no query, show products from current category
-          const currentCategory = getCurrentCategory();
-          if (currentCategory && currentCategory !== 'all') {
-              filteredProducts = allProducts.filter(product => product.category === currentCategory);
-          } else {
-              filteredProducts = allProducts;
-          }
-      } else {
-          // If there's a query, search across all products
-          filteredProducts = allProducts.filter(item =>
-              item.title.toLowerCase().includes(query)
-          );
-      }
-      
-      if (filteredProducts.length === 0) {
-          grid.innerHTML = '<div class="error-message">No products match your search.</div>';
-      } else {
-          // Render the first batch of results
-          renderNextBatch();
-      }
-  }
+    // Normalize the query
+    const normalizedQuery = query.trim().toLowerCase();
 
-  // Debounce function to limit how often a function can run
-  function debounce(func, delay) {
-      let timeout;
-      return function(...args) {
-          const context = this;
-          clearTimeout(timeout);
-          timeout = setTimeout(() => func.apply(context, args), delay);
-      };
-  }
+    if (normalizedQuery === "") {
+        // If no query, show products from current category
+        const currentCategory = getCurrentCategory();
+        if (currentCategory && currentCategory !== 'all') {
+            filteredProducts = allProducts.filter(product => product.category === currentCategory);
+        } else {
+            filteredProducts = allProducts;
+        }
+    } else if (["men", "male"].includes(normalizedQuery)) {
+        // For "men" or "male" query: show links with "m" in permanentId and all for-him products
+        filteredProducts = allProducts.filter(product =>
+            (product.category === "links" && product.permanentId && product.permanentId.toLowerCase().includes("m")) ||
+            product.category === "for-him"
+        );
+    } else if (["women", "ladies", "female"].includes(normalizedQuery)) {
+        // For "women", "ladies", or "female" query: show links with "w" in permanentId and all for-her products
+        filteredProducts = allProducts.filter(product =>
+            (product.category === "links" && product.permanentId && product.permanentId.toLowerCase().includes("w")) ||
+            product.category === "for-her"
+        );
+    } else {
+        // For other queries, search across all products by title
+        filteredProducts = allProducts.filter(item =>
+            item.title.toLowerCase().includes(normalizedQuery)
+        );
+    }
 
-  // Event delegation for share buttons
-  document.addEventListener('click', function(e) {
-      if (e.target.classList.contains('share-button')) {
-          const title = e.target.dataset.title;
-          const image = e.target.dataset.image;
-          const buyUrl = e.target.dataset.url;
-          const permanentId = e.target.dataset.id;
-          
-          console.log('Share button clicked:', title);
-          shareProduct(title, image, buyUrl, permanentId);
-      }
-  });
+    if (filteredProducts.length === 0) {
+        grid.innerHTML = '<div class="error-message">No products match your search.</div>';
+    } else {
+        // Render the first batch of results
+        renderNextBatch();
+    }
+}
 
-  // Initialize the page
-  window.addEventListener("DOMContentLoaded", function() {
-      loadAllProducts().then(() => {
-          // Set up search functionality after products are loaded
-          const searchInput = document.getElementById("searchInput");
-          if (searchInput) {
-              const urlParams = new URLSearchParams(window.location.search);
-              const searchQuery = urlParams.get('search');
-              
-              if (searchQuery) {
-                  searchInput.value = searchQuery;
-                  performSearch(searchQuery.toLowerCase());
-              }
+// Debounce function to limit how often a function can run
+function debounce(func, delay) {
+    let timeout;
+    return function(...args) {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), delay);
+    };
+}
 
-              // Debounce the input event listener
-              const debouncedSearch = debounce((query) => {
-                  performSearch(query);
-                  // Update URL with search query
-                  const url = new URL(window.location);
-                  if (query) {
-                      url.searchParams.set('search', query);
-                  } else {
-                      url.searchParams.delete('search');
-                  }
-                  window.history.replaceState({}, '', url);
-              }, 300); // 300ms delay
+// Event delegation for share buttons
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('share-button')) {
+        const title = e.target.dataset.title;
+        const image = e.target.dataset.image;
+        const buyUrl = e.target.dataset.url;
+        const permanentId = e.target.dataset.id;
+        
+        console.log('Share button clicked:', title);
+        shareProduct(title, image, buyUrl, permanentId);
+    }
+});
 
-              searchInput.addEventListener("input", function() {
-                  debouncedSearch(this.value.toLowerCase());
-              });
-          }
-      });
-      
-      // Set up scroll event for infinite scrolling
-      window.addEventListener("scroll", () => {
-          const scrollY = window.scrollY;
-          const viewportHeight = window.innerHeight;
-          const fullHeight = document.body.offsetHeight;
+// Initialize the page
+window.addEventListener("DOMContentLoaded", function() {
+    loadAllProducts().then(() => {
+        // Set up search functionality after products are loaded
+        const searchInput = document.getElementById("searchInput");
+        if (searchInput) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchQuery = urlParams.get('search');
+            
+            if (searchQuery) {
+                searchInput.value = searchQuery;
+                performSearch(searchQuery.toLowerCase());
+            }
 
-          if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < filteredProducts.length) {
-              renderNextBatch();
-          }
+            // Debounce the input event listener
+            const debouncedSearch = debounce((query) => {
+                performSearch(query);
+                // Update URL with search query
+                const url = new URL(window.location);
+                if (query) {
+                    url.searchParams.set('search', query);
+                } else {
+                    url.searchParams.delete('search');
+                }
+                window.history.replaceState({}, '', url);
+            }, 300); // 300ms delay
 
-          const backToTopBtn = document.getElementById("backToTop");
-          if (backToTopBtn) {
-              backToTopBtn.style.display = scrollY > 300 ? "block" : "none";
-          }
-      });
+            searchInput.addEventListener("input", function() {
+                debouncedSearch(this.value.toLowerCase());
+            });
+        }
+    });
+    
+    // Set up scroll event for infinite scrolling
+    window.addEventListener("scroll", () => {
+        const scrollY = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        const fullHeight = document.body.offsetHeight;
 
-      // Set up back to top button
-      const backToTopBtn = document.getElementById("backToTop");
-      if (backToTopBtn) {
-          backToTopBtn.addEventListener("click", () => {
-              window.scrollTo({ top: 0, behavior: "smooth" });
-          });
-      }
-      
-      // Set active navigation link
-      document.querySelectorAll('.nav-btn').forEach(link => {
-          if (link.href === window.location.href) {
-              link.classList.add('active');
-          }
-      });
-  });
+        if (scrollY + viewportHeight >= fullHeight - 100 && currentIndex < filteredProducts.length) {
+            renderNextBatch();
+        }
+
+        const backToTopBtn = document.getElementById("backToTop");
+        if (backToTopBtn) {
+            backToTopBtn.style.display = scrollY > 300 ? "block" : "none";
+        }
+    });
+
+    // Set up back to top button
+    const backToTopBtn = document.getElementById("backToTop");
+    if (backToTopBtn) {
+        backToTopBtn.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    }
+    
+    // Set active navigation link
+    document.querySelectorAll('.nav-btn').forEach(link => {
+        if (link.href === window.location.href) {
+            link.classList.add('active');
+        }
+    });
+});
 </script>
                                               
 </body>
