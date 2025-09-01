@@ -570,10 +570,13 @@ body {
   </div>
 
   <!-- Product Grid -->
-  <main id="productGrid" class="grid layout-container" aria-label="Product catalog">
-    <div class="error-message" id="loadingMessage">Loading products...</div>
+  <main id="product-grid-container" class="layout-container">
+  <div class="products-grid" id="product-grid">
+    <div class="message" id="loadingMessage">Loading products...</div>
+    <div class="message" id="errorMessage" style="display: none;"></div>
+  </div>
   </main>
-</div>
+  
 
 <!-- Back to Top Button -->
 <button id="backToTop" title="Back to Top">Top</button>
@@ -711,19 +714,33 @@ body {
     
     // Other helper functions (show/hide loading, handle events)
     function showLoading() {
-      document.getElementById('loadingMessage').style.display = 'block';
-      document.getElementById('errorMessage').style.display = 'none';
+      const loadingMessage = document.getElementById('loadingMessage');
+      if (loadingMessage) {
+        loadingMessage.style.display = 'block';
+      }
+      const errorMessage = document.getElementById('errorMessage');
+      if (errorMessage) {
+        errorMessage.style.display = 'none';
+      }
     }
     
     function hideLoading() {
-      document.getElementById('loadingMessage').style.display = 'none';
+      const loadingMessage = document.getElementById('loadingMessage');
+      if (loadingMessage) {
+        loadingMessage.style.display = 'none';
+      }
     }
     
     function showError(message) {
-      document.getElementById('loadingMessage').style.display = 'none';
-      const errorElement = document.getElementById('errorMessage');
-      errorElement.textContent = message;
-      errorElement.style.display = 'block';
+      const loadingMessage = document.getElementById('loadingMessage');
+      if (loadingMessage) {
+        loadingMessage.style.display = 'none';
+      }
+      const errorMessage = document.getElementById('errorMessage');
+      if (errorMessage) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+      }
     }
     
     // Main function to load products
@@ -811,7 +828,6 @@ body {
             }
         });
     });
-</script>
-  
+</script>    
 </body>
 </html>
