@@ -130,21 +130,22 @@ body {
   padding: 8px 0;
   background-color: #1c1c1c;
   width: 100%;
+  margin: 0 auto; /* Added to ensure centering */
 }
 
 /* Styles for the container that holds the search input */
 .search-bar .layout-container {
-  padding: 0 20px;
+  padding: 0;
   max-width: 1200px;
   width: 100%;
   box-sizing: border-box;
-  margin: 0; /* Override the main layout-container margin if needed for a different layout, but in this case, the Flexbox handles it. */
+  margin: 0 auto; /* Added to center the container */
 }
 
 /* Styles specifically for the search input field */
 #searchInput {
   width: 100%;
-  max-width: none;
+  max-width: 100%; /* Ensure it doesn't exceed container */
   padding: 10px 14px;
   font-size: 12px;
   border-radius: 4px;
