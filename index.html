@@ -126,10 +126,15 @@ body {
 /* Search Bar */
 .search-bar {
   padding: 8px 0;
-  text-align: center;
-  width: 100%;
+  width: 100%; /* Or a fixed width, but it must be less than 100% to center */
   background-color: #1c1c1c;
+  
+  /* The following lines will center the element */
+  display: block; /* Ensure it's a block-level element */
+  margin-left: auto;
+  margin-right: auto;
 }
+  
 
 #searchInput {
   /* UPDATED: Made search bar full-width */
