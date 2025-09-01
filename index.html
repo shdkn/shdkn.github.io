@@ -202,12 +202,23 @@ body {
   max-width: 420px;
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  /* UPDATED: A more subtle, Google-like shadow */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.06);
   box-sizing: border-box;
   aspect-ratio: 3 / 5;
   overflow: hidden;
   opacity: 0;
   transform: translateY(20px);
+}
+
+/* UPDATED: A new container for the text to group it with consistent padding */
+.card-content-container {
+  padding: 0 12px 12px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Carousel inside Card */
@@ -236,16 +247,17 @@ body {
   animation: fadeInUp 0.6s ease forwards;
 }
 
+/* UPDATED: Title text adjusted for better alignment and color */
 .title-text {
   font-family: 'Inter', sans-serif;
   font-weight: 300;
   font-size: 0.95em;
-  color: #BABABA;
-  margin-top: 15px;
-  line-height: 1.1;
-  text-align: center;
-  max-width: 90%;
-  margin: 0 auto;
+  color: #555;
+  margin: 12px 0 0;
+  line-height: 1.4;
+  text-align: left;
+  width: 100%;
+  max-width: none;
 }
 
 .card:hover {
@@ -449,23 +461,28 @@ body {
   font-size: 12px;
   opacity: 0.85;
 }
+
+/* UPDATED: The divider now has a lighter color and consistent vertical spacing */
 .buy-divider {
   width: 90%;
   height: 1px;
-  background-color: #BDB9B9;
-  margin: 20px 0;
+  background-color: #eee;
+  margin: 12px 0;
   border: none;
   opacity: 0.5;
 }
+
 .spacer {
   height: 20px;
 }
 
+/* UPDATED: The button wrapper is now left-aligned and has no negative margin */
 .buy-button-wrapper {
   display: flex;
+  justify-content: flex-start;
   gap: 10px;
   width: 100%;
-  margin-left: -6px;
+  margin-left: 0;
   box-sizing: border-box;
 }
 
