@@ -594,14 +594,15 @@ body {
   </div>
 </footer>
   <!-- JavaScript -->
-  <script>
+<script>
+    // Your original constants and variables
     const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
     const batchSize = 12;
     let allProducts = [];
     let filteredProducts = [];
     let currentIndex = 0;
     let isFetching = false;
-    
+
     // Your original color codes from the uploaded file
     const colors = [
         "#3A3647", "#1C262E", "#692B17",
@@ -624,10 +625,10 @@ body {
     async function fetchAllSheets() {
         if (isFetching) return;
         isFetching = true;
-        
+
         const sheetNames = ["links", "for-him", "for-her"];
         let allData = [];
-        
+
         for (const sheetName of sheetNames) {
             try {
                 const res = await fetch(`https://opensheet.elk.sh/${sheetID}/${sheetName}`);
@@ -649,43 +650,45 @@ body {
         if (!allProducts || allProducts.length === 0) {
             return [];
         }
-        
+
         const lowerCaseQuery = query.toLowerCase();
-        
+
         if (lowerCaseQuery === 'men' || lowerCaseQuery.includes('male')) {
             return allProducts.filter(product =>
                 product.source === 'for-him' || (product.source === 'links' && product.permanentId && product.permanentId.toLowerCase().endsWith('m'))
             );
         }
-        
+
         if (lowerCaseQuery === 'women' || lowerCaseQuery.includes('female')) {
             return allProducts.filter(product =>
                 product.source === 'for-her' || (product.source === 'links' && product.permanentId && product.permanentId.toLowerCase().endsWith('w'))
             );
         }
-        
+
         return allProducts.filter(product =>
             (product.title && product.title.toLowerCase().includes(lowerCaseQuery)) ||
             (product.price && product.price.toLowerCase().includes(lowerCaseQuery)) ||
             (product.description && product.description.toLowerCase().includes(lowerCaseQuery))
         );
     }
-    
+
     // Renders the next batch of products with colors
     function renderNextBatch() {
-        const grid = document.getElementById("product-grid");
+        const grid = document.getElementById("productGrid");
         if (!grid) return;
-        
+
         const batch = filteredProducts.slice(currentIndex, currentIndex + batchSize);
         batch.forEach((item, i) => {
-            const card = document.createElement('div');
-            card.classList.add('card');
+            const card = document.createElement("article");
+            card.className = "card";
+            card.setAttribute("role", "article");
+            card.setAttribute("aria-label", item.title);
             
             // Set the background color based on the index
             const colorIndex = (currentIndex + i) % colors.length;
             card.style.backgroundColor = colors[colorIndex];
-
-            card.innerHTML = generateCardHTML(item);
+            
+            card.innerHTML = generateCardHTML(item, i);
             grid.appendChild(card);
             setTimeout(() => card.classList.add('visible'), 50);
         });
@@ -693,12 +696,18 @@ body {
     }
 
     // Generates the HTML for a single product card
-    function generateCardHTML(item) {
-        const productPageUrl = `product.html?permanentId=${item.permanentId}&source=${item.source}`;
-        const carouselHTML = item.img.split(',').map((url, i) =>
+    function generateCardHTML(item, index) {
+        const imageArray = item.img.split(',');
+        const carouselHTML = imageArray.map((url, i) =>
             `<img src="${url.trim()}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${item.title}" />`
         ).join('');
-        
+        // Clean the values for use in JavaScript
+        const cleanTitle = escapeQuotes(item.title);
+        const firstImage = escapeQuotes(imageArray[0].trim());
+        const buyUrl = escapeQuotes(item.link);
+        const permanentId = escapeQuotes(item.permanentId || index);
+        // FIXED: Use correct GitHub Pages URL for product links
+        const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${getCurrentSheetName()}`;
         return `
             <a href="${productPageUrl}" class="product-link">
                 <div class="carousel">
@@ -714,10 +723,10 @@ body {
                     👉👉 Buy Now
                 </a>
                 <button class="share-button action-button-text"
-                    data-title="${escapeQuotes(item.title)}"
-                    data-image="${escapeQuotes(item.img)}"
-                    data-url="${escapeQuotes(item.link)}"
-                    data-id="${escapeQuotes(item.permanentId)}"
+                    data-title="${cleanTitle}"
+                    data-image="${firstImage}"
+                    data-url="${buyUrl}"
+                    data-id="${permanentId}"
                     aria-label="Share ${item.title}">
                     📤 Share
                 </button>
@@ -735,6 +744,7 @@ body {
       const loadingMessage = document.getElementById('loadingMessage');
       if (loadingMessage) {
         loadingMessage.style.display = 'block';
+        loadingMessage.innerHTML = '<span class="loading-spinner"></span> Loading products...';
       }
       const errorMessage = document.getElementById('errorMessage');
       if (errorMessage) {
@@ -760,7 +770,7 @@ body {
         errorMessage.style.display = 'block';
       }
     }
-    
+
     // Main function to load products and handle initial filter
     async function loadInitialProducts() {
         showLoading();
@@ -796,7 +806,7 @@ body {
         const searchInput = document.getElementById('searchInput');
         if (searchInput) {
             searchInput.addEventListener('input', function(e) {
-                const grid = document.getElementById('product-grid');
+                const grid = document.getElementById('productGrid');
                 if (grid) {
                     grid.innerHTML = ''; // Clear existing results
                 }
@@ -852,6 +862,6 @@ body {
             }
         });
     });
-      </script>  
+      </script>
 </body>
 </html>
