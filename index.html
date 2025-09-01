@@ -594,13 +594,20 @@ body {
   </div>
 </footer>
   <!-- JavaScript -->
-<script>
+     <script>
     const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
     const batchSize = 12;
     let allProducts = [];
     let filteredProducts = [];
     let currentIndex = 0;
+    let isFetching = false; // Prevents multiple fetch calls
     
+    // Color codes from your provided file
+    const colors = [
+        "#3A3647", "#1C262E", "#692B17",
+        "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255",
+    ];
+
     // Determines the current sheet name based on the URL
     function getCurrentSheetName() {
         const path = window.location.pathname;
@@ -615,6 +622,9 @@ body {
 
     // Fetches data from all three sheets
     async function fetchAllSheets() {
+        if (isFetching) return;
+        isFetching = true;
+        
         const sheetNames = ["links", "for-him", "for-her"];
         let allData = [];
         
@@ -630,6 +640,7 @@ body {
                 console.error(`Failed to fetch data from sheet: ${sheetName}`, error);
             }
         }
+        isFetching = false;
         return allData;
     }
 
@@ -660,13 +671,20 @@ body {
         );
     }
     
-    // Renders the next batch of products
+    // Renders the next batch of products with colors
     function renderNextBatch() {
         const grid = document.getElementById("product-grid");
+        if (!grid) return;
+        
         const batch = filteredProducts.slice(currentIndex, currentIndex + batchSize);
-        batch.forEach(item => {
+        batch.forEach((item, i) => {
             const card = document.createElement('div');
             card.classList.add('card');
+            
+            // Set the background color based on the index
+            const colorIndex = (currentIndex + i) % colors.length;
+            card.style.backgroundColor = colors[colorIndex];
+
             card.innerHTML = generateCardHTML(item);
             grid.appendChild(card);
             setTimeout(() => card.classList.add('visible'), 50);
@@ -743,48 +761,54 @@ body {
       }
     }
     
-    // Main function to load products
-    async function loadProducts() {
+    // Main function to load products and handle initial filter
+    async function loadInitialProducts() {
         showLoading();
         allProducts = await fetchAllSheets();
-        if (allProducts.length > 0) {
-            const urlParams = new URLSearchParams(window.location.search);
-            const initialQuery = urlParams.get('search');
-            
-            if (initialQuery) {
-                filteredProducts = filterProducts(initialQuery);
-            } else {
-                const currentSheetName = getCurrentSheetName();
-                filteredProducts = allProducts.filter(product => product.source === currentSheetName);
+        
+        // Check for a search query in the URL and filter products accordingly
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialQuery = urlParams.get('search');
+        
+        if (initialQuery) {
+            filteredProducts = filterProducts(initialQuery);
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = initialQuery;
             }
-            
-            if (filteredProducts.length > 0) {
-                renderNextBatch();
-                hideLoading();
-            } else {
-                showError("No products found.");
-            }
+        } else {
+            const currentSheetName = getCurrentSheetName();
+            filteredProducts = allProducts.filter(product => product.source === currentSheetName);
+        }
+        
+        if (filteredProducts.length > 0) {
+            renderNextBatch();
+            hideLoading();
         } else {
             showError("No products found.");
         }
     }
-    
+
     // Event listeners and initial page load
     document.addEventListener("DOMContentLoaded", function() {
-        loadProducts();
+        loadInitialProducts();
         
         const searchInput = document.getElementById('searchInput');
         if (searchInput) {
             searchInput.addEventListener('input', function(e) {
-                const query = e.target.value.trim();
-                filteredProducts = filterProducts(query);
-                currentIndex = 0;
                 const grid = document.getElementById('product-grid');
                 if (grid) {
-                    grid.innerHTML = '';
-                    renderNextBatch();
+                    grid.innerHTML = ''; // Clear existing results
                 }
+
+                const query = e.target.value.trim();
                 
+                // Reset filteredProducts and currentIndex for a new search
+                filteredProducts = filterProducts(query);
+                currentIndex = 0;
+                
+                renderNextBatch();
+
                 const url = new URL(window.location);
                 if (query) {
                     url.searchParams.set('search', query);
@@ -828,6 +852,7 @@ body {
             }
         });
     });
-</script>    
+     </script>
+  
 </body>
 </html>
