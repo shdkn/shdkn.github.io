@@ -123,14 +123,15 @@ body {
   color: inherit;
 }
 
-/* Search Bar (revised using Flexbox) */
+/* Search Bar (Revised using Grid) */
 .search-bar {
-  /* Set the search bar itself to be a flex container */
-  display: flex;
-  /* Center the content horizontally */
-  justify-content: center;
-  /* Center the content vertically (if needed, though padding also works) */
-  align-items: center;
+  /* Set the search bar itself to be a Grid container */
+  display: grid;
+  /* Define a single column that is automatically sized */
+  grid-template-columns: 1fr; 
+  
+  /* Place the content of the Grid in the center horizontally */
+  justify-items: center;
 
   /* Other styles from your original code */
   padding: 8px 0;
@@ -139,10 +140,10 @@ body {
 }
 
 /* You no longer need `margin: auto` on the layout-container. */
-/* Just set a max-width and let Flexbox handle the centering. */
+/* Just set a max-width and let Grid handle the centering. */
 .layout-container {
-  max-width: 1200px; /* Still good for controlling desktop width */
-  width: 100%; /* Ensure it fills the flex container's space */
+  max-width: 1200px;
+  width: 100%; /* It's a grid item now, so it'll fill the grid cell */
   padding: 0 20px;
   box-sizing: border-box;
 }
@@ -158,9 +159,10 @@ body {
 /* Media query for mobile devices */
 @media (max-width: 768px) {
   .layout-container {
-    padding: 0 10px; /* Use less padding for smaller screens */
+    padding: 0 10px;
   }
 }
+  
 #searchInput {
   /* UPDATED: Made search bar full-width */
   width: 100%;
