@@ -123,21 +123,28 @@ body {
   color: inherit;
 }
 
-/* General search bar styles */
+/* Search Bar (revised using Flexbox) */
 .search-bar {
+  /* Set the search bar itself to be a flex container */
+  display: flex;
+  /* Center the content horizontally */
+  justify-content: center;
+  /* Center the content vertically (if needed, though padding also works) */
+  align-items: center;
+
+  /* Other styles from your original code */
   padding: 8px 0;
   background-color: #1c1c1c;
-  /* The parent div should be full width to contain the centered content */
-  width: 100%; 
+  width: 100%;
 }
 
-/* Styles for the container that holds the search input */
-/* This is the key to a responsive, centered layout */
+/* You no longer need `margin: auto` on the layout-container. */
+/* Just set a max-width and let Flexbox handle the centering. */
 .layout-container {
-  max-width: 1200px; /* A good max-width for desktop */
-  margin-left: auto;
-  margin-right: auto; /* This centers the container on the page */
-  padding: 0 20px; /* Optional: adds horizontal padding on larger screens */
+  max-width: 1200px; /* Still good for controlling desktop width */
+  width: 100%; /* Ensure it fills the flex container's space */
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 /* Styles specifically for the search input field */
@@ -146,7 +153,6 @@ body {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  /* Add any other input styles here */
 }
 
 /* Media query for mobile devices */
@@ -154,10 +160,7 @@ body {
   .layout-container {
     padding: 0 10px; /* Use less padding for smaller screens */
   }
-  }
-  
-  
-
+}
 #searchInput {
   /* UPDATED: Made search bar full-width */
   width: 100%;
