@@ -130,22 +130,23 @@ body {
   padding: 8px 0;
   background-color: #1c1c1c;
   width: 100%;
-  margin: 0 auto; /* Added to ensure centering */
+  max-width: var(--max-width); /* Match the header's max-width */
+  margin: 0 auto; /* Center it within the max-width */
 }
 
 /* Styles for the container that holds the search input */
 .search-bar .layout-container {
-  padding: 0;
-  max-width: 1200px;
+  padding: 0 var(--side-padding); /* Match the header's side padding */
+  max-width: var(--max-width); /* Ensure it doesn't exceed the defined max-width */
   width: 100%;
   box-sizing: border-box;
-  margin: 0 auto; /* Added to center the container */
+  margin: 0 auto; /* Center the container */
 }
 
 /* Styles specifically for the search input field */
 #searchInput {
   width: 100%;
-  max-width: 100%; /* Ensure it doesn't exceed container */
+  max-width: 100%; /* Ensure it fits within the container */
   padding: 10px 14px;
   font-size: 12px;
   border-radius: 4px;
