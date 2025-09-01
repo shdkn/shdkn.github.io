@@ -22,7 +22,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400&display=swap" rel="stylesheet">
-
 <style>
 :root {
   --max-width: 1440px;
@@ -33,7 +32,8 @@ body {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', sans-serif;
+  /* UPDATED: Changed to a single font family for consistency */
+  font-family: 'Inter', sans-serif;
   background: #1c1c1c;
   scroll-behavior: smooth;
 }
@@ -75,7 +75,8 @@ body {
 }
 
 .logo {
-  width: 75px;
+  /* UPDATED: Increased logo size slightly */
+  width: 90px;
   height: auto;
   aspect-ratio: 1 / 1;
   object-fit: contain;
@@ -90,7 +91,8 @@ body {
 }
 
 .tagline {
-  font-family: 'Assistant', sans-serif;
+  /* UPDATED: Changed to 'Inter' for font consistency */
+  font-family: 'Inter', sans-serif;
   font-size: 12px;
   font-weight: 400;
   margin-bottom: 4px;
@@ -106,7 +108,8 @@ body {
 }
 
 .telegram-link {
-  font-family: 'Assistant', sans-serif;
+  /* UPDATED: Changed to 'Inter' for font consistency */
+  font-family: 'Inter', sans-serif;
   font-size: 13px;
   color: #ffcc00;
   text-decoration: none;
@@ -121,15 +124,17 @@ body {
 
 /* Search Bar */
 .search-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 8px 0;
-  text-align: center;
   width: 100%;
-  background-color: #1c1c1c;
+  box-sizing: border-box;
 }
 
 #searchInput {
-  width: 90%;
-  max-width: 400px;
+  width: 100%;
+  max-width: 100%;
   padding: 10px 14px;
   font-size: 12px;
   border-radius: 4px;
@@ -189,6 +194,10 @@ body {
     height: 100px;
     margin-bottom: 8px;
   }
+
+  .layout-container {
+    padding: 0 10px;
+  }
 }
 
 /* Card */
@@ -208,6 +217,16 @@ body {
   overflow: hidden;
   opacity: 0;
   transform: translateY(20px);
+}
+
+/* UPDATED: A new container for the text to group it with consistent padding */
+.card-content-container {
+  padding: 0 12px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Carousel inside Card */
@@ -340,7 +359,8 @@ body {
   width: 40px;
   height: 40px;
   text-decoration: none;
-  font-family: 'Assistant', sans-serif;
+  /* UPDATED: Changed to 'Inter' for font consistency */
+  font-family: 'Inter', sans-serif;
   font-size: 12px;
   font-weight: 400;
   color: #BABABA;
@@ -518,7 +538,9 @@ body {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
-</style>
+  </style>
+  
+
 </head>
 <body>
 <div class="wrapper grid-wrapper">
@@ -565,9 +587,11 @@ body {
   </nav>
   
   <!-- Search Bar -->
-  <div class="search-bar layout-container">
+<div class="layout-container">
+  <div class="search-bar">
     <input type="text" id="searchInput" placeholder="Search for products..." aria-label="Search products">
   </div>
+</div>
 
   <!-- Product Grid -->
   <main id="productGrid" class="grid layout-container" aria-label="Product catalog">
