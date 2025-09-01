@@ -22,7 +22,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400&display=swap" rel="stylesheet">
-
 <style>
 :root {
   --max-width: 1440px;
@@ -123,48 +122,27 @@ body {
   color: inherit;
 }
 
-/* Search Bar (Revised using Grid) */
+/* Search Bar */
 .search-bar {
-  /* Set the search bar itself to be a Grid container */
-  display: grid;
-  /* Define a single column that is automatically sized */
-  grid-template-columns: 1fr; 
-  
-  /* Place the content of the Grid in the center horizontally */
-  justify-items: center;
-
-  /* Other styles from your original code */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 8px 0;
   background-color: #1c1c1c;
   width: 100%;
 }
 
-/* You no longer need `margin: auto` on the layout-container. */
-/* Just set a max-width and let Grid handle the centering. */
-.layout-container {
-  max-width: 1200px;
-  width: 100%; /* It's a grid item now, so it'll fill the grid cell */
+/* Styles for the container that holds the search input */
+.search-bar .layout-container {
   padding: 0 20px;
+  max-width: 1200px;
+  width: 100%;
   box-sizing: border-box;
+  margin: 0; /* Override the main layout-container margin if needed for a different layout, but in this case, the Flexbox handles it. */
 }
 
 /* Styles specifically for the search input field */
 #searchInput {
-  width: 100%; /* The input should always fill its parent container */
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-/* Media query for mobile devices */
-@media (max-width: 768px) {
-  .layout-container {
-    padding: 0 10px;
-  }
-}
-  
-#searchInput {
-  /* UPDATED: Made search bar full-width */
   width: 100%;
   max-width: none;
   padding: 10px 14px;
@@ -226,6 +204,10 @@ body {
     height: 100px;
     margin-bottom: 8px;
   }
+
+  .layout-container {
+    padding: 0 10px;
+  }
 }
 
 /* Card */
@@ -249,10 +231,10 @@ body {
 
 /* UPDATED: A new container for the text to group it with consistent padding */
 .card-content-container {
-  padding: 0 12px 12px; 
+  padding: 0 12px 12px;
   display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center;
   width: 100%;
   box-sizing: border-box;
 }
@@ -566,7 +548,9 @@ body {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
-</style>
+  </style>
+  
+
 </head>
 <body>
 <div class="wrapper grid-wrapper">
