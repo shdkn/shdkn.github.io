@@ -128,25 +128,13 @@ body {
   justify-content: center;
   align-items: center;
   padding: 8px 0;
-  background-color: #1c1c1c;
-  width: 100%;
-  max-width: var(--max-width); /* Match the header's max-width */
-  margin: 0 auto; /* Center it within the max-width */
-}
-
-/* Styles for the container that holds the search input */
-.search-bar .layout-container {
-  padding: 0 var(--side-padding); /* Match the header's side padding */
-  max-width: var(--max-width); /* Ensure it doesn't exceed the defined max-width */
   width: 100%;
   box-sizing: border-box;
-  margin: 0 auto; /* Center the container */
 }
 
-/* Styles specifically for the search input field */
 #searchInput {
   width: 100%;
-  max-width: 100%; /* Ensure it fits within the container */
+  max-width: 100%;
   padding: 10px 14px;
   font-size: 12px;
   border-radius: 4px;
@@ -599,8 +587,8 @@ body {
   </nav>
   
   <!-- Search Bar -->
-<div class="search-bar">
-  <div class="layout-container">
+<div class="layout-container">
+  <div class="search-bar">
     <input type="text" id="searchInput" placeholder="Search for products..." aria-label="Search products">
   </div>
 </div>
