@@ -123,17 +123,39 @@ body {
   color: inherit;
 }
 
-/* Search Bar */
+/* General search bar styles */
 .search-bar {
   padding: 8px 0;
-  width: 100%; /* Or a fixed width, but it must be less than 100% to center */
   background-color: #1c1c1c;
-  
-  /* The following lines will center the element */
-  display: block; /* Ensure it's a block-level element */
-  margin-left: auto;
-  margin-right: auto;
+  /* The parent div should be full width to contain the centered content */
+  width: 100%; 
 }
+
+/* Styles for the container that holds the search input */
+/* This is the key to a responsive, centered layout */
+.layout-container {
+  max-width: 1200px; /* A good max-width for desktop */
+  margin-left: auto;
+  margin-right: auto; /* This centers the container on the page */
+  padding: 0 20px; /* Optional: adds horizontal padding on larger screens */
+}
+
+/* Styles specifically for the search input field */
+#searchInput {
+  width: 100%; /* The input should always fill its parent container */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  /* Add any other input styles here */
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .layout-container {
+    padding: 0 10px; /* Use less padding for smaller screens */
+  }
+  }
+  
   
 
 #searchInput {
