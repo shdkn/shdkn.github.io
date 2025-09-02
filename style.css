@@ -372,7 +372,14 @@ body {
 
 /* Active State: Highlight current page */
 .nav-btn.active .nav-text {
-  color: #fff;
+  color: #febd59; /* Updated to match hover color */
+}
+
+.nav-btn.active img {
+  width: 42px; /* Slightly larger icon for focused look */
+  height: 42px;
+  transform: scale(0.75); /* Adjusted scale to match new size */
+  transform-origin: top center;
 }
 
 /* Hover Behavior */
