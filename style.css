@@ -334,7 +334,6 @@ body {
   font-weight: 400;
   color: #BABABA;
   text-transform: uppercase;
-  overflow: hidden;
   position: relative;
 }
 
@@ -342,29 +341,26 @@ body {
 .nav-btn img {
   width: 40px;
   height: 40px;
-  transition: transform 0.3s ease;
+  transform: scale(0.7); /* Fixed scale */
+  transform-origin: top center;
 }
 
-/* Text Label (hidden by default) */
+/* Text Label (always visible now) */
 .nav-text {
   position: absolute;
   bottom: 0;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  opacity: 1;
   pointer-events: none;
   font-size: 10px;
-  color: #fff;
+  color: #BABABA;
   text-align: center;
   width: 100%;
 }
 
-/* Hover Behavior */
-.nav-btn:hover img {
-  transform: scale(0.5);
-  transform-origin: top center;
-}
-
+/* Remove Hover Behavior */
+.nav-btn:hover img,
 .nav-btn:hover .nav-text {
+  transform: none;
   opacity: 1;
 }
 
@@ -375,15 +371,10 @@ body {
   user-select: none;
 }
 
-.nav-btn.active img {
-  transform: scale(0.7);
-  transform-origin: top center;
-}
-
+/* Active State: Highlight current page */
 .nav-btn.active .nav-text {
-  opacity: 1;
   color: #fff;
-}
+  }
 
 /* Back to Top */
 #backToTop {
