@@ -396,7 +396,7 @@ body {
   .nav-text {
     font-size: 8px; /* Further reduced font size for mobile */
   }
-
+}
 /* Back to Top */
 #backToTop {
   position: fixed;
