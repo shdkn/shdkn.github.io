@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<script>
+<head>
+  <script>
     fetch('head.html')
       .then(response => response.text())
       .then(data => {
         document.head.innerHTML += data;
       });
   </script>
+</head>
 <body>
 <div class="wrapper grid-wrapper">
   <!-- Header -->
