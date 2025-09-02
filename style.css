@@ -360,7 +360,7 @@ body {
 
 /* Hover Behavior */
 .nav-btn:hover img {
-  transform: scale(0.7);
+  transform: scale(0.5);
   transform-origin: top center;
 }
 
