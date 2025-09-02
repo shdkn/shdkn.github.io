@@ -305,7 +305,7 @@ body {
 
 /* Nav List */
 .nav-list {
-  display: inline-block;
+  display: flex;
   justify-content: center;
   align-items: center;
   gap: 8px;
