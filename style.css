@@ -372,7 +372,7 @@ body {
 
 /* Active State: Highlight current page */
 .nav-btn.active .nav-text {
-  color: #febd59; /* Updated to match hover color */
+  color: #febd59; /* Corrected to #febd59 for active state */
 }
 
 .nav-btn.active img {
