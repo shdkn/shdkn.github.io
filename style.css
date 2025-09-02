@@ -301,6 +301,7 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   border-top: 1px solid #444;
   border-bottom: 1px solid #444;
+  width: 100%; /* Ensures full width on desktop */
 }
 
 /* Nav List */
@@ -310,8 +311,9 @@ body {
   align-items: center;
   gap: 16px; /* Increased gap for better spacing */
   list-style: none;
-  margin: 0;
+  margin: 0 auto; /* Centers the list within the nav-bar */
   padding: 0;
+  max-width: var(--max-width); /* Matches layout-container max-width */
 }
 
 /* Nav Item */
@@ -373,6 +375,23 @@ body {
   color: #fff;
 }
 
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .nav-bar {
+    padding: 6px 10px; /* Adjust padding for mobile */
+  }
+  .nav-list {
+    gap: 12px; /* Slightly reduced gap for mobile */
+    width: 100%; /* Ensures full width on mobile */
+  }
+  .nav-btn {
+    width: 45px; /* Slightly reduced width for mobile */
+    height: 45px;
+  }
+  .nav-text {
+    font-size: 8px; /* Further reduced font size for mobile */
+  }
+}
 /* Back to Top */
 #backToTop {
   position: fixed;
