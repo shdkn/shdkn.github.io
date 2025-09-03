@@ -6,7 +6,7 @@
 <meta name="description" content="Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.">
 <meta name="keywords" content="premium shoes, footwear catalog, mobile-first grid, Shoe Dukaan, vertical product images, curated shoes, online shoe store">
 <meta name="author" content="ShareDukaan">
-<link rel="canonical" href="https://shdkn.carrd.co">
+<link rel="canonical" href="https://shdkn.github.co">
 <meta name="robots" content="index, follow">
 <link rel="icon" href="shdkn_fav_p.png" type="image/png">
 <link rel="stylesheet" href="style.css">
@@ -15,7 +15,7 @@
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "ShareDukaan",
-  "url": "https://shdkn.carrd.co"
+  "url": "https://shdkn.github.co"
 }
 </script>
 <script data-goatcounter="https://shdkn.goatcounter.com/count"
@@ -132,7 +132,7 @@ async function shareProduct(title, image, buyUrl, permanentId) {
     // Get current category for the source parameter
     const currentCategory = getCurrentCategory();
     // FIXED: Create the correct product page URL for GitHub Pages
-    const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${currentCategory}`;
+    const productPageUrl = `https://shdkn.github.io/product.html?permanentId=${permanentId}&source=${currentCategory}`;
     // Create share data
     const shareData = {
         title: title,
@@ -234,7 +234,7 @@ function generateCardHTML(item, index) {
     const buyUrl = escapeQuotes(item.link);
     const permanentId = escapeQuotes(item.permanentId || index);
     // FIXED: Use correct GitHub Pages URL for product links
-    const productPageUrl = `https://sharedukaan.github.io/shdknlinks/product.html?permanentId=${permanentId}&source=${getCurrentCategory()}`;
+    const productPageUrl = `https://shdkn.github.io/product.html?permanentId=${permanentId}&source=${getCurrentCategory()}`;
     return `
         <div class="carousel" data-seed="${item.shuffleID || index}">
             ${carouselHTML}
