@@ -2,12 +2,11 @@
   const isLikelyBot = () => {
     const ua = navigator.userAgent.toLowerCase();
     const suspiciousUA = /bot|crawl|spider|slurp|headless|phantom/i;
-    const isHeadless = navigator.webdriver;
-    const isTouchless = !('ontouchstart' in window);
-    const isNoLang = !navigator.language;
+    const isHeadless = navigator.webdriver;       // automation hint
     const isNoScreen = screen.width === 0 || screen.height === 0;
 
-    return suspiciousUA.test(ua) || isHeadless || isTouchless || isNoLang || isNoScreen;
+    // Only consider UA patterns, headless automation, or impossible screens as bots
+    return suspiciousUA.test(ua) || isHeadless || isNoScreen;
   };
 
   if (!isLikelyBot()) {
@@ -18,10 +17,11 @@
     };
 
     const s = document.createElement("script");
-    s.src = "https://gc.example.com/count.js"; // Replace with your GoatCounter URL
+    s.src = "//gc.zgo.at/count.js";              // GoatCounter hosted script
     s.defer = true;
+    s.setAttribute("data-goatcounter", "https://shdkn.goatcounter.com/count");
     document.head.appendChild(s);
   } else {
-    console.log("Bot traffic filtered: GoatCounter not loaded.");
+    console.debug("Bot traffic filtered: GoatCounter not loaded.", navigator.userAgent);
   }
 })();
