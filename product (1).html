@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ShareDukaan | Product Details</title>
+<meta name="description" content="Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.">
+<meta name="keywords" content="premium shoes, footwear catalog, mobile-first grid, ShoeDukaan, ShareDukaan,vertical product images, curated shoes, online shoe store">
+<meta name="author" content="ShareDukaan">
+<link rel="canonical" href="https://shdkn.github.io">
+<meta name="robots" content="index, follow">
+<link rel="icon" href="shdkn_fav_p.png" type="image/png">
+<meta property="og:title" content="ShoeDukaan | Premium Footwear Catalog">
+<meta property="og:description" content="Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.">
+<meta property="og:image" content="https://i.imgur.com/hp0QbkV.jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://shdkn.github.io/product.html">
+<meta property="og:type" content="website">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Product image from ShoeDukaan">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ShoeDukaan | Premium Footwear Catalog">
+<meta name="twitter:description" content="Discover the best shoes & accessories – all in one place. Shop smart with our mobile-first catalog and curated product grid.">
+<meta name="twitter:image" content="https://i.imgur.com/hp0QbkV.jpeg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "shdkn.github.io",
+  "url": "https://shdkn.github.io/product.html"
+}
+  <script src="/assets/js/goatcounter-human.js" defer></script>
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrapper">
+  <header class="top-banner layout-container">
+    <div class="header-left">
+      <img src="https://i.imgur.com/hp0QbkV.jpeg" alt="ShareDukaan Logo" class="logo">
+    </div>
+    <div class="header-right">
+      <p class="tagline">Discover The Best Shoes & Accessories – All in One Place | Shop Smart!!</p>
+      <a href="https://t.me/sharedukaan" class="telegram-link">For daily updates 👉 Telegram</a>
+    </div>
+  </header>
+
+  <nav class="nav-bar layout-container" role="navigation" aria-label="Main site navigation">
+    <ul class="nav-list">
+      <li>
+        <a href="index.html" class="nav-btn">
+          <img src="assets/Home_P.png" alt="Explore" width="40" height="40" />
+          <span class="nav-text">Explore</span>
+        </a>
+      </li>
+      <li><span class="nav-separator">|</span></li>
+      <li>
+        <a href="forhim.html" class="nav-btn">
+          <img src="assets/Men_P.png" alt="For Him" width="40" height="40" />
+          <span class="nav-text">For Him</span>
+        </a>
+      </li>
+      <li><span class="nav-separator">|</span></li>
+      <li>
+        <a href="forher.html" class="nav-btn">
+          <img src="assets/Women_P.png" alt="For Her" width="40" height="40" />
+          <span class="nav-text">For Her</span>
+        </a>
+      </li>
+      <li><span class="nav-separator">|</span></li>
+      <li><a href="https://shoedukaan.blogspot.com" class="nav-btn">Blog >></a></li>
+    </ul>
+  </nav>
+
+  <main class="layout-container">
+    <a href="index.html" class="back-button">← Back to Home</a>
+    
+    <div class="product-container">
+      <div id="productLoading" class="loading-message">
+        <span class="loading-spinner"></span> Loading product details...
+      </div>
+      
+      <div id="productError" class="error-message" style="display: none;">
+        Product not found. Please check the URL or return to the homepage.
+      </div>
+      
+      <div id="productDetail" class="product-detail" style="display: none;">
+        <!-- Product details will be inserted here by JavaScript -->
+      </div>
+    </div>
+    
+    <div class="similar-products">
+      <h2 class="section-title">You Might Also Like</h2>
+      <div id="similarProducts" class="products-grid">
+        <!-- Similar products will be inserted here by JavaScript -->
+      </div>
+    </div>
+  </main>
+</div>
+
+<button id="backToTop" title="Back to Top">Top</button>
+
+<footer class="footer-banner">
+  <div class="layout-container">
+    <div class="footer-content">
+      <p class="footer-tagline">Inspired by Google Keep's brilliant simplicity</p>
+      <p class="footer-branding">© 2025 shdkn.github.io. All rights reserved.</p>
+      <p class="footer-disclaimer">
+        Disclaimer: shdkn.github.io is a participant in the Amazon Associates Program. We may earn a small commission when you purchase through affiliate links, at no extra cost to you. Product prices and availability are subject to change. The actual product may differ slightly from the images shown above.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Utility function to escape quotes
+  function escapeQuotes(str) {
+    return String(str).replace(/"/g, '&quot;');
+  }
+
+  // Function to update Open Graph and Twitter meta tags dynamically
+  function updateSocialMetaTags(title, description, imageUrl, currentUrl) {
+    function setMeta(property, content) {
+      let meta = document.querySelector(`meta[property="${property}"]`) || 
+                 document.querySelector(`meta[name="${property}"]`);
+      if (!meta) {
+        meta = document.createElement('meta');
+        if (property.startsWith('og:')) {
+          meta.setAttribute('property', property);
+        } else {
+          meta.setAttribute('name', property);
+        }
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', content);
+    }
+
+    // Add cache-busting parameter to image URL for social platforms
+    const cacheBustedImageUrl = imageUrl + (imageUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
+    
+    console.log('Updating meta tags:', { title, description, imageUrl: cacheBustedImageUrl, currentUrl });
+    setMeta('og:title', title);
+    setMeta('og:description', description);
+    setMeta('og:image', cacheBustedImageUrl);
+    setMeta('og:image:width', '1200');
+    setMeta('og:image:height', '630');
+    setMeta('og:url', currentUrl);
+    setMeta('og:type', 'product');
+    setMeta('og:image:type', 'image/jpeg');
+    setMeta('og:image:alt', title + ' - ShoeDukaan');
+    setMeta('twitter:card', 'summary_large_image');
+    setMeta('twitter:title', title);
+    setMeta('twitter:description', description);
+    setMeta('twitter:image', cacheBustedImageUrl);
+    
+    // Also update the canonical URL with cache busting for social platforms
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+      canonical.setAttribute('href', currentUrl + (currentUrl.includes('?') ? '&' : '?') + 't=' + Date.now());
+    }
+  }
+
+  // Function to validate image URL
+  async function validateImageUrl(url) {
+    if (!url || url.includes('placeholder.com')) return false;
+    try {
+      const response = await fetch(url, { method: 'HEAD' });
+      if (response.ok) {
+        const contentType = response.headers.get('content-type');
+        const contentLength = response.headers.get('content-length');
+        const isImage = contentType && contentType.startsWith('image/');
+        const sizeOk = contentLength ? parseInt(contentLength) < 1000000 : true; // <1MB
+        console.log(`Image validation for ${url}:`, { isImage, sizeOk, contentType, contentLength });
+        return isImage && sizeOk;
+      }
+      console.warn(`Image fetch failed for ${url}: Status ${response.status}`);
+      return false;
+    } catch (err) {
+      console.error(`Failed to validate image ${url}:`, err);
+      return false;
+    }
+  }
+
+  // Colors for product cards
+  const colors = [
+    "#3A3647", "#1C262E", "#692B17",
+    "#0C625D", "#5A6361", "#4B455E", "#596C39", "#396C5D", "#6C394F", "#284255"
+  ];
+
+  // Get URL parameters
+  function getUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      permanentId: params.get('permanentId'),
+      source: params.get('source')
+    };
+  }
+
+  // Get current page URL
+  function getCurrentUrl() {
+    return window.location.origin + window.location.pathname + window.location.search;
+  }
+
+  // Activate carousels
+  function activateCarousels(selector = ".carousel") {
+    document.querySelectorAll(selector).forEach((carousel, index) => {
+      if (carousel.dataset.activated === "true") return;
+      carousel.dataset.activated = "true";
+
+      const images = carousel.querySelectorAll("img");
+      if (images.length <= 1) return;
+
+      let current = 0;
+
+      function shuffle() {
+        images.forEach((img, i) => img.classList.toggle("active", i === current));
+        current = (current + 1) % images.length;
+
+        const seed = Number(carousel.dataset.seed) || index;
+        const nextDelay = 2000 + (seed % 3000);
+        setTimeout(shuffle, nextDelay);
+      }
+
+      const initialDelay = Math.floor(Math.random() * 3000);
+      setTimeout(shuffle, initialDelay);
+    });
+  }
+
+  // Intersection Observer
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      entry.target.classList.toggle('visible', entry.isIntersecting);
+    });
+  }, {
+    threshold: 0.1
+  });
+
+  // Load product details
+  async function loadProductDetail() {
+    const { permanentId, source } = getUrlParams();
+    
+    if (!permanentId) {
+      showError();
+      return;
+    }
+    
+    try {
+      const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+      const categories = ['links', 'for-him', 'for-her'];
+      
+      let product = null;
+      
+      for (const category of categories) {
+        const url = `https://opensheet.elk.sh/${sheetID}/${category}`;
+        const res = await fetch(url);
+        
+        if (!res.ok) {
+          console.error(`Failed to fetch ${category} category: ${res.status}`);
+          continue;
+        }
+        
+        const data = await res.json();
+        console.log(`Fetched data for ${category}:`, data);
+        const foundProduct = data.find(item => item.permanentId === permanentId);
+        
+        if (foundProduct) {
+          product = { ...foundProduct, category };
+          break;
+        }
+      }
+      
+      if (product) {
+        console.log('Product found:', product);
+        displayProduct(product);
+        loadSimilarProducts(product.category, permanentId);
+      } else {
+        console.warn('No product found for permanentId:', permanentId);
+        showError();
+      }
+    } catch (err) {
+      console.error("Failed to load product:", err);
+      showError();
+    }
+  }
+  
+  // Display product details
+  async function displayProduct(product) {
+    const productDetail = document.getElementById('productDetail');
+    const productLoading = document.getElementById('productLoading');
+    
+    productLoading.style.display = 'none';
+    productDetail.style.display = 'grid';
+    
+    const imageArray = product.img ? product.img.split(',').map(url => url.trim()).filter(url => url) : [];
+    console.log(`Product ${product.title} image array:`, imageArray);
+    
+    let firstImage = imageArray.length > 0 ? imageArray[0] : 'https://i.imgur.com/hp0QbkV.jpeg';
+    
+    // Validate first image
+    const isValidImage = await validateImageUrl(firstImage);
+    if (!isValidImage) {
+      console.warn(`Invalid image URL ${firstImage} for product ${product.title}, using fallback`);
+      firstImage = 'https://i.imgur.com/hp0QbkV.jpeg'; // Fallback to logo
+    }
+    
+    // Make sure the image URL is absolute
+    if (!firstImage.startsWith('http')) {
+      firstImage = 'https://' + firstImage;
+    }
+    
+    const carouselHTML = imageArray.length > 0 ? 
+      imageArray.map((url, i) => {
+        const absoluteUrl = url.startsWith('http') ? url : 'https://' + url;
+        return `<img src="${absoluteUrl}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${product.title || 'Product Image'}" onerror="this.src='https://via.placeholder.com/300x500?text=No+Image';" />`;
+      }).join('') : 
+      `<img src="https://via.placeholder.com/300x500?text=No+Image" class="active" loading="lazy" alt="No Image" />`;
+    
+    const productHTML = `
+      <div class="product-image-container" role="region" aria-label="Product images">
+        <div class="carousel" data-seed="${product.shuffleID || 0}">
+          ${carouselHTML}
+        </div>
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">${product.title || 'Unknown Product'}</h3>
+        ${product.description ? `<div class="product-description">${product.description}</div>` : ''}
+        ${product.price ? `<div class="product-price">${product.price}</div>` : ''}
+        ${product.features ? `
+          <ul class="product-features">
+            ${product.features.split(',').map(feature => `<li>${feature.trim()}</li>`).join('')}
+          </ul>
+        ` : ''}
+        <div class="buy-divider"></div>
+        <div class="product-actions">
+          <a href="${product.link || '#'}" target="_blank" class="buy-button" aria-label="Buy ${product.title || 'product'}">👉👉 Buy Now</a>
+          <button class="share-button" data-title="${escapeQuotes(product.title || 'product')}" data-image="${firstImage}" data-url="${escapeQuotes(product.link || '#')}" data-id="${escapeQuotes(product.permanentId || '0')}" aria-label="Share ${product.title || 'product'}">📤 Share</button>
+        </div>
+        <div class="product-meta">
+          ${product.category ? `<div><strong>Category:</strong> ${product.category}</div>` : ''}
+        </div>
+      </div>
+    `;
+    
+    productDetail.innerHTML = productHTML;
+    
+    document.title = `${product.title || 'Product'} | ShoeDukaan`;
+    
+    const ogDescription = product.description || `${product.title}${product.price ? ` - ${product.price}` : ''}`;
+    
+    updateSocialMetaTags(
+      product.title || 'Product Details',
+      ogDescription,
+      firstImage,
+      getCurrentUrl()
+    );
+    
+    const imageContainer = productDetail.querySelector('.product-image-container');
+    observer.observe(imageContainer);
+    activateCarousels('.product-image-container .carousel');
+  }
+  
+  // Load similar products
+  async function loadSimilarProducts(category, excludeId) {
+    try {
+      const sheetID = "1z06jsVC54KkbyH_X3oGwmChEPyP1jrMl625LV5VP7Uw";
+      const url = `https://opensheet.elk.sh/${sheetID}/${category}`;
+      const res = await fetch(url);
+      
+      if (!res.ok) {
+        console.error(`Failed to fetch similar products for ${category}: ${res.status}`);
+        return;
+      }
+      
+      const data = await res.json();
+      console.log(`Fetched similar products for ${category}:`, data);
+      const similarProducts = data
+        .filter(item => item.permanentId !== excludeId && item.title && item.img && item.link)
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 4);
+      
+      console.log(`Filtered similar products:`, similarProducts);
+      displaySimilarProducts(similarProducts);
+    } catch (err) {
+      console.error("Failed to load similar products:", err);
+      document.getElementById('similarProducts').innerHTML = '<div class="error-message">Failed to load similar products.</div>';
+    }
+  }
+  
+  // Display similar products
+  function displaySimilarProducts(products) {
+    const similarProductsContainer = document.getElementById('similarProducts');
+    
+    if (products.length === 0) {
+      similarProductsContainer.innerHTML = '<div class="error-message">No similar products found.</div>';
+      return;
+    }
+    
+    const productsHTML = products.map((product, i) => {
+      const imageArray = product.img ? product.img.split(',').map(url => url.trim()).filter(url => url) : [];
+      console.log(`Product ${product.title} images:`, imageArray);
+      const carouselHTML = imageArray.length > 0 ? 
+        imageArray.map((url, i) => {
+          const absoluteUrl = url.startsWith('http') ? url : 'https://' + url;
+          return `<img src="${absoluteUrl}" class="${i === 0 ? 'active' : ''}" loading="lazy" alt="${product.title}" onerror="this.src='https://via.placeholder.com/300x500?text=No+Image';" />`;
+        }).join('') : 
+        `<img src="https://via.placeholder.com/300x500?text=No+Image" class="active" loading="lazy" alt="No Image" />`;
+      
+      return `
+        <article class="product-card" role="article" aria-label="${product.title}" style="background-color: ${colors[i % colors.length]}; transition-delay: ${i * 100}ms;">
+          <div class="carousel" data-seed="${product.shuffleID || i}">
+            ${carouselHTML}
+          </div>
+          <div class="spacer"></div>
+          <h3 class="product-card-title">${product.title}</h3>
+          ${product.price ? `<div class="product-card-price">${product.price}</div>` : ''}
+          <div class="buy-divider"></div>
+          <div class="product-card-actions">
+            <a href="product.html?permanentId=${product.permanentId}&source=${product.category}" class="product-card-link" aria-label="View ${product.title} details">View Details</a>
+          </div>
+        </article>
+      `;
+    }).join('');
+    
+    similarProductsContainer.innerHTML = productsHTML;
+    
+    similarProductsContainer.querySelectorAll('.product-card').forEach(card => observer.observe(card));
+    activateCarousels('.product-card .carousel');
+  }
+  
+  // Show error message
+  function showError() {
+    const productLoading = document.getElementById('productLoading');
+    const productError = document.getElementById('productError');
+    
+    productLoading.style.display = 'none';
+    productError.style.display = 'block';
+  }
+  
+  // Share product function
+  async function shareProduct(title, image, buyUrl, permanentId) {
+    const { source } = getUrlParams();
+    const timestamp = Date.now();
+    const productPageUrl = `https://shdkn.github.io/product.html?permanentId=${permanentId}&source=${source || 'direct'}&t=${timestamp}`;
+    
+    const shareData = {
+      title: title,
+      text: `Check out ${title} on ShoeDukaan!`,
+      url: productPageUrl
+    };
+    
+    console.log('Sharing product with data:', shareData);
+    
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          copyToClipboard(productPageUrl, title);
+        }
+      }
+    } else {
+      copyToClipboard(productPageUrl, title);
+    }
+  }
+  
+  // Fallback function to copy to clipboard
+  function copyToClipboard(text, productTitle) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert(`Link for "${productTitle}" copied to clipboard!`);
+    }).catch(err => {
+      console.error('Could not copy text: ', err);
+      prompt('Copy this URL to share:', text);
+    });
+  }
+  
+  // Event delegation for share buttons
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('share-button')) {
+      const title = e.target.dataset.title;
+      const image = e.target.dataset.image;
+      const buyUrl = e.target.dataset.url;
+      const permanentId = e.target.dataset.id;
+      
+      shareProduct(title, image, buyUrl, permanentId);
+    }
+  });
+  
+  // Initialize the page
+  window.addEventListener("DOMContentLoaded", function() {
+    loadProductDetail();
+    
+    window.addEventListener("scroll", () => {
+      const scrollY = window.scrollY;
+      const backToTopBtn = document.getElementById("backToTop");
+      if (backToTopBtn) {
+        backToTopBtn.style.display = scrollY > 300 ? "block" : "none";
+      }
+    });
+
+    const backToTopBtn = document.getElementById("backToTop");
+    if (backToTopBtn) {
+      backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+    
+    document.querySelectorAll('.nav-btn').forEach(link => {
+      if (link.href === window.location.href) {
+        link.classList.add('active');
+      }
+    });
+  });
+</script>
+</body>
+</html>
