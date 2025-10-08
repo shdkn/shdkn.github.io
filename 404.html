@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding-top: 50px; }
+        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 2s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="spinner"></div>
+    <p>We're sending you to the correct page...</p>
+    <script>
+        // Get the path that failed (e.g., /product?id=1234)
+        const path = window.location.pathname + window.location.search;
+        
+        // Check if the path is trying to access our clean product URL
+        if (path.startsWith('/product?id=')) {
+            // Extract the permanentId from the shared URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const permanentId = urlParams.get('id');
+
+            if (permanentId) {
+                // Construct the correct internal product URL
+                const correctUrl = `/product.html?permanentId=${permanentId}`;
+                
+                // Perform the redirect
+                console.log(`Redirecting to: ${correctUrl}`);
+                window.location.replace(correctUrl);
+            } else {
+                // Fallback if ID is missing
+                window.location.replace("/index.html");
+            }
+        } else {
+            // If it's a real 404 (not a clean product link), redirect to home
+            window.location.replace("/index.html");
+        }
+    </script>
+</body>
+</html>
