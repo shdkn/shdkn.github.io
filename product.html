@@ -440,11 +440,12 @@
     productError.style.display = 'block';
   }
   
-  // Share product function
+    // Share product function
   async function shareProduct(title, image, buyUrl, permanentId) {
-    const { source } = getUrlParams();
-    const timestamp = Date.now();
-    const productPageUrl = `https://shdkn.github.io/product.html?permanentId=${permanentId}&source=${source || 'direct'}&t=${timestamp}`;
+    // Shared link format: https://shdkn.github.io/product?id=1234
+    // This is a dummy URL that will trigger the 404 page.
+    const productPageUrl = `https://shdkn.github.io/product?id=${permanentId}`; 
+
     
     const shareData = {
       title: title,
