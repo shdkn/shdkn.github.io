@@ -447,11 +447,11 @@
     const productPageUrl = `https://shdkn.github.io/product?id=${permanentId}`;  
 
     
-    const shareData = {
-  title: title,
-  // NEW: Include the productPageUrl variable directly in the text.
-  text: `Check out ${title} on ShoeDukaan! ${productPageUrl}`,
-  url: productPageUrl
+  // Cleanest share data for platforms that add their own preview
+const shareData = {
+  title: `Check out ${title} on ShoeDukaan!`,
+  text: ``, // Leave text empty to avoid duplicating the title/URL on some platforms
+  url: productPageUrl 
 };
     
     
