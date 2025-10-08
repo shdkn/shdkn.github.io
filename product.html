@@ -448,10 +448,12 @@
 
     
     const shareData = {
-      title: title,
-      text: `Check out ${title} on ShoeDukaan!`,
-      url: productPageUrl
-    };
+  title: title,
+  // NEW: Include the productPageUrl variable directly in the text.
+  text: `Check out ${title} on ShoeDukaan! ${productPageUrl}`,
+  url: productPageUrl
+};
+    
     
     console.log('Sharing product with data:', shareData);
     
