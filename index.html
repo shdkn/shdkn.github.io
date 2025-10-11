@@ -253,9 +253,10 @@ function generateCardHTML(item, index) {
                     aria-label="Share ${item.title}">
                 📤 Share
             </button>
-          <button class="buy-button action-button-text search-code-static" 
+          <button class="buy-button action-button-text" 
         data-id="${item.permanentId}" 
-        aria-label="Search code for ${item.title}">
+        aria-label="Search code for ${item.title}"
+        style="cursor: default;">
     🔍 Search Code: ${item.permanentId}
 </button>
         </div>
