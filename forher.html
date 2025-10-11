@@ -345,11 +345,12 @@ function performSearch(query) {
             (product.category === "links" && product.permanentId && product.permanentId.toLowerCase().includes("w")) ||
             product.category === "for-her"
         );
-    } else {
-        // For other queries, search across all products by title
-        filteredProducts = allProducts.filter(item =>
-            item.title.toLowerCase().includes(normalizedQuery)
-        );
+    }else {
+    // For other queries, search across both permanentId and title
+    filteredProducts = allProducts.filter(item =>
+        item.title.toLowerCase().includes(normalizedQuery) ||
+        item.permanentId.toLowerCase().includes(normalizedQuery)
+    );
     }
 
     if (filteredProducts.length === 0) {
